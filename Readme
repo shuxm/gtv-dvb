@@ -7,7 +7,17 @@ Audio & Video & Digital TV - Gstreamer 1.0
 
 Depends:
   gtk+3, gstreamer, gst-plugins-base, gst-plugins-good, gst-plugins-ugly, gst-plugins-bad, gst-libav
+
+Compilation:
+  sh compile.sh
   
+Install ( home ):
+  sh install-home.sh
+
+Unistall ( home ):
+  sh unistall-home.sh
+
+
 Channels ( has two options ):
   You can scan channels by the program itself ( data of each transponder you need to enter manually ).
   Another option to convert the file - dvb_channel.conf ( the file format is only DVBv5 ).
