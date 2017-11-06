@@ -1,5 +1,4 @@
 GTV 1.0
-
 Digital TV ( DVB-T/T2/S/S2/C )
 
 Requirements:
@@ -12,3 +11,4 @@ Depends:
 Channels ( has two options ):
   You can scan channels by the program itself ( data of each transponder you need to enter manually ).
   Another option to convert the file - dvb_channel.conf ( the file format is only DVBv5 ).
+
