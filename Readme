@@ -1,5 +1,5 @@
 GTV 1.0
-Digital TV ( DVB-T/T2/S/S2/C )
+Digital TV ( DVB-T/T2, DVB-S/S2, DVB-C )
 
 Requirements:
 Graphical interfaces - Gtk+3
@@ -18,7 +18,13 @@ Unistall ( home ):
   sh unistall-home.sh
 
 
-Channels ( has two options ):
-  You can scan channels by the program itself ( data of each transponder you need to enter manually ).
-  Another option to convert the file - dvb_channel.conf ( the file format is only DVBv5 ).
+Channels:
+	1. Scan channels manually ( Ctrl + U ).
+	2. Convert - dvb_channel.conf ( format DVBv5 ).
+	
+	dvb_channel.conf - created by command: dvbv5-scan [OPTION...] <initial file>
 
+	dvbv5-scan - https://www.linuxtv.org/downloads/v4l-utils/
+	initial file - https://www.linuxtv.org/downloads/dtv-scan-tables/
+  
+  
