@@ -1,6 +1,6 @@
 #!/bin/sh
 
-###  Gtk TV  ###
+###  GTV  ###
 ###  sh install-home.sh
 
 NAME="gtv"
