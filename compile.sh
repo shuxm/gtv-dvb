@@ -1,11 +1,11 @@
 #!/bin/sh
 
-###  Gtk TV  ###
+###  GTV  ###
 ###  sh compile.sh
 
 NAME="gtv"
 
-gcc -Wall \
+gcc -Wall -Wextra \
 	src/*.c \
 	-o $NAME \
 	`pkg-config gtk+-3.0 --cflags --libs` \
