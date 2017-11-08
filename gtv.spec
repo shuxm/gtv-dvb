@@ -2,7 +2,7 @@ Name: gtv
 Version: 1.0
 Release: alt1
 
-Summary: DVB-T/T2/S/S2/C player
+Summary: Digital TV player
 
 License: LGPLv2
 Group: Video
@@ -13,13 +13,14 @@ BuildRequires: pkgconfig(gtk+-3.0) pkgconfig(gstreamer-1.0) pkgconfig(gstreamer-
 Requires: v4l-utils
 
 %description
-DVB-T/T2/S/S2/C player
+Digital TV player
+DVB-T/T2, DVB-S/S2, DVB-C
 
 %prep
 %setup
 
 %build
-gcc -Wall gtv.c -o gtv `pkg-config gtk+-3.0 --cflags --libs` `pkg-config gstreamer-video-1.0 --cflags --libs`
+gcc -Wall gtv.c -o gtv `pkg-config gtk+-3.0 --cflags --libs` `pkg-config gstreamer-video-1.0 --cflags --libs` `pkg-config gstreamer-mpegts-1.0 --libs`
 
 %install
 mkdir -p %buildroot%_bindir
