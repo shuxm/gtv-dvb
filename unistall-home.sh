@@ -1,6 +1,6 @@
 #!/bin/sh
 
-###  Gtk TV  ###
+###  GTV  ###
 ###  sh unistall-home.sh
 
 NAME="gtv"
