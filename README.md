@@ -1,7 +1,6 @@
 # GTV 1.0
 
-Digital TV 
-DVB-T/T2, DVB-S/S2, DVB-C
+Digital TV ( DVB-T/T2, DVB-S/S2, DVB-C )
 
 
 ![alt text](screenshots.png "Preview")
@@ -12,20 +11,20 @@ DVB-T/T2, DVB-S/S2, DVB-C
 	Audio & Video & Digital TV - Gstreamer 1.0
 
 
-Depends:
+## Depends:
 	gtk+3, gstreamer, gst-plugins-base, gst-plugins-good, gst-plugins-ugly, gst-plugins-bad, gst-libav
 
-Compilation:
+## Compilation:
 	sh compile.sh
   
-Install ( home ):
+## Install ( home ):
   	sh install-home.sh
 
-Unistall ( home ):
+## Unistall ( home ):
 	sh unistall-home.sh
 
 
-Channels:
+## Channels:
 	1. Scan channels manually ( Ctrl + U ).
 	2. Convert - dvb_channel.conf ( format DVBv5 ).
 	
