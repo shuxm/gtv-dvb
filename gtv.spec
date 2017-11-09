@@ -20,7 +20,7 @@ DVB-T/T2, DVB-S/S2, DVB-C
 %setup
 
 %build
-gcc -Wall gtv.c -o gtv `pkg-config gtk+-3.0 --cflags --libs` `pkg-config gstreamer-video-1.0 --cflags --libs` `pkg-config gstreamer-mpegts-1.0 --libs`
+gcc -Wall src/gtv-scan.c src/gtv.c -o gtv `pkg-config gtk+-3.0 --cflags --libs` `pkg-config gstreamer-video-1.0 --cflags --libs` `pkg-config gstreamer-mpegts-1.0 --libs`
 
 %install
 mkdir -p %buildroot%_bindir
