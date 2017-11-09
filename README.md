@@ -1,9 +1,12 @@
 # GTV 1.0
 
-Digital TV ( DVB-T/T2, DVB-S/S2, DVB-C )
+	Digital TV player
+	Digital TV ( DVB-T/T2, DVB-S/S2, DVB-C )
+
 
 
 ![alt text](screenshots.png "Preview")
+
 
 
 ## Requirements:
