@@ -1,26 +1,28 @@
 # GTV 1.0
 
-# Digital TV 
+Digital TV 
 DVB-T/T2, DVB-S/S2, DVB-C
 
-# Preview
+
 ![alt text](screenshots.png "Preview")
 
-Requirements:
-Graphical interfaces - Gtk+3
-Audio & Video & Digital TV - Gstreamer 1.0
+
+## Requirements:
+	Graphical interfaces - Gtk+3
+	Audio & Video & Digital TV - Gstreamer 1.0
+
 
 Depends:
-  gtk+3, gstreamer, gst-plugins-base, gst-plugins-good, gst-plugins-ugly, gst-plugins-bad, gst-libav
+	gtk+3, gstreamer, gst-plugins-base, gst-plugins-good, gst-plugins-ugly, gst-plugins-bad, gst-libav
 
 Compilation:
-  sh compile.sh
+	sh compile.sh
   
 Install ( home ):
-  sh install-home.sh
+  	sh install-home.sh
 
 Unistall ( home ):
-  sh unistall-home.sh
+	sh unistall-home.sh
 
 
 Channels:
