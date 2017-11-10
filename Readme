@@ -22,7 +22,6 @@ Install ( home ):
 Uninstall ( home ):
 	sh scripts/uninstall-home.sh
 
-
 Channels:
 	1. Scan channels manually ( Ctrl + U ).
 	2. Convert - dvb_channel.conf ( format DVBv5 ).
@@ -31,7 +30,6 @@ Channels:
 
 	dvbv5-scan - https://www.linuxtv.org/downloads/v4l-utils/
 	initial file - https://www.linuxtv.org/downloads/dtv-scan-tables/
-  
   
 Record:
 	the default video theoraenc, vorbisenc audio ( these settings can be changed )
