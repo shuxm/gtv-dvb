@@ -34,9 +34,11 @@
 	
 	dvb_channel.conf - created by command: dvbv5-scan [OPTION...] <initial file>
 
-	[dvbv5-scan](https://www.linuxtv.org/downloads/v4l-utils/)
+	dvbv5-scan - https://www.linuxtv.org/downloads/v4l-utils/
 	initial file - https://www.linuxtv.org/downloads/dtv-scan-tables/
 
 ### Record:
 	the default video theoraenc, vorbisenc audio ( these settings can be changed )
 
+
+[Markdown](http://en.wikipedia.com/wiki/Markdown)
