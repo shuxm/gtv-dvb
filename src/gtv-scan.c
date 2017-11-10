@@ -218,7 +218,6 @@ static void dump_sdt ( GstMpegtsSection *section )
 
         if ( !get_descr ) continue;
 
-        dvb_gst_scan_sdt_n[sdt_count].name = g_strdup_printf ( "PGMN-%d", service->service_id );
         g_print ( "     Service id: %d  %d 0x%04x \n", sdt_count+1, service->service_id, service->service_id );
 
         GPtrArray *descriptors = service->descriptors;
@@ -242,6 +241,8 @@ static void dump_sdt ( GstMpegtsSection *section )
                 g_free ( service_name  );
                 g_free ( provider_name );
             }
+	    else
+		dvb_gst_scan_sdt_n[sdt_count].name = g_strdup_printf ( "PGMN-%d", service->service_id );
         }
         sdt_count++;
     }
