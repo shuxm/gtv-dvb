@@ -12,7 +12,8 @@
 	Audio & Video & Digital TV - Gstreamer 1.0
 
 ### License:
-	[GNU LESSER GENERAL PUBLIC LICENSE](http://www.gnu.org/licenses/lgpl.html)
+	GNU LESSER GENERAL PUBLIC LICENSE
+	http://www.gnu.org/licenses/lgpl.html
 
 ### Depends:
 	gtk+3, gstreamer, gst-plugins-base, gst-plugins-good, gst-plugins-ugly, gst-plugins-bad, gst-libav
@@ -33,7 +34,7 @@
 	
 	dvb_channel.conf - created by command: dvbv5-scan [OPTION...] <initial file>
 
-	dvbv5-scan - https://www.linuxtv.org/downloads/v4l-utils/
+	[dvbv5-scan](https://www.linuxtv.org/downloads/v4l-utils/)
 	initial file - https://www.linuxtv.org/downloads/dtv-scan-tables/
 
 ### Record:
