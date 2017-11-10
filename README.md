@@ -18,14 +18,14 @@
 ### Depends:
 	gtk+3, gstreamer, gst-plugins-base, gst-plugins-good, gst-plugins-ugly, gst-plugins-bad, gst-libav
 
-### Compilation:
-	sh compile.sh
+### Compile:
+	sh scripts/compile.sh
   
 ### Install ( home ):
-  	sh install-home.sh
+  	sh scripts/install-home.sh
 
-### Unistall ( home ):
-	sh unistall-home.sh
+### Uninstall ( home ):
+	sh scripts/uninstall-home.sh
 
 
 ### Channels:
