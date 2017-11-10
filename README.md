@@ -1,7 +1,7 @@
 ## GTV 1.0
 
-	Digital TV player
-	DVB-T/T2, DVB-S/S2, DVB-C
+- Digital TV player
+- DVB-T/T2, DVB-S/S2, DVB-C
 
 
 ![alt text](screenshots.png "Preview")
@@ -29,13 +29,9 @@
 
 ### Channels:
 - Scan channels manually ( Ctrl + U ).
-- Convert - dvb_channel.conf ( format DVBv5 ).
+- Convert - dvb_channel.conf ( format [DVBv5](https://www.linuxtv.org/docs/libdvbv5/index.html) ).
 	
-- dvb_channel.conf - created by command: dvbv5-scan [OPTION...] <initial file>
-
-- [DVBv5](https://www.linuxtv.org/docs/libdvbv5/index.html)
-- [dvbv5-scan](https://www.linuxtv.org/downloads/v4l-utils)
-- [initial file](https://www.linuxtv.org/downloads/dtv-scan-tables)
+- dvb_channel.conf - created by command: [dvbv5-scan](https://www.linuxtv.org/downloads/v4l-utils) [OPTION...] [initial file](https://www.linuxtv.org/downloads/dtv-scan-tables)
 
 ### Record:
 - the default video theoraenc, vorbisenc audio ( these settings can be changed )
