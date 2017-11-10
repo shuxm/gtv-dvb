@@ -12,8 +12,7 @@
 	Audio & Video & Digital TV - Gstreamer 1.0
 
 ### License:
-	GNU LESSER GENERAL PUBLIC LICENSE
-	http://www.gnu.org/licenses/lgpl.html
+	[GNU LESSER GENERAL PUBLIC LICENSE](http://www.gnu.org/licenses/lgpl.html)
 
 ### Depends:
 	gtk+3, gstreamer, gst-plugins-base, gst-plugins-good, gst-plugins-ugly, gst-plugins-bad, gst-libav
