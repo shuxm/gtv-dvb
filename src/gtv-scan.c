@@ -229,20 +229,22 @@ static void dump_sdt ( GstMpegtsSection *section )
             GstMpegtsDVBServiceType service_type;
 
             if ( desc->tag == GST_MTS_DESC_DVB_SERVICE )
-            if ( gst_mpegts_descriptor_parse_dvb_service ( desc, &service_type, &service_name, &provider_name ) )
             {
-                dvb_gst_scan_sdt_n[sdt_count].name = g_strdup ( service_name );
+                if ( gst_mpegts_descriptor_parse_dvb_service ( desc, &service_type, &service_name, &provider_name ) )
+                {
+                    dvb_gst_scan_sdt_n[sdt_count].name = g_strdup ( service_name );
 
-                g_print ( "   Service Descriptor, type:0x%02x (%s) \n",
-                    service_type, enum_name (GST_TYPE_MPEGTS_DVB_SERVICE_TYPE, service_type) );
-                g_print ( "      Service  (name) : %s \n", service_name  );
-                g_print ( "      Provider (name) : %s \n", provider_name );
+                    g_print ( "   Service Descriptor, type:0x%02x (%s) \n",
+                        service_type, enum_name (GST_TYPE_MPEGTS_DVB_SERVICE_TYPE, service_type) );
+                    g_print ( "      Service  (name) : %s \n", service_name  );
+                    g_print ( "      Provider (name) : %s \n", provider_name );
 
-                g_free ( service_name  );
-                g_free ( provider_name );
+                    g_free ( service_name  );
+                    g_free ( provider_name );
+                }
+                else
+                    dvb_gst_scan_sdt_n[sdt_count].name = g_strdup_printf ( "PGMN-%d", service->service_id );
             }
-	    else
-		dvb_gst_scan_sdt_n[sdt_count].name = g_strdup_printf ( "PGMN-%d", service->service_id );
         }
         sdt_count++;
     }
