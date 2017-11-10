@@ -42,4 +42,4 @@
 
 
 [Markdown](http://en.wikipedia.com/wiki/Markdown)
-[dvbv5-scan](httphttps://www.linuxtv.org/downloads/v4l-utils)
+[dvbv5-scan](https://www.linuxtv.org/downloads/v4l-utils)
