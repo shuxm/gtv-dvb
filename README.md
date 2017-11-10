@@ -8,8 +8,8 @@
 
 
 ### Requirements:
-- Graphical interfaces - Gtk+3
-- Audio & Video & Digital TV - Gstreamer 1.0
+- Graphical interfaces - [Gtk+3](https://developer.gnome.org/gtk3)
+- Audio & Video & Digital TV - [Gstreamer 1.0](https://gstreamer.freedesktop.org)
 
 ### License:
 - [GNU LESSER GENERAL PUBLIC LICENSE](http://www.gnu.org/licenses/lgpl.html)
