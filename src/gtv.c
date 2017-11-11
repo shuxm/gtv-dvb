@@ -1023,13 +1023,16 @@ static void tv_init ()
     file_ext = g_strdup ( "ogg" );
 
     gchar *th_home = g_strconcat ( g_get_home_dir (), "/.themes/Adwaita-dark", NULL );
+    gchar *ic_home = g_strconcat ( g_get_home_dir (), "/.icons/Art", NULL );
 
     if ( g_file_test ( th_home, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR ) || g_file_test ( "/usr/share/themes/Adwaita-dark", G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR ) )
         g_object_set ( gtk_settings_get_default (), "gtk-theme-name", "Adwaita-dark", NULL );
 
-    g_free ( th_home );
+    if ( g_file_test ( ic_home, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR ) || g_file_test ( "/usr/share/icons/Art", G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR ) )
+        g_object_set ( gtk_settings_get_default (), "gtk-icon-theme-name", "Art", NULL );
 
-    g_object_set ( gtk_settings_get_default (), "gtk-icon-theme-name", "Art", NULL );
+    g_free ( th_home );
+    g_free ( ic_home );
 
     tv_logo = gtk_icon_theme_load_icon ( gtk_icon_theme_get_default (),
               "applications-multimedia", 64, GTK_ICON_LOOKUP_USE_BUILTIN, NULL );
