@@ -1334,7 +1334,8 @@ static void dump_sdt ( GstMpegtsSection *section )
     {
         GstMpegtsSDTService *service = g_ptr_array_index ( sdt->services, i );
 
-        dvb_gst_scan_sdt_n[sdt_count].name = g_strdup_printf ( "PGMN-%d", service->service_id);
+        //dvb_gst_scan_sdt_n[sdt_count].name = g_strdup_printf ( "PGMN-%d", service->service_id);
+	dvb_gst_scan_sdt_n[sdt_count].name = NULL;
         dvb_gst_scan_sdt_n[sdt_count].pmn_pid = service->service_id;
 
         gboolean get_descr = FALSE;
@@ -1371,11 +1372,13 @@ static void dump_sdt ( GstMpegtsSection *section )
 
                     g_free ( service_name  );
                     g_free ( provider_name );
-                }
-                else
-                    dvb_gst_scan_sdt_n[sdt_count].name = g_strdup_printf ( "PGMN-%d", service->service_id );
+                }   
             }
         }
+	    
+	if ( dvb_gst_scan_sdt_n[sdt_count].name == NULL )
+	    dvb_gst_scan_sdt_n[sdt_count].name = g_strdup_printf ( "PGMN-%d", service->service_id );
+	    
         sdt_count++;
     }
 
