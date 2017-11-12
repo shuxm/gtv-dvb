@@ -43,8 +43,8 @@ enum { COL_NUM, COL_FILES_CH, COL_URI_DATA, NUM_COLS };
 
 static guintptr video_window_handle = 0;
 static gdouble volume_start = 0.5;
-static guint j = 0, a = 0, c = 0, d = 0, tv_time_rec = 0;
-static gboolean video_enable = TRUE, rec_status = TRUE, rec_en_ts = TRUE, firstmsgerr = FALSE, w_info = FALSE;
+static guint j = 0, a = 0, b = 0, c = 0, tv_time_rec = 0;
+static gboolean video_enable = TRUE, rec_status = TRUE, rec_en_ts = TRUE, firstmsgerr = FALSE, w_info = FALSE, msg_dg_p = TRUE;
 
 static void tv_stop ();
 static void tv_gst_rec_remove ();
@@ -181,7 +181,11 @@ static void tv_msg_err ( GstBus *bus, GstMessage *msg )
     gst_message_parse_error ( msg, &err, &dbg );
     g_printerr ( "ERROR: %s (%s)\n", err->message, (dbg) ? dbg : "no details" );
 
-    if ( firstmsgerr ) tv_message_dialog ( err->message, (dbg) ? dbg : " ", GTK_MESSAGE_ERROR );
+    if ( msg_dg_p )
+        tv_message_dialog ( err->message, (dbg) ? dbg : " ", GTK_MESSAGE_ERROR );
+
+    msg_dg_p = FALSE;
+
     tv_info_object_name ( GST_OBJECT ( bus ) );
 
     g_error_free ( err );
@@ -366,11 +370,11 @@ struct dvb_rec_all_list { const gchar *name; } dvb_all_rec_list_n[] =
     	}
     }
 
-    if ( video_enable ) { d = 0; } else { d = 2; }
+    if ( video_enable ) { b = 0; } else { b = 2; }
 
   gst_element_set_state ( dvbplay, GST_STATE_PAUSED );
 
-    for ( c = d; c < G_N_ELEMENTS ( dvb_rec_all_n ); c++ )
+    for ( c = b; c < G_N_ELEMENTS ( dvb_rec_all_n ); c++ )
         gst_bin_add ( GST_BIN (dvbplay), dvb_rec_all_n[c] );
 
     if ( video_enable )
@@ -385,7 +389,7 @@ struct dvb_rec_all_list { const gchar *name; } dvb_all_rec_list_n[] =
     g_object_set ( dvb_rec_all_n[5], "location", file_rec, NULL );
     g_free ( file_rec );
 
-    for ( c = d; c < G_N_ELEMENTS ( dvb_rec_all_n ); c++ )
+    for ( c = b; c < G_N_ELEMENTS ( dvb_rec_all_n ); c++ )
         gst_element_set_state ( dvb_rec_all_n[c], GST_STATE_PAUSED );
 
     g_usleep ( 250000 );
@@ -396,7 +400,7 @@ struct dvb_rec_all_list { const gchar *name; } dvb_all_rec_list_n[] =
 
 static void tv_gst_rec_remove ()
 {
-    for ( c = d; c < G_N_ELEMENTS ( dvb_rec_all_n ); c++ )
+    for ( c = b; c < G_N_ELEMENTS ( dvb_rec_all_n ); c++ )
         gst_bin_remove ( GST_BIN (dvbplay), dvb_rec_all_n[c] );
 
     //g_usleep ( 250000 );
@@ -481,6 +485,7 @@ static void tv_play ( gchar *data )
     {
         tv_checked_video ( data );
         tv_gst_tsdemux ();
+        msg_dg_p = TRUE;
 
         gchar *ch_name = tv_data_split_set_dvb ( data );
             gtk_window_set_title ( main_window, ch_name );
@@ -1058,14 +1063,14 @@ static void tv_init ()
         g_object_set ( gtk_settings_get_default (), "gtk-theme-name", "Adwaita-dark", NULL );
 
     g_free ( th_home );
-/*    
+
     gchar *ic_home = g_strconcat ( g_get_home_dir (), "/.icons/Art", NULL );
 
     if ( g_file_test ( ic_home, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR ) || g_file_test ( "/usr/share/icons/Art", G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR ) )
         g_object_set ( gtk_settings_get_default (), "gtk-icon-theme-name", "Art", NULL );
 
     g_free ( ic_home );
-*/
+
     tv_logo = gtk_icon_theme_load_icon ( gtk_icon_theme_get_default (),
               "applications-multimedia", 64, GTK_ICON_LOOKUP_USE_BUILTIN, NULL );
 }
@@ -1200,7 +1205,7 @@ const gchar *dvb_type_str = "UNDEFINED";
 //static guint j = 0, c = 0;
 guint adapter_ct = 0, frontend_ct = 0, lnb_type = 0;
 gchar *pol = "H";
-gboolean msg_info = FALSE, w_scan_info = FALSE;
+gboolean msg_info = FALSE, w_scan_info = FALSE, msg_dg_s = TRUE;
 
 time_t t_start, t_cur;
 
@@ -1245,6 +1250,8 @@ static gboolean pat_done = FALSE, pmt_done = FALSE, sdt_done = FALSE;
 
 static void start_clear_dvb_gst_scan ()
 {
+    msg_dg_s = TRUE;
+
     sdt_done = FALSE;
     pat_done = FALSE;
     pmt_done = FALSE;
@@ -1486,10 +1493,16 @@ static void scan_msg_err ( GstBus *bus, GstMessage *msg )
     gst_message_parse_error ( msg, &err, &dbg );
     g_printerr ( "ERROR: %s (%s)\n", err->message, (dbg) ? dbg : "no details" );
     tv_info_object_name ( GST_OBJECT ( bus ) );
-    //tv_message_dialog ( err->message, (dbg) ? dbg : " ", GTK_MESSAGE_ERROR );
+
+    if ( msg_dg_s )
+        tv_message_dialog ( err->message, (dbg) ? dbg : " ", GTK_MESSAGE_ERROR );
+
+    msg_dg_s = FALSE;
 
     g_error_free ( err );
     g_free ( dbg );
+
+    tv_scan_stop ( NULL, NULL );
 }
 
 static void scan_set_tune ()
@@ -2104,6 +2117,9 @@ static void tv_scan_start ( GtkButton *button, gpointer data )
 
     start_clear_dvb_gst_scan ();
 
+    g_object_set ( dvbsrc_tune, "adapter",  adapter_ct,  NULL );
+    g_object_set ( dvbsrc_tune, "frontend", frontend_ct, NULL );
+
     time ( &t_start );
     gst_element_set_state ( dvb_scan, GST_STATE_PLAYING );
 
@@ -2342,6 +2358,9 @@ static GtkBox * tv_scan_channels  ()
     return g_box;
 }
 
+
+GtkEntry *entry_enc[4];
+
 static void tv_get_dvb_name ( GtkLabel *label )
 {
     gchar *dvb_name = NULL;
@@ -2418,61 +2437,40 @@ static void tv_scan_convert ( GtkButton *button, GtkEntry *entry )
 
 static void tv_set_rec_dir ( GtkEntry *entry )
 {
-    g_free ( rec_dir );
-        rec_dir = tv_rec_dir ();
+    g_free ( rec_dir ); rec_dir = tv_rec_dir ();
     if ( rec_dir ) gtk_entry_set_text ( entry, rec_dir );
 }
 
 static void tv_set_rec_data_venc ( GtkEntry *entry )
 {
-    if ( !rec_en_ts )
-    {
-        tv_message_dialog ( "Encoder Off", " ", GTK_MESSAGE_WARNING );
-        return;
-    }
-
     g_free ( video_encoder );
     video_encoder = g_strdup ( gtk_entry_get_text ( entry ) );
 }
 static void tv_set_rec_data_aenc ( GtkEntry *entry )
 {
-    if ( !rec_en_ts )
-    {
-        tv_message_dialog ( "Encoder Off", " ", GTK_MESSAGE_WARNING );
-        return;
-    }
-
     g_free ( audio_encoder );
     audio_encoder = g_strdup ( gtk_entry_get_text ( entry ) );
 }
 static void tv_set_rec_data_mux ( GtkEntry *entry )
 {
-    if ( !rec_en_ts )
-    {
-        tv_message_dialog ( "Encoder Off", " ", GTK_MESSAGE_WARNING );
-        return;
-    }
-
     g_free ( muxer );
     muxer = g_strdup ( gtk_entry_get_text ( entry ) );
 }
 static void tv_set_rec_data_ext ( GtkEntry *entry )
 {
-    if ( !rec_en_ts )
-    {
-        tv_message_dialog ( "Encoder Off", " ", GTK_MESSAGE_WARNING );
-        return;
-    }
-
     g_free ( file_ext );
     file_ext = g_strdup ( gtk_entry_get_text ( entry ) );
 }
-static void tv_changed_cb_et ( GtkComboBox *combo_box )
+static void tv_changed_sw_et ( GtkSwitch *switch_p )
 {
-    guint num = gtk_combo_box_get_active ( combo_box );
+    if ( !gtk_switch_get_state (switch_p) )
+        rec_en_ts = TRUE;
+    else
+        rec_en_ts = FALSE;
 
-    if ( num == 0 ) rec_en_ts = TRUE;
-    if ( num == 1 ) rec_en_ts = FALSE;
+    guint z = 0;
+    for ( z = 0; z < 4; z++ )
+        gtk_widget_set_sensitive ( GTK_WIDGET ( entry_enc[z] ), rec_en_ts );
 }
 
 static GtkBox * tv_scan_pref ()
@@ -2501,11 +2499,14 @@ static GtkBox * tv_scan_pref ()
     gtk_box_pack_start ( g_box, GTK_WIDGET ( grid ), TRUE, TRUE, 10 );
 
     GtkLabel *label_name;
+    GtkSpinButton *spin;
     GtkEntry *entry, *entry_cv;
 
-    guint d = 0;
+    guint d = 0, z = 0;
     for ( d = 0; d < G_N_ELEMENTS ( data_scan_pref_n ); d++ )
     {
+        if ( d == 0 ) continue;
+
         GtkLabel *label = (GtkLabel *)gtk_label_new ( data_scan_pref_n[d].label );
         gtk_widget_set_halign ( GTK_WIDGET ( label ), ( d == 1 ) ? GTK_ALIGN_CENTER : GTK_ALIGN_START );
         gtk_grid_attach ( GTK_GRID ( grid ), GTK_WIDGET ( label ), 0, d, ( d == 1 ) ? 2 : 1, 1 );
@@ -2514,22 +2515,21 @@ static GtkBox * tv_scan_pref ()
 
         if ( d == 3 || d == 4 )
         {
-            GtkSpinButton *spin = (GtkSpinButton *) gtk_spin_button_new_with_range ( 0, 16, 1 );
+            spin = (GtkSpinButton *) gtk_spin_button_new_with_range ( 0, 16, 1 );
             gtk_spin_button_set_value ( spin, data_scan_pref_n[d].af  );
             g_signal_connect ( spin, "changed", G_CALLBACK ( data_scan_pref_n[d].activate ), label_name );
-            gtk_grid_attach ( GTK_GRID ( grid ), GTK_WIDGET ( spin ), 1, d, 1, 1 );
 
+            gtk_grid_attach ( GTK_GRID ( grid ), GTK_WIDGET ( spin ), 1, d, 1, 1 );
             continue;
         }
 
         if ( d == 8 )
         {
-            GtkComboBoxText *combo = (GtkComboBoxText *)gtk_combo_box_text_new ();
-            gtk_combo_box_text_append_text ( combo, "Encoder" );
-            gtk_combo_box_text_append_text ( combo, "Ts" );
-            gtk_combo_box_set_active ( GTK_COMBO_BOX ( combo ), rec_en_ts ? 0 : 1 );
-            g_signal_connect ( combo, "changed", G_CALLBACK ( tv_changed_cb_et ), NULL );
-            gtk_grid_attach ( GTK_GRID ( grid ), GTK_WIDGET ( combo ), 1, d, 1, 1 );
+            GtkSwitch *switch_p = (GtkSwitch *) gtk_switch_new ();
+            gtk_switch_set_state ( switch_p, !rec_en_ts );
+            g_signal_connect ( switch_p, "notify::active", G_CALLBACK ( tv_changed_sw_et ), NULL );
+
+            gtk_grid_attach ( GTK_GRID ( grid ), GTK_WIDGET ( switch_p ), 1, d, 1, 1 );
             continue;
         }
 
@@ -2548,6 +2548,8 @@ static GtkBox * tv_scan_pref ()
             g_signal_connect ( entry, "changed", G_CALLBACK ( data_scan_pref_n[d].activate ), NULL );
 
         if ( d == 5 ) entry_cv = entry;
+
+        if ( d > 8 ) entry_enc[z++] = entry;
     }
 
     tv_get_dvb_name ( label_name );
@@ -2555,6 +2557,9 @@ static GtkBox * tv_scan_pref ()
     GtkButton *button_convert = (GtkButton *)gtk_button_new_with_label ( " Convert DVBv5 " );
     g_signal_connect ( button_convert, "clicked", G_CALLBACK ( tv_scan_convert ), entry_cv );
     gtk_box_pack_start ( g_box, GTK_WIDGET ( button_convert ), FALSE, FALSE, 10 );
+
+    for ( z = 0; z < 4; z++ )
+        gtk_widget_set_sensitive ( GTK_WIDGET ( entry_enc[z] ), rec_en_ts );
 
     return g_box;
 }
@@ -2609,3 +2614,4 @@ static void tv_win_scan ()
 
     gtk_widget_show_all ( GTK_WIDGET ( window ) );
 }
+
