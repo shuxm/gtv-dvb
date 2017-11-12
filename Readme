@@ -32,6 +32,6 @@ Channels:
 	initial file - https://www.linuxtv.org/downloads/dtv-scan-tables
   
 Record:
-	Encoder (  video theoraenc; audio vorbisenc )
+	Encoder
 	Ts
 	
