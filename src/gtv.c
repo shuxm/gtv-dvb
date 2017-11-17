@@ -44,7 +44,7 @@ enum { COL_NUM, COL_FILES_CH, COL_URI_DATA, NUM_COLS };
 static guintptr video_window_handle = 0;
 static gdouble volume_start = 0.5;
 static guint j = 0, a = 0, b = 0, c = 0, tv_time_rec = 0;
-static gboolean video_enable = TRUE, rec_status = TRUE, rec_en_ts = TRUE, firstmsgerr = FALSE, w_info = FALSE, msg_dg_p = TRUE;
+static gboolean video_enable = TRUE, rec_status = TRUE, rec_en_ts = TRUE, w_info = FALSE, fmsg_i = TRUE;
 
 static void tv_stop ();
 static void tv_gst_rec_remove ();
@@ -55,7 +55,9 @@ static void tv_remv  ();
 static void tv_clear ();
 static void tv_quit  ( /*GtkWindow *window*/ );
 
-gchar *channels_conf, *rec_dir, *audio_encoder, *video_encoder, *muxer, *file_ext, *video_parser, *audio_parser;
+gchar *channels_conf, *rec_dir, *video_parser, *audio_parser,
+      *audio_encoder, *video_encoder, *muxer, *file_ext;
+
 
 static void dvb_mpegts_initialize ();
 const gchar * enum_name ( GType instance_type, gint val );
@@ -130,6 +132,7 @@ static void tv_info_object_name ( GstObject *object )
     }
 }
 
+
 static GstBusSyncReply tv_bus_sync_handler ( GstBus *bus, GstMessage *message )
 {
     if ( !gst_is_video_overlay_prepare_window_handle_message ( message ) )
@@ -181,19 +184,17 @@ static void tv_msg_err ( GstBus *bus, GstMessage *msg )
     gst_message_parse_error ( msg, &err, &dbg );
     g_printerr ( "ERROR: %s (%s)\n", err->message, (dbg) ? dbg : "no details" );
 
-    if ( msg_dg_p )
+    if ( fmsg_i )
         tv_message_dialog ( err->message, (dbg) ? dbg : " ", GTK_MESSAGE_ERROR );
 
-    msg_dg_p = FALSE;
+    fmsg_i = FALSE;
 
     tv_info_object_name ( GST_OBJECT ( bus ) );
 
     g_error_free ( err );
     g_free ( dbg );
 
-    //if ( msgerr ) tv_stop ();
-
-    firstmsgerr = TRUE;
+    // tv_stop ();
 }
 
 static gboolean tv_gst_create ()
@@ -257,9 +258,13 @@ static void tv_gst_pad_link ( GstPad *pad, GstElement *element, const gchar *nam
     if ( gst_pad_link ( pad, pad_va_sink ) == GST_PAD_LINK_OK )
     	gst_object_unref ( pad_va_sink );
     else
-       	g_printerr ( "Linking demux/decode name: %s & video/audio pad failed \n", name );
-
-    tv_info_object_name ( GST_OBJECT ( element_n ) );
+    {
+        if ( w_info )
+        {
+            g_printerr ( "Linking demux/decode name: %s & video/audio pad failed \n", name );
+            tv_info_object_name ( GST_OBJECT ( element_n ) );
+        }
+    }
 }
 
 static void tv_pad_demux_added_audio ( GstElement *element, GstPad *pad, GstElement *element_audio )
@@ -412,9 +417,8 @@ static void tv_sensitive ( gboolean set_sensitive, guint start_s, guint end_s )
 
     const gchar *menu_n[] = { "Record", "Stop", "Mute"/*, "EQ-Audio", "EQ-Video" */};
 
-    guint i;
-    for ( i = 0; i < G_N_ELEMENTS ( menu_n ); i++ )
-        g_action_group_action_enabled_changed ( G_ACTION_GROUP (group), menu_n[i], set_sensitive );
+    for ( c = 0; c < G_N_ELEMENTS ( menu_n ); c++ )
+        g_action_group_action_enabled_changed ( G_ACTION_GROUP (group), menu_n[c], set_sensitive );
 
 
     for ( j = start_s; j < end_s; j++ )
@@ -474,7 +478,7 @@ static void tv_stop ()
 
         tv_sensitive  ( FALSE, 0, gtk_toolbar_get_n_items ( GTK_TOOLBAR ( toolbar_media ) ) - 2 );
         gtk_label_set_text ( signal_snr, "Signal 0  &  Snr 0" );
-        gtk_window_set_title  ( GTK_WINDOW ( main_window ), "Gtv" );
+        gtk_window_set_title  ( GTK_WINDOW ( main_window ), "GDvb" );
         gtk_widget_queue_draw ( GTK_WIDGET ( main_window ) );
     }
 }
@@ -485,7 +489,7 @@ static void tv_play ( gchar *data )
     {
         tv_checked_video ( data );
         tv_gst_tsdemux ();
-        msg_dg_p = TRUE;
+        fmsg_i = TRUE;
 
         gchar *ch_name = tv_data_split_set_dvb ( data );
             gtk_window_set_title ( main_window, ch_name );
@@ -699,11 +703,11 @@ const struct tv_list_media { const gchar *label; gchar *name_icon; void (* activ
 
     // Toolbar sw
     { "Up",       "up",                   tv_goup,  "<control>z" }, { "Down",       "down",                tv_down,  "<control>z" },
-    { "Remove",   "remove",               tv_remv,  "<control>z" }, { "Clear",      "trashcan_empty",          tv_clear, "<control>z" },
+    { "Remove",   "remove",               tv_remv,  "<control>z" }, { "Clear",      "edit-clear",          tv_clear, "<control>z" },
 
     // Menu ( only )
     { "Mute",    "audio-volume-muted",    tv_mute,  "<control>m" }, { "Fullscreen", "view-fullscreen",     tv_flscr, "<control>f" },
-    { "Mini",    "view-restore",          tv_mini,  "<control>h" }, { "Quit",       "window-close",        tv_quit,  "<control>q" }
+    { "Mini",    "view-restore",          tv_mini,  "<control>h" }, { "Quit",       "system-shutdown",     tv_quit,  "<control>q" }
 };
 
 static void tv_create_gaction_entry ( GtkApplication *app )
@@ -712,15 +716,15 @@ static void tv_create_gaction_entry ( GtkApplication *app )
 
     GActionEntry entries[ G_N_ELEMENTS ( tv_list_media_n ) ];
 
-    guint i; for ( i = 0; i < G_N_ELEMENTS ( tv_list_media_n ); i++ )
+    for ( j = 0; j < G_N_ELEMENTS ( tv_list_media_n ); j++ )
     {
-        entries[i].name           = tv_list_media_n[i].label;
-        entries[i].activate       = tv_list_media_n[i].activate;
-        entries[i].parameter_type = NULL; // g_variant_new_string ( tv_list_media_n[i].accel_key );
-        entries[i].state          = NULL;
+        entries[j].name           = tv_list_media_n[j].label;
+        entries[j].activate       = tv_list_media_n[j].activate;
+        entries[j].parameter_type = NULL; // g_variant_new_string ( tv_list_media_n[j].accel_key );
+        entries[j].state          = NULL;
 
-        gchar *text = g_strconcat ( "app.", tv_list_media_n[i].label, NULL );
-        const gchar *accelf[] = { tv_list_media_n[i].accel_key, NULL };
+        gchar *text = g_strconcat ( "app.", tv_list_media_n[j].label, NULL );
+        const gchar *accelf[] = { tv_list_media_n[j].accel_key, NULL };
             gtk_application_set_accels_for_action ( app, text, accelf );
         g_free ( text );
     }
@@ -750,7 +754,7 @@ static GtkToolbar * tv_create_toolbar_all ( guint start, guint stop )
         gtk_toolbar_insert ( toolbar_create, item, -1 );
     }
 
-    gtk_toolbar_set_icon_size ( toolbar_create, GTK_ICON_SIZE_MENU ); // GTK_ICON_SIZE_LARGE_TOOLBAR
+    gtk_toolbar_set_icon_size ( toolbar_create, GTK_ICON_SIZE_MENU ); // GTK_ICON_SIZE_MENU GTK_ICON_SIZE_LARGE_TOOLBAR
 
     return toolbar_create;
 }
@@ -771,17 +775,16 @@ static GMenu * tv_create_gmenu ()
 
     gint dat_n[] = { 1, 0, 2, 3, 8, 10, 9, 11 };
 
-    guint i;
-    for ( i = 0; i < G_N_ELEMENTS ( dat_n ); i++ )
+    for ( j = 0; j < G_N_ELEMENTS ( dat_n ); j++ )
     {
-        gchar *text = g_strconcat ( "menu.", tv_list_media_n[ dat_n[i] ].label, NULL );
-            mitem = g_menu_item_new ( tv_list_media_n[ dat_n[i] ].label, text );
+        gchar *text = g_strconcat ( "menu.", tv_list_media_n[ dat_n[j] ].label, NULL );
+            mitem = g_menu_item_new ( tv_list_media_n[ dat_n[j] ].label, text );
         g_free ( text );
 
         g_menu_item_set_icon ( mitem, G_ICON ( gtk_icon_theme_load_icon ( gtk_icon_theme_get_default (),
-                               tv_list_media_n[ dat_n[i] ].name_icon, 16, GTK_ICON_LOOKUP_NO_SVG, NULL ) ) );
+                               tv_list_media_n[ dat_n[j] ].name_icon, 16, GTK_ICON_LOOKUP_NO_SVG, NULL ) ) );
 
-        g_menu_item_set_attribute_value ( mitem, "accel", g_variant_new_string ( tv_list_media_n[ dat_n[i] ].accel_key ) );
+        g_menu_item_set_attribute_value ( mitem, "accel", g_variant_new_string ( tv_list_media_n[ dat_n[j] ].accel_key ) );
         g_menu_append_item ( menu, mitem );
     }
 
@@ -951,7 +954,7 @@ static void tv_read_file_ch_to_treeview ( const gchar *filename )
 
 static void mp_treeview_to_file ( GtkTreeView *tree_view, gchar *filename )
 {
-    GString *gstring = g_string_new ( "# Gtv channel format \n" );
+    GString *gstring = g_string_new ( "# GDvb channel format \n" );
 
     GtkTreeIter iter;
     GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tree_view ) );
@@ -1037,7 +1040,7 @@ static void tv_strat_hide ()
     tv_sensitive ( FALSE, 0, gtk_toolbar_get_n_items ( GTK_TOOLBAR ( toolbar_media ) ) - 2 );
 }
 
-static void tv_init ()
+static void tv_init ( GtkApplication *app )
 {
     gchar *dir_conf = g_strdup_printf ( "%s/gtv", g_get_user_config_dir () );
 
@@ -1054,25 +1057,33 @@ static void tv_init ()
 
     audio_encoder = g_strdup ( "vorbisenc" );
     video_encoder = g_strdup ( "theoraenc" );
-    muxer = g_strdup ( "oggmux" );
-    file_ext = g_strdup ( "ogg" );
+    muxer =         g_strdup ( "oggmux" );
+    file_ext =      g_strdup ( "ogg" );
 
-    gchar *th_home = g_strconcat ( g_get_home_dir (), "/.themes/Adwaita-dark", NULL );
+    const gchar *th_name = "Dark-media";
+    gchar *th_home = g_strconcat ( g_get_home_dir (), "/.themes/", th_name, NULL );
+    gchar *th_root = g_strconcat ( "/usr/share/themes/", th_name, NULL );
 
-    if ( g_file_test ( th_home, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR ) || g_file_test ( "/usr/share/themes/Adwaita-dark", G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR ) )
-        g_object_set ( gtk_settings_get_default (), "gtk-theme-name", "Adwaita-dark", NULL );
+    if ( g_file_test ( th_home, G_FILE_TEST_EXISTS ) || g_file_test ( th_root, G_FILE_TEST_EXISTS ) )
+        g_object_set ( gtk_settings_get_default (), "gtk-theme-name", th_name, NULL );
 
     g_free ( th_home );
+    g_free ( th_root );
 
-    gchar *ic_home = g_strconcat ( g_get_home_dir (), "/.icons/Art", NULL );
+    const gchar *ic_name = "Light-media";
+    gchar *ic_home = g_strconcat ( g_get_home_dir (), "/.icons/", ic_name, NULL );
+    gchar *ic_root = g_strconcat ( "/usr/share/icons/", ic_name, NULL );
 
-    if ( g_file_test ( ic_home, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR ) || g_file_test ( "/usr/share/icons/Art", G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR ) )
-        g_object_set ( gtk_settings_get_default (), "gtk-icon-theme-name", "Art", NULL );
+    if ( g_file_test ( ic_home, G_FILE_TEST_EXISTS ) || g_file_test ( ic_root, G_FILE_TEST_EXISTS ) )
+        g_object_set ( gtk_settings_get_default (), "gtk-icon-theme-name", ic_name, NULL );
 
     g_free ( ic_home );
+    g_free ( ic_root );
 
     tv_logo = gtk_icon_theme_load_icon ( gtk_icon_theme_get_default (),
               "applications-multimedia", 64, GTK_ICON_LOOKUP_USE_BUILTIN, NULL );
+
+    tv_create_gaction_entry ( app );
 }
 
 static void tv_read_ch ()
@@ -1101,14 +1112,14 @@ static void tv_quit ( /*GtkWindow *window*/ )
 
 static void tv_win_base ( GtkApplication *app )
 {
-    tv_init ();
+    tv_init ( app );
 
     GtkBox *main_box, *main_hbox, *tool_hbox_sw;
     GtkListStore *liststore;
     GtkScrolledWindow *scrollwin;
 
     main_window = (GtkWindow *)gtk_application_window_new ( app );
-    gtk_window_set_title ( main_window, "Gtv" );
+    gtk_window_set_title ( main_window, "GDvb" );
     gtk_window_set_default_size ( main_window, 900, 400 );
     gtk_window_set_default_icon_name ( "display" );
     g_signal_connect ( main_window, "destroy", G_CALLBACK ( tv_quit ), NULL );
@@ -1175,7 +1186,6 @@ static void tv_win_base ( GtkApplication *app )
 
 static void activate ( GtkApplication *app )
 {
-    tv_create_gaction_entry ( app );
     tv_win_base ( app );
 }
 
@@ -1205,7 +1215,7 @@ const gchar *dvb_type_str = "UNDEFINED";
 //static guint j = 0, c = 0;
 guint adapter_ct = 0, frontend_ct = 0, lnb_type = 0;
 gchar *pol = "H";
-gboolean msg_info = FALSE, w_scan_info = FALSE, msg_dg_s = TRUE;
+gboolean msg_info = FALSE, w_scan_info = FALSE, fmsg_is = TRUE;
 
 time_t t_start, t_cur;
 
@@ -1250,7 +1260,7 @@ static gboolean pat_done = FALSE, pmt_done = FALSE, sdt_done = FALSE;
 
 static void start_clear_dvb_gst_scan ()
 {
-    msg_dg_s = TRUE;
+    fmsg_is = TRUE;
 
     sdt_done = FALSE;
     pat_done = FALSE;
@@ -1260,18 +1270,17 @@ static void start_clear_dvb_gst_scan ()
     pmt_count = 0;
     sdt_count = 0;
 
-    gint i;
-    for ( i = 0; i < MAX_RUN_PAT; i++ )
+    for ( j = 0; j < MAX_RUN_PAT; j++ )
     {
-        dvb_gst_scan_pmt_n[i].pmn_pid = 0;
-        dvb_gst_scan_pmt_n[i].apid = 0;
-        dvb_gst_scan_pmt_n[i].vpid = 0;
+        dvb_gst_scan_pmt_n[j].pmn_pid = 0;
+        dvb_gst_scan_pmt_n[j].apid = 0;
+        dvb_gst_scan_pmt_n[j].vpid = 0;
 
-        dvb_gst_scan_pat_n[i].pmn_pid = 0;
-        dvb_gst_scan_pat_n[i].nmap = 0;
+        dvb_gst_scan_pat_n[j].pmn_pid = 0;
+        dvb_gst_scan_pat_n[j].nmap = 0;
 
-        dvb_gst_scan_sdt_n[i].pmn_pid = 0;
-        dvb_gst_scan_sdt_n[i].name = NULL;
+        dvb_gst_scan_sdt_n[j].pmn_pid = 0;
+        dvb_gst_scan_sdt_n[j].name = NULL;
     }
 }
 
@@ -1494,10 +1503,10 @@ static void scan_msg_err ( GstBus *bus, GstMessage *msg )
     g_printerr ( "ERROR: %s (%s)\n", err->message, (dbg) ? dbg : "no details" );
     tv_info_object_name ( GST_OBJECT ( bus ) );
 
-    if ( msg_dg_s )
+    if ( fmsg_is )
         tv_message_dialog ( err->message, (dbg) ? dbg : " ", GTK_MESSAGE_ERROR );
 
-    msg_dg_s = FALSE;
+    fmsg_is = FALSE;
 
     g_error_free ( err );
     g_free ( dbg );
@@ -2468,9 +2477,8 @@ static void tv_changed_sw_et ( GtkSwitch *switch_p )
     else
         rec_en_ts = FALSE;
 
-    guint z = 0;
-    for ( z = 0; z < 4; z++ )
-        gtk_widget_set_sensitive ( GTK_WIDGET ( entry_enc[z] ), rec_en_ts );
+    for ( c = 0; c < 4; c++ )
+        gtk_widget_set_sensitive ( GTK_WIDGET ( entry_enc[c] ), rec_en_ts );
 }
 
 static GtkBox * tv_scan_pref ()
@@ -2558,8 +2566,8 @@ static GtkBox * tv_scan_pref ()
     g_signal_connect ( button_convert, "clicked", G_CALLBACK ( tv_scan_convert ), entry_cv );
     gtk_box_pack_start ( g_box, GTK_WIDGET ( button_convert ), FALSE, FALSE, 10 );
 
-    for ( z = 0; z < 4; z++ )
-        gtk_widget_set_sensitive ( GTK_WIDGET ( entry_enc[z] ), rec_en_ts );
+    for ( c = 0; c < 4; c++ )
+        gtk_widget_set_sensitive ( GTK_WIDGET ( entry_enc[c] ), rec_en_ts );
 
     return g_box;
 }
@@ -2614,4 +2622,3 @@ static void tv_win_scan ()
 
     gtk_widget_show_all ( GTK_WIDGET ( window ) );
 }
-
