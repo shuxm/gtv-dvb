@@ -24,6 +24,9 @@
 #define GST_USE_UNSTABLE_API
 #include <gst/mpegts/mpegts.h>
 
+#include <locale.h>
+#include <glib/gi18n.h>
+
 
 static GstElement *dvbplay, *dvb_all_n[17], *dvb_rec_all_n[6];
 
@@ -478,7 +481,7 @@ static void tv_stop ()
 
         tv_sensitive  ( FALSE, 0, gtk_toolbar_get_n_items ( GTK_TOOLBAR ( toolbar_media ) ) - 2 );
         gtk_label_set_text ( signal_snr, "Signal 0  &  Snr 0" );
-        gtk_window_set_title  ( GTK_WINDOW ( main_window ), "GDvb" );
+        gtk_window_set_title  ( GTK_WINDOW ( main_window ), "Gtv-Dvb" );
         gtk_widget_queue_draw ( GTK_WIDGET ( main_window ) );
     }
 }
@@ -697,17 +700,24 @@ static gboolean tv_press_event ( GtkDrawingArea *drawingare, GdkEventButton *eve
 const struct tv_list_media { const gchar *label; gchar *name_icon; void (* activate); const gchar *accel_key; } tv_list_media_n[] =
 {
     // Toolbar media
-    { "Record",   "media-record",            tv_rec,   "<control>r" }, { "Stop",       "media-playback-stop", tv_stop,  "<control>x" },
-    //{ "EQ-Audio", "preferences-desktop",  tv_audio, "<control>a" }, { "EQ-Video",   "preferences-desktop", tv_video, "<control>v" },
-    { "Channels", "applications-multimedia", tv_plist, "<control>l" }, { "Scan",       "display",             tv_scan,  "<control>u" },
+    { N_("Record"),     "media-record",            tv_rec,   "<control>r" },
+    { N_("Stop"),       "media-playback-stop",     tv_stop,  "<control>x" },
+    //{ N_("EQ-Audio"),   "preferences-desktop",     tv_audio, "<control>a" },
+    //{ N_("EQ-Video"),   "preferences-desktop",     tv_video, "<control>v" },
+    { N_("Channels"),   "applications-multimedia", tv_plist, "<control>l" },
+    { N_("Scan"),       "display",                 tv_scan,  "<control>u" },
 
     // Toolbar sw
-    { "Up",       "up",                   tv_goup,  "<control>z" }, { "Down",       "down",                tv_down,  "<control>z" },
-    { "Remove",   "remove",               tv_remv,  "<control>z" }, { "Clear",      "edit-clear",          tv_clear, "<control>z" },
+    { N_("Up"),         "up",                      tv_goup,  "<control>z" },
+    { N_("Down"),       "down",                    tv_down,  "<control>z" },
+    { N_("Remove"),     "remove",                  tv_remv,  "<control>z" },
+    { N_("Clear"),      "edit-clear",              tv_clear, "<control>z" },
 
     // Menu ( only )
-    { "Mute",    "audio-volume-muted",    tv_mute,  "<control>m" }, { "Fullscreen", "view-fullscreen",     tv_flscr, "<control>f" },
-    { "Mini",    "view-restore",          tv_mini,  "<control>h" }, { "Quit",       "system-shutdown",     tv_quit,  "<control>q" }
+    { N_("Mute"),       "audio-volume-muted",      tv_mute,  "<control>m" },
+    { N_("Full-screen"),"view-fullscreen",         tv_flscr, "<control>f" },
+    { N_("Mini"),       "view-restore",            tv_mini,  "<control>h" },
+    { N_("Quit"),       "system-shutdown",         tv_quit,  "<control>q" }
 };
 
 static void tv_create_gaction_entry ( GtkApplication *app )
@@ -778,7 +788,7 @@ static GMenu * tv_create_gmenu ()
     for ( j = 0; j < G_N_ELEMENTS ( dat_n ); j++ )
     {
         gchar *text = g_strconcat ( "menu.", tv_list_media_n[ dat_n[j] ].label, NULL );
-            mitem = g_menu_item_new ( tv_list_media_n[ dat_n[j] ].label, text );
+            mitem = g_menu_item_new ( _(tv_list_media_n[ dat_n[j] ].label), text );
         g_free ( text );
 
         g_menu_item_set_icon ( mitem, G_ICON ( gtk_icon_theme_load_icon ( gtk_icon_theme_get_default (),
@@ -954,7 +964,7 @@ static void tv_read_file_ch_to_treeview ( const gchar *filename )
 
 static void mp_treeview_to_file ( GtkTreeView *tree_view, gchar *filename )
 {
-    GString *gstring = g_string_new ( "# GDvb channel format \n" );
+    GString *gstring = g_string_new ( "# Gtv-Dvbf channel format \n" );
 
     GtkTreeIter iter;
     GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tree_view ) );
@@ -1119,7 +1129,7 @@ static void tv_win_base ( GtkApplication *app )
     GtkScrolledWindow *scrollwin;
 
     main_window = (GtkWindow *)gtk_application_window_new ( app );
-    gtk_window_set_title ( main_window, "GDvb" );
+    gtk_window_set_title ( main_window, "Gtv-Dvb" );
     gtk_window_set_default_size ( main_window, 900, 400 );
     gtk_window_set_default_icon_name ( "display" );
     g_signal_connect ( main_window, "destroy", G_CALLBACK ( tv_quit ), NULL );
@@ -1189,11 +1199,35 @@ static void activate ( GtkApplication *app )
     tv_win_base ( app );
 }
 
+static void set_locale ()
+{
+    setlocale ( LC_ALL, "" );
+
+        const gchar *lc_name = "uk/LC_MESSAGES/gtv-dvb.mo";
+        gchar *lc_home_d = g_strconcat ( g_get_home_dir (), "/.local/share/locale/", NULL );
+        gchar *lc_home_f = g_strconcat ( lc_home_d, lc_name, NULL );
+
+        if ( g_file_test ( lc_home_f, G_FILE_TEST_EXISTS ) )
+        {
+            bindtextdomain ("gtv-dvb", lc_home_d);
+            g_print ( "LC home dir %s found \n", lc_home_d );
+        }
+        else
+            bindtextdomain ( "gtv-dvb", "/usr/share/locale/" );
+
+        g_free ( lc_home_f );
+        g_free ( lc_home_d );
+
+    textdomain ( "gtv-dvb" );
+}
+
 int main ()
 {
     gst_init ( NULL, NULL );
 
     if ( !tv_gst_create () ) return -1;
+
+    set_locale ();
 
     GtkApplication *app = gtk_application_new ( NULL, G_APPLICATION_FLAGS_NONE );
     g_signal_connect ( app, "activate", G_CALLBACK ( activate ),  NULL );
