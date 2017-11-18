@@ -34,24 +34,14 @@ Depends
 * gst-libav
 
 
-Compile
--------
+Makefile
+--------
 
-* sh scripts/compile.sh
+* Compile
 
+* Install
 
-Install
--------
-
-* home
-	* sh scripts/install-home.sh
-
-
-Uninstall
----------
-
-* home
-	* sh scripts/uninstall-home.sh
+* Uninstall
 
 
 Channels
