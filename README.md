@@ -4,7 +4,10 @@ GTV
 - Digital TV player
 - DVB-T/T2, DVB-S/S2, DVB-C
 
+* OS Lubuntu; Icon-theme [Light-media](https://github.com/vl-nix/light-media); Theme [Dark-media](https://github.com/vl-nix/dark-media)
+![alt text](Lubuntu.png "Preview")
 
+* OS AltLinux; Icon-theme default; Theme [Adwaita-dark](https://github.com/GNOME/gnome-themes-standard)
 ![alt text](screenshots.png "Preview")
 
 
