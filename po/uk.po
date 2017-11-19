@@ -1,14 +1,14 @@
-# Ukrainian translations for gtv package.
-# Copyright (C) 2017 THE gtv'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the gtv package.
+# Ukrainian translations for gtv-dvb package.
+# Copyright (C) 2017 THE gtv-dvb'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gtv-dvb package.
 # Stepan Perun <st.pr-u@yandex.ua>, 2017.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtv 1.0\n"
+"Project-Id-Version: gtv-dvb 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-18 17:21+0200\n"
-"PO-Revision-Date: 2017-11-18 14:06+0200\n"
+"POT-Creation-Date: 2017-11-19 12:44+0200\n"
+"PO-Revision-Date: 2017-11-19 12:44+0200\n"
 "Last-Translator: Stepan Perun <st.pr-u@yandex.ua>\n"
 "Language-Team: Ukrainian\n"
 "Language: uk\n"
