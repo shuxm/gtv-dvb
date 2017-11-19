@@ -42,7 +42,7 @@ install:
 	mkdir -p $(bindir) $(datadir) $(desktopdir)
 	install -Dp -m0755 $(target) $(bindir)/$(target)
 	install -Dp -m0644 res/$(target).desktop $(desktopdir)/$(target).desktop
-	sed 's|prefix|$(prefix)|g' -i $(desktopdir)/$(target).desktop
+	sed 's|bindir|$(bindir)|g' -i $(desktopdir)/$(target).desktop
 	cp -r locale $(datadir)
 
 uninstall:
