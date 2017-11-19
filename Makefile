@@ -22,7 +22,7 @@
 #   $ make build      only build
 #   $ make install    install all
 #   $ make uninstall  uninstall all
-#   $ make clean 	  clean all
+#   $ make clean      clean all
 #   $ make help       get the usage of the makefile
 #   $ make info       show variables
 #
