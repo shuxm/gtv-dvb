@@ -27,9 +27,9 @@
 #   $ make info       show variables
 #
 #   $ For translators:
-#		make gen_pot         only xgettext -> pot
-#		make msg_merge_init  only msgmerge or msginit pot -> po
-#		make msgfmt          only msgfmt lang.po -> lang.mo
+#	make gen_pot         only xgettext -> pot
+#	make msg_merge_init  only msgmerge or msginit pot -> po
+#	make msgfmt          only msgfmt lang.po -> lang.mo
 #
 #===========================================================================
 
@@ -121,7 +121,7 @@ help:
 	@echo '  install    install all'
 	@echo '  uninstall  uninstall all'
 	@echo '  clean      clean all'
-	@echo '  show       show variables'
+	@echo '  info       show variables'
 	@echo '  help       print this message'
 	@echo
 	@echo 'For translators:'
