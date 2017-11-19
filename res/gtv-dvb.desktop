@@ -2,8 +2,8 @@
 Name=Gtv-dvb
 Comment=Digital TV
 Type=Application
-TryExec=prefix/bin/gtv-dvb
-Exec=prefix/bin/gtv-dvb %U
+TryExec=bindir/gtv-dvb
+Exec=bindir/gtv-dvb %U
 Icon=display
 Terminal=false
 Categories=GTK;AudioVideo
