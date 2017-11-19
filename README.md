@@ -1,5 +1,5 @@
-GTV
----
+Gtv-Dvb
+-------
 
 - Digital TV player
 - DVB-T/T2, DVB-S/S2, DVB-C
@@ -63,15 +63,10 @@ Record
 * Ts
 
 
-Icon-theme
-----------
+Design
+------
+* Icon-theme [Light-media](https://github.com/vl-nix/light-media)
 
-* [Light-media](https://github.com/vl-nix/light-media)
-
-
-Theme
------
-
-* [Dark-media](https://github.com/vl-nix/dark-media)
+* Theme [Dark-media](https://github.com/vl-nix/dark-media)
 
 
