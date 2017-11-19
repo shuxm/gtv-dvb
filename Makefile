@@ -93,14 +93,14 @@ msgfmt:
 	done
 
 install:
-	mkdir -p $(bindir) $(datadir) $(desktopdir)
-	install -Dp -m0755 $(program) $(bindir)/$(program)
-	install -Dp -m0644 res/$(program).desktop $(desktopdir)/$(program).desktop
-	sed 's|bindir|$(bindir)|g' -i $(desktopdir)/$(program).desktop
-	cp -r locale $(datadir)
+	mkdir -p $(DESTDIR)$(bindir) $(DESTDIR)$(datadir) $(DESTDIR)$(desktopdir)
+	install -Dp -m0755 $(program) $(DESTDIR)$(bindir)/$(program)
+	install -Dp -m0644 res/$(program).desktop $(DESTDIR)$(desktopdir)/$(program).desktop
+	sed 's|bindir|$(bindir)|g' -i $(DESTDIR)$(desktopdir)/$(program).desktop
+	cp -r locale $(DESTDIR)$(datadir)
 
 uninstall:
-	rm -fr $(bindir)/$(program) $(desktopdir)/$(program).desktop $(localedir)/*/*/$(program).mo
+	rm -fr $(DESTDIR)$(bindir)/$(program) $(DESTDIR)$(desktopdir)/$(program).desktop $(DESTDIR)$(localedir)/*/*/$(program).mo
 
 clean:
 	rm -f $(program) src/*.o po/$(program).pot
