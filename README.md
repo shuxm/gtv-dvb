@@ -8,7 +8,7 @@ Gtv-Dvb
 ![alt text](Lubuntu.png "Preview")
 
 * OS AltLinux; Icon-theme default; Theme [Adwaita-dark](https://github.com/GNOME/gnome-themes-standard)
-![alt text](screenshots.png "Preview")
+![alt text](AltLinux.png "Preview")
 
 
 Requirements
