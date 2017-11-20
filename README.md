@@ -40,7 +40,7 @@ Depends
 Makefile
 --------
 
-* make target:
+* make [target]:
   * all
   * help
   * info
