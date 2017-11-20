@@ -1,6 +1,8 @@
 #############################################################################
 #
 # Makefile for Gtv-dvb
+# License: GPL (General Public License)
+#
 # Get Gtv-dvb: https://github.com/vl-nix/gtv-dvb
 #
 #
@@ -17,37 +19,36 @@
 #
 # Make Target:
 # ------------
-#   $ make            compile all
-#   $ make depends    check dependencies
-#   $ make build      only build
-#   $ make install    install all
-#   $ make uninstall  uninstall all
-#   $ make clean      clean all
-#   $ make help       get the usage of the makefile
+#   $ make            all
+#   $ make help       get the usage
 #   $ make info       show variables
+#   $ make depends    check dependencies
+#   $ make compile    only build
+#   $ make install    install
+#   $ make uninstall  uninstall
+#   $ make clean      clean all
 #
 #   $ For translators:
-#	make gen_pot         only xgettext -> pot
-#	make msg_merge_init  only msgmerge or msginit pot -> po
-#	make msgfmt          only msgfmt lang.po -> lang.mo
+#	   make genpot     only xgettext -> pot
+#	   make mergeinit  only msgmerge or msginit pot -> po
+#	   make msgfmt     only msgfmt po -> mo
 #
 #===========================================================================
 
 
 ## Set prefix=PREFIX ( install files in PREFIX )
 ##==========================================================================
-# prefix     = /usr
-prefix     = $(HOME)/.local
+# prefix    = /usr
+prefix      = $(HOME)/.local
 
+program     = gtv-dvb
+version     = 1.0
 
-program    = gtv-dvb
-version    = 1.0
+bindir      = $(prefix)/bin
+datadir     = $(prefix)/share
+desktopdir  = $(datadir)/applications
+localedir   = $(datadir)/locale
 
-bindir     = $(prefix)/bin
-datadir    = $(prefix)/share
-desktopdir = $(datadir)/applications
-
-localedir  = $(datadir)/locale
 obj_locale = $(subst :, ,$(LANGUAGE))
 
 obj_depends = gtk+-3.0 gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-plugins-good-1.0 gstreamer-plugins-bad-1.0 gstreamer-video-1.0
@@ -62,6 +63,8 @@ depends:
 		pkg-config --exists --print-errors $$depend; \
 	done
 
+compile: build
+
 build:
 	gcc -Wall -Wextra \
 		src/*.c \
@@ -70,14 +73,14 @@ build:
 		`pkg-config gstreamer-video-1.0 --cflags --libs` \
 		`pkg-config gstreamer-mpegts-1.0 --libs`
 
-translation: gen_pot msg_merge_init msgfmt	
+translation: genpot mergeinit msgfmt	
 
-gen_pot:
+genpot:
 	mkdir -p po
 	xgettext src/*.c --language=C --keyword=N_ --escape --sort-output --from-code=UTF-8 --package-name=$(program) --package-version=$(version) -o po/$(program).pot
 	sed 's|PACKAGE VERSION|$(program) $(version)|g;s|charset=CHARSET|charset=UTF-8|g' -i po/$(program).pot
 
-msg_merge_init:
+mergeinit:
 	for lang in $(obj_locale); do \
 		echo $$lang; \
 		if [ ! -f po/$$lang.po ]; then msginit -i po/$(program).pot --locale=$$lang -o po/$$lang.po; \
@@ -107,29 +110,6 @@ clean:
 	rm -r locale
 
 
-
-# Show help.
-help:
-	@echo 'Makefile for Gtv-dvb'
-	@echo 'Get Gtv-dvb: https://github.com/vl-nix/gtv-dvb'
-	@echo
-	@echo 'Usage: make [TARGET]'
-	@echo 'TARGETS:'
-	@echo '  all        (=make) compile all'
-	@echo '  depends    check dependencies'
-	@echo '  build      only build'
-	@echo '  install    install all'
-	@echo '  uninstall  uninstall all'
-	@echo '  clean      clean all'
-	@echo '  info       show variables'
-	@echo '  help       print this message'
-	@echo
-	@echo 'For translators:'
-	@echo '  gen_pot         only xgettext -> pot'
-	@echo '  msg_merge_init  only msgmerge or msginit pot -> po'
-	@echo '  msgfmt          only msgfmt lang.po -> lang.mo'
-	@echo
-
 # Show variables.
 info:
 	@echo
@@ -141,6 +121,29 @@ info:
 	@echo 'localedir    :' $(localedir)
 	@echo 'obj_locale   :' $(obj_locale)
 	@echo 'obj_depends  :' $(obj_depends)
+	@echo
+
+
+# Show help.
+help:
+	@echo 'Makefile for Gtv-dvb'
+	@echo 'Get Gtv-dvb: https://github.com/vl-nix/gtv-dvb'
+	@echo
+	@echo 'Usage: make [TARGET]'
+	@echo 'TARGETS:'
+	@echo '  all        or make'
+	@echo '  help       print this message'
+	@echo '  info       show variables'
+	@echo '  depends    check dependencies'
+	@echo '  compile    only build'
+	@echo '  install    install'
+	@echo '  uninstall  uninstall'
+	@echo '  clean      clean all'
+	@echo
+	@echo 'For translators:'
+	@echo '  genpot     only xgettext -> pot'
+	@echo '  mergeinit  only msgmerge or msginit pot -> po'
+	@echo '  msgfmt     only msgfmt po -> mo'
 	@echo
 
 ## End of the Makefile
