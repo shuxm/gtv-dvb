@@ -40,12 +40,15 @@ Depends
 Makefile
 --------
 
-* Compile
-
-* Install
-
-* Uninstall
-
+* make target:
+  * all
+  * help
+  * info
+  * depends
+  * compile
+  * install
+  * uninstall
+  * clean
 
 Channels
 --------
