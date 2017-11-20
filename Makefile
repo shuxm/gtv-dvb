@@ -77,7 +77,8 @@ translation: genpot mergeinit msgfmt
 
 genpot:
 	mkdir -p po
-	xgettext src/*.c --language=C --keyword=N_ --escape --sort-output --from-code=UTF-8 --package-name=$(program) --package-version=$(version) -o po/$(program).pot
+	xgettext src/*.c --language=C --keyword=N_ --escape --sort-output --from-code=UTF-8 \
+	--package-name=$(program) --package-version=$(version) -o po/$(program).pot
 	sed 's|PACKAGE VERSION|$(program) $(version)|g;s|charset=CHARSET|charset=UTF-8|g' -i po/$(program).pot
 
 mergeinit:
@@ -103,7 +104,8 @@ install:
 	cp -r locale $(DESTDIR)$(datadir)
 
 uninstall:
-	rm -fr $(DESTDIR)$(bindir)/$(program) $(DESTDIR)$(desktopdir)/$(program).desktop $(DESTDIR)$(localedir)/*/*/$(program).mo
+	rm -fr $(DESTDIR)$(bindir)/$(program) $(DESTDIR)$(desktopdir)/$(program).desktop \
+	$(DESTDIR)$(localedir)/*/*/$(program).mo
 
 clean:
 	rm -f $(program) src/*.o po/$(program).pot
