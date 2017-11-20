@@ -36,7 +36,7 @@
 #===========================================================================
 
 
-## Set prefix=PREFIX ( install files in PREFIX )
+## Set prefix = PREFIX ( install files in PREFIX )
 ##==========================================================================
 # prefix    = /usr
 prefix      = $(HOME)/.local
@@ -51,7 +51,7 @@ localedir   = $(datadir)/locale
 
 obj_locale = $(subst :, ,$(LANGUAGE))
 
-obj_depends = gtk+-3.0 gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-plugins-good-1.0 gstreamer-plugins-bad-1.0 gstreamer-video-1.0
+obj_depends = gtk+-3.0 gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-plugins-good-1.0 gstreamer-plugins-bad-1.0
 
 
 all: depends build translation
