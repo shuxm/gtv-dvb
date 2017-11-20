@@ -41,14 +41,12 @@ Makefile
 --------
 
 * make [target]:
-  * all
   * help
   * info
   * depends
-  * compile
   * install
   * uninstall
-  * clean
+  * ...
 
 Channels
 --------
