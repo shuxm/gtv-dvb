@@ -43,7 +43,6 @@ Makefile
 * make [target]:
   * help
   * info
-  * depends
   * install
   * uninstall
   * ...
