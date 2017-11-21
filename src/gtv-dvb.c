@@ -1202,8 +1202,7 @@ static void activate ( GtkApplication *app )
 static void set_locale ()
 {
     setlocale ( LC_ALL, "" );
-	/* "/usr/share/locale/" */
-    bindtextdomain ( "gtv-dvb", "/usr/share/locale" );
+    bindtextdomain ( "gtv-dvb", "/usr/share/locale/" );
     textdomain ( "gtv-dvb" );
 }
 
