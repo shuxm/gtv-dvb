@@ -145,7 +145,7 @@ help:
 	@echo
 	@echo 'For translators:'
 	@echo '  genpot     only xgettext -> pot'
-	@echo '  mergeinit  only msgmerge or msginit pot -> po'
+	@echo '  mergeinit  gen_pot and msgmerge or msginit pot -> po'
 	@echo '  msgfmt     only msgfmt po -> mo'
 	@echo
 
