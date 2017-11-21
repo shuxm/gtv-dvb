@@ -2608,7 +2608,7 @@ static GtkBox * tv_scan_pref ()
     guint d = 0, z = 0;
     for ( d = 0; d < G_N_ELEMENTS ( data_a_n ); d++ )
     {
-        gtk_label_set_label ( GTK_LABEL ( data_a_n[d].label ), data_a_n[d].ltext );
+        gtk_label_set_label ( GTK_LABEL ( data_a_n[d].label ), _(data_a_n[d].ltext) );
         gtk_widget_set_halign ( GTK_WIDGET ( data_a_n[d].label ), GTK_ALIGN_START );
         gtk_grid_attach ( GTK_GRID ( grid ), GTK_WIDGET ( data_a_n[d].label ), 0, d, 1, 1 );
 
