@@ -88,7 +88,7 @@ translation: genpot mergeinit msgfmt
 
 genpot:
 	mkdir -p po
-	xgettext src/*.c --language=C --keyword=N_ --escape --sort-output --from-code=UTF-8 \
+	xgettext src/*.c --language=C --keyword=N_ --keyword=_ --escape --sort-output --from-code=UTF-8 \
 	--package-name=$(program) --package-version=$(version) -o po/$(program).pot
 	sed 's|PACKAGE VERSION|$(program) $(version)|g;s|charset=CHARSET|charset=UTF-8|g' -i po/$(program).pot
 
