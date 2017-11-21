@@ -30,7 +30,7 @@
 #
 #   $ For translators:
 #	   make genpot     only xgettext -> pot
-#	   make mergeinit  only msgmerge or msginit pot -> po
+#	   make mergeinit  gen_pot and msgmerge or msginit pot -> po
 #	   make msgfmt     only msgfmt po -> mo
 #
 #===========================================================================
@@ -54,7 +54,7 @@ obj_locale = $(subst :, ,$(LANGUAGE))
 obj_depends = gtk+-3.0 gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-plugins-good-1.0 gstreamer-plugins-bad-1.0
 
 
-all: depends build translation
+all: depends build msgfmt
 
 
 depends:
@@ -66,14 +66,14 @@ depends:
 compile: build
 
 build:
-	gcc -Wall -Wextra \
+	gcc -Wall -Wextra $(CFLAG)\
 		src/*.c \
 		-o $(program) \
 		`pkg-config gtk+-3.0 --cflags --libs` \
 		`pkg-config gstreamer-video-1.0 --cflags --libs` \
 		`pkg-config gstreamer-mpegts-1.0 --libs`
 
-translation: genpot mergeinit msgfmt	
+translation: genpot mergeinit msgfmt
 
 genpot:
 	mkdir -p po
@@ -81,7 +81,7 @@ genpot:
 	--package-name=$(program) --package-version=$(version) -o po/$(program).pot
 	sed 's|PACKAGE VERSION|$(program) $(version)|g;s|charset=CHARSET|charset=UTF-8|g' -i po/$(program).pot
 
-mergeinit:
+mergeinit: genpot
 	for lang in $(obj_locale); do \
 		echo $$lang; \
 		if [ ! -f po/$$lang.po ]; then msginit -i po/$(program).pot --locale=$$lang -o po/$$lang.po; \
@@ -89,11 +89,10 @@ mergeinit:
 	done
 
 msgfmt:
-	for lang in $(obj_locale); do \
-		echo $$lang; \
-		msgfmt -v po/$$lang.po -o $$lang.mo; \
+	for language in po/*.po; do \
+		lang=`basename $$language | cut -f 1 -d '.'`; \
 		mkdir -pv locale/$$lang/LC_MESSAGES/; \
-		mv $$lang.mo locale/$$lang/LC_MESSAGES/$(program).mo; \
+		msgfmt -v $$language -o locale/$$lang/LC_MESSAGES/$(program).mo; \
 	done
 
 install:
@@ -109,7 +108,7 @@ uninstall:
 
 clean:
 	rm -f $(program) src/*.o po/$(program).pot
-	rm -r locale
+	rm -fr locale
 
 
 # Show variables.
