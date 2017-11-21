@@ -2490,7 +2490,7 @@ static GtkBox * tv_scan_convert ()
             g_signal_connect ( data_a_n[d].widget, "changed", G_CALLBACK ( data_a_n[d].activate ), label_name );
     }
 
-    GtkLabel *label = (GtkLabel *)gtk_label_new ( "Set file - dvb_channel.conf ( format DVBv5 )" );
+    GtkLabel *label = (GtkLabel *)gtk_label_new ( "Choose file:\n    dvb_channel.conf ( format DVBv5 )" );
     gtk_widget_set_halign ( GTK_WIDGET ( label ), GTK_ALIGN_START );
     gtk_box_pack_start ( g_box, GTK_WIDGET ( label ), FALSE, FALSE, 10 );
 
