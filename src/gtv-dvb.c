@@ -83,7 +83,7 @@ static void tv_message_dialog ( gchar *f_error, gchar *file_or_info, GtkMessageT
 
 static void tv_set_sgn_snr ( GstElement *element, GtkLabel *label, gdouble sgb, gdouble srb, gboolean hlook )
 {
-    gchar *texta = g_strdup_printf ( "Signal %d%s", (int)sgb, "%" );
+    gchar *texta = g_strdup_printf ( "Level %d%s", (int)sgb, "%" );
     gchar *textb = g_strdup_printf ( "Snr %d%s",    (int)srb, "%" );
 
     const gchar *format = NULL;
@@ -101,7 +101,7 @@ static void tv_set_sgn_snr ( GstElement *element, GtkLabel *label, gdouble sgb, 
     }
     if ( GST_ELEMENT_CAST ( element ) -> current_state == GST_STATE_NULL )
     {
-        gtk_label_set_text ( label, "Signal 0  &  Snr 0" );
+        gtk_label_set_text ( label, "Level 0  &  Snr 0" );
     }
 
     g_free ( texta );
@@ -480,7 +480,7 @@ static void tv_stop ()
         rec_status = TRUE;
 
         tv_sensitive  ( FALSE, 0, gtk_toolbar_get_n_items ( GTK_TOOLBAR ( toolbar_media ) ) - 2 );
-        gtk_label_set_text ( signal_snr, "Signal 0  &  Snr 0" );
+        gtk_label_set_text ( signal_snr, "Level 0  &  Snr 0" );
         gtk_window_set_title  ( GTK_WINDOW ( main_window ), "Gtv-Dvb" );
         gtk_widget_queue_draw ( GTK_WIDGET ( main_window ) );
     }
@@ -997,7 +997,7 @@ static void tv_remv  () { tv_treeview_remove  ( tv_treeview ); }
 static gchar * tv_rec_dir ()
 {
     GtkFileChooserDialog *dialog = ( GtkFileChooserDialog *)gtk_file_chooser_dialog_new (
-                    "Folder",  main_window, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                    _("Folder"),  main_window, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
                     "gtk-cancel", GTK_RESPONSE_CANCEL,
                     "gtk-apply",  GTK_RESPONSE_ACCEPT,
                      NULL );
@@ -1019,7 +1019,7 @@ static gchar * tv_openf ()
     gchar *filename = NULL;
 
     GtkFileChooserDialog *dialog = ( GtkFileChooserDialog *)gtk_file_chooser_dialog_new (
-                    "Open File",  main_window, GTK_FILE_CHOOSER_ACTION_OPEN,
+                    _("Open File"),  main_window, GTK_FILE_CHOOSER_ACTION_OPEN,
                     "gtk-cancel", GTK_RESPONSE_CANCEL,
                     "gtk-open",   GTK_RESPONSE_ACCEPT,
                      NULL );
@@ -1039,7 +1039,7 @@ static GtkBox * tv_create_sgn_snr ()
 {
     GtkBox *tbar_dvb = (GtkBox *)gtk_box_new ( GTK_ORIENTATION_VERTICAL, 0 );
 
-    signal_snr = (GtkLabel *)gtk_label_new ( "Signal 0  &  Snr 0" );
+    signal_snr = (GtkLabel *)gtk_label_new ( "Level 0  &  Snr 0" );
     gtk_box_pack_start ( tbar_dvb, GTK_WIDGET ( signal_snr  ), FALSE, FALSE, 10 );
 
     return tbar_dvb;
@@ -1147,7 +1147,7 @@ static void tv_win_base ( GtkApplication *app )
     liststore   = (GtkListStore *)gtk_list_store_new ( 3, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING );
     tv_treeview = (GtkTreeView *)gtk_tree_view_new_with_model ( GTK_TREE_MODEL ( liststore ) );
 
-    scrollwin        = tv_scroll_win ( tv_treeview, "Channels", "Data" );
+    scrollwin        = tv_scroll_win ( tv_treeview, _("Channels"), "Data" );
     toolbar_media    = tv_create_toolbar_media ( 0, 4 );
     toolbar_media_sw = tv_create_toolbar_sw    ( 4, 8 );
 
@@ -1229,7 +1229,7 @@ int main ()
 // Scan & convert
 
 gint DVB_DELSYS = SYS_UNDEFINED;
-const gchar *dvb_type_str = "UNDEFINED";
+const gchar *dvb_type_str = N_("UNDEFINED");
 
 //static guint j = 0, c = 0;
 guint adapter_ct = 0, frontend_ct = 0, lnb_type = 0;
@@ -1575,7 +1575,7 @@ static void tv_scan_add_to_treeview ( gchar *name_ch, gchar *data );
 
 const struct labels_scan { gchar *name; } labels_scan_n[] =
 {
-    { "General" }, { "Scan / Convert" }, { "DVB-T/T2" }, { "DVB-S/S2" }, { "DVB-C" }, { "Channels" }
+    { N_("General") }, { N_("Scan / Convert") }, { "DVB-T/T2" }, { "DVB-S/S2" }, { "DVB-C" }, { N_("Channels") }
 };
 
 const gchar *dvbt[] =
@@ -2164,9 +2164,9 @@ static void tv_scan_stop ( GtkButton *button, gpointer data )
 
     gst_element_set_state ( dvb_scan, GST_STATE_NULL );
 
-    gtk_label_set_text ( scan_snr_dvbt, "Signal level 0  &  Signal quality 0" );
-    gtk_label_set_text ( scan_snr_dvbs, "Signal level 0  &  Signal quality 0" );
-    gtk_label_set_text ( scan_snr_dvbc, "Signal level 0  &  Signal quality 0" );
+    gtk_label_set_text ( scan_snr_dvbt, "Level 0  &  Quality 0" );
+    gtk_label_set_text ( scan_snr_dvbs, "Level 0  &  Quality 0" );
+    gtk_label_set_text ( scan_snr_dvbc, "Level 0  &  Quality 0" );
 
     tv_scan_read_ch_to_treeview ();
 
@@ -2179,7 +2179,9 @@ static void tv_scan_stop ( GtkButton *button, gpointer data )
 
 static void tv_scan_set_all_ch ( gint all_ch, gint c_tv, gint c_ro )
 {
-    gchar *text = g_strdup_printf ( " All Channels: %d \n TV: %d -- Radio: %d -- Other: %d\n", all_ch, c_tv, c_ro, all_ch - c_tv - c_ro );
+    gchar *text = g_strdup_printf ( " %s: %d \n %s: %d -- %s: %d -- %s: %d\n",
+                   _("All Channels"), all_ch, _("TV"), c_tv, _("Radio"), c_ro, _("Other"), all_ch - c_tv - c_ro );
+
     gtk_label_set_text ( GTK_LABEL ( all_channels ), text );
     g_free ( text );
 }
@@ -2190,17 +2192,17 @@ static GtkBox * tv_scan_battons_box ( const gchar *type )
 
     GtkBox *hb_box = (GtkBox *)gtk_box_new ( GTK_ORIENTATION_HORIZONTAL, 0 );
 
-    GtkLabel *label = (GtkLabel *)gtk_label_new ( "Signal level 0  &  Signal quality 0" );
+    GtkLabel *label = (GtkLabel *)gtk_label_new ( "Level 0  &  Quality 0" );
     if ( g_strrstr ( type, "DVB-T" ) ) scan_snr_dvbt = label;
     if ( g_strrstr ( type, "DVB-S" ) ) scan_snr_dvbs = label;
     if ( g_strrstr ( type, "DVB-C" ) ) scan_snr_dvbc = label;
     gtk_box_pack_start ( g_box, GTK_WIDGET  ( label ), FALSE, FALSE, 10 );
 
-    GtkButton *button_scan = (GtkButton *)gtk_button_new_with_label ( " Scan " );
+    GtkButton *button_scan = (GtkButton *)gtk_button_new_with_label ( _("Start") );
     g_signal_connect ( button_scan, "clicked", G_CALLBACK ( tv_scan_start ), (gpointer)type );
     gtk_box_pack_start ( hb_box, GTK_WIDGET ( button_scan ), FALSE, FALSE, 0 );
 
-    GtkButton *button_stop = (GtkButton *) gtk_button_new_with_label ( " Stop " );
+    GtkButton *button_stop = (GtkButton *) gtk_button_new_with_label ( _("Stop") );
     g_signal_connect ( button_stop, "clicked", G_CALLBACK ( tv_scan_stop ),  (gpointer)type );
     gtk_box_pack_start ( hb_box, GTK_WIDGET ( button_stop ), FALSE, FALSE, 0 );
 
@@ -2338,12 +2340,10 @@ static GtkBox * tv_scan_channels_battons_box ()
 
     GtkBox *hb_box = (GtkBox *)gtk_box_new ( GTK_ORIENTATION_HORIZONTAL, 0 );
 
-    //GtkButton *button_save = (GtkButton *)gtk_button_new_with_label ( " Save " );
     GtkButton *button_save = (GtkButton *)gtk_button_new_from_icon_name ( "document-save", GTK_ICON_SIZE_SMALL_TOOLBAR );
     g_signal_connect ( button_save, "clicked", G_CALLBACK ( tv_scan_ch_save ), NULL );
     gtk_box_pack_end ( hb_box, GTK_WIDGET ( button_save ), FALSE, FALSE, 0 );
 
-    //GtkButton *button_clear = (GtkButton *) gtk_button_new_with_label ( " Clear " );
     GtkButton *button_clear = (GtkButton *)gtk_button_new_from_icon_name ( "edit-clear", GTK_ICON_SIZE_SMALL_TOOLBAR );
     g_signal_connect ( button_clear, "clicked", G_CALLBACK ( tv_scan_ch_clear ), NULL );
     gtk_box_pack_end ( hb_box, GTK_WIDGET ( button_clear ), FALSE, FALSE, 0 );
@@ -2359,12 +2359,12 @@ static GtkBox * tv_scan_channels  ()
     gtk_widget_set_margin_start ( GTK_WIDGET ( g_box ), 10 );
     gtk_widget_set_margin_end   ( GTK_WIDGET ( g_box ), 10 );
 
-    all_channels = (GtkLabel *)gtk_label_new ( " All Channels \n" );
+    all_channels = (GtkLabel *)gtk_label_new ( _("All Channels") );
     gtk_widget_set_halign ( GTK_WIDGET ( all_channels ),    GTK_ALIGN_START );
 
     scan_treeview = (GtkTreeView *)gtk_tree_view_new_with_model ( GTK_TREE_MODEL ( gtk_list_store_new ( 3, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING ) ) );
 
-    gtk_box_pack_start ( g_box, GTK_WIDGET ( tv_scroll_win ( scan_treeview, "Channels", "Data" ) ), TRUE, TRUE, 10 );
+    gtk_box_pack_start ( g_box, GTK_WIDGET ( tv_scroll_win ( scan_treeview, _("Channels"), "Data" ) ), TRUE, TRUE, 10 );
     gtk_box_pack_start ( g_box, GTK_WIDGET ( all_channels ),  FALSE, FALSE, 0 );
 
     gtk_box_pack_start ( g_box, GTK_WIDGET ( tv_scan_channels_battons_box () ), FALSE, FALSE, 10 );
@@ -2489,7 +2489,13 @@ static GtkBox * tv_scan_convert ()
             g_signal_connect ( data_a_n[d].widget, "changed", G_CALLBACK ( data_a_n[d].activate ), label_name );
     }
 
-    GtkLabel *label = (GtkLabel *)gtk_label_new ( "Choose file:\n    dvb_channel.conf ( format DVBv5 )" );
+    gchar *text = g_strdup_printf ( " %s:\n    dvb_channel.conf ( %s DVBv5 )",
+                   _("Choose file"), _("format") );
+
+    GtkLabel *label = (GtkLabel *)gtk_label_new ( text );
+
+    g_free ( text );
+
     gtk_widget_set_halign ( GTK_WIDGET ( label ), GTK_ALIGN_START );
     gtk_box_pack_start ( g_box, GTK_WIDGET ( label ), FALSE, FALSE, 10 );
 
@@ -2585,18 +2591,18 @@ static GtkBox * tv_scan_pref ()
     struct data_a { GtkWidget *label; gchar *ltext; GtkWidget *widget; gchar *etext; void (* activate); gboolean icon_set; }
     data_a_n[] =
     {
-        { gtk_label_new ( "" ), "Theme",            gtk_entry_new  (), tv_get_prop ( "gtk-theme-name"      ), tv_set_theme, TRUE  },
-        { gtk_label_new ( "" ), "Icon-theme",       gtk_entry_new  (), tv_get_prop ( "gtk-icon-theme-name" ), tv_set_icon,  TRUE  },
+        { gtk_label_new ( "" ), N_("Theme"),            gtk_entry_new  (), tv_get_prop ( "gtk-theme-name"      ), tv_set_theme, TRUE  },
+        { gtk_label_new ( "" ), N_("Icon-theme"),       gtk_entry_new  (), tv_get_prop ( "gtk-icon-theme-name" ), tv_set_icon,  TRUE  },
 
-        { gtk_label_new ( "" ), NULL,               NULL,              NULL,          NULL,           FALSE },
-        { gtk_label_new ( "" ), "Recording folder", gtk_entry_new  (), rec_dir,       tv_set_rec_dir, TRUE  },
-        { gtk_label_new ( "" ), NULL,               NULL,              NULL,          NULL,           FALSE },
+        { gtk_label_new ( "" ), NULL,                   NULL,              NULL,          NULL,           FALSE },
+        { gtk_label_new ( "" ), N_("Recording folder"), gtk_entry_new  (), rec_dir,       tv_set_rec_dir, TRUE  },
+        { gtk_label_new ( "" ), NULL,                   NULL,              NULL,          NULL,           FALSE },
 
-        { gtk_label_new ( "" ), "Encoder / Ts",     gtk_switch_new (), NULL,          tv_changed_sw_et,     FALSE },
-        { gtk_label_new ( "" ), "Audio encoder",    gtk_entry_new  (), audio_encoder, tv_set_rec_data_aenc, FALSE },
-        { gtk_label_new ( "" ), "Video encoder",    gtk_entry_new  (), video_encoder, tv_set_rec_data_venc, FALSE },
-        { gtk_label_new ( "" ), "Muxer",            gtk_entry_new  (), muxer,         tv_set_rec_data_mux,  FALSE },
-        { gtk_label_new ( "" ), "File ext",         gtk_entry_new  (), file_ext,      tv_set_rec_data_ext,  FALSE }
+        { gtk_label_new ( "" ), N_("Encoder / Ts"),     gtk_switch_new (), NULL,          tv_changed_sw_et,     FALSE },
+        { gtk_label_new ( "" ), N_("Audio encoder"),    gtk_entry_new  (), audio_encoder, tv_set_rec_data_aenc, FALSE },
+        { gtk_label_new ( "" ), N_("Video encoder"),    gtk_entry_new  (), video_encoder, tv_set_rec_data_venc, FALSE },
+        { gtk_label_new ( "" ), N_("Muxer"),            gtk_entry_new  (), muxer,         tv_set_rec_data_mux,  FALSE },
+        { gtk_label_new ( "" ), N_("File .ext"),        gtk_entry_new  (), file_ext,      tv_set_rec_data_ext,  FALSE }
     };
 
     guint d = 0, z = 0;
@@ -2669,7 +2675,7 @@ static void tv_win_scan ()
     GtkWindow *window =      (GtkWindow *)gtk_window_new ( GTK_WINDOW_TOPLEVEL );
     gtk_window_set_modal     ( window, TRUE );
     gtk_window_set_position  ( window, GTK_WIN_POS_CENTER );
-    gtk_window_set_title     ( window, "Scan" );
+    gtk_window_set_title     ( window, _("Scan") );
 	g_signal_connect         ( window, "destroy", G_CALLBACK ( tv_scan_quit ), NULL );
 
 	gtk_window_set_type_hint ( GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_UTILITY );
