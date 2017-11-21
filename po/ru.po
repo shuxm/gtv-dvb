@@ -1,0 +1,67 @@
+# Russian translations for gtv-dvb package.
+# Copyright (C) 2017 THE gtv-dvb'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gtv-dvb package.
+#  <antohami@altlinux.org>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtv-dvb 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-20 17:24+0700\n"
+"PO-Revision-Date: 2017-11-20 17:24+0700\n"
+"Last-Translator:  <antohami@altlinux.org>\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: src/gtv-dvb.c:707
+msgid "Channels"
+msgstr "Каналы"
+
+#: src/gtv-dvb.c:714
+msgid "Clear"
+msgstr "Очистить"
+
+#: src/gtv-dvb.c:712
+msgid "Down"
+msgstr "Вниз"
+
+#: src/gtv-dvb.c:718
+msgid "Full-screen"
+msgstr "Полный экран"
+
+#: src/gtv-dvb.c:719
+msgid "Mini"
+msgstr "Мини"
+
+#: src/gtv-dvb.c:717
+msgid "Mute"
+msgstr "Без звука"
+
+#: src/gtv-dvb.c:720
+msgid "Quit"
+msgstr "Выйти"
+
+#: src/gtv-dvb.c:703
+msgid "Record"
+msgstr "Запись"
+
+#: src/gtv-dvb.c:713
+msgid "Remove"
+msgstr "Удалить"
+
+#: src/gtv-dvb.c:708
+msgid "Scan"
+msgstr "Сканировать"
+
+#: src/gtv-dvb.c:704
+msgid "Stop"
+msgstr "Стоп"
+
+#: src/gtv-dvb.c:711
+msgid "Up"
+msgstr "Вверх"
