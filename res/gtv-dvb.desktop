@@ -6,4 +6,4 @@ TryExec=bindir/gtv-dvb
 Exec=bindir/gtv-dvb %U
 Icon=display
 Terminal=false
-Categories=GTK;AudioVideo
+Categories=GTK;AudioVideo;Video
