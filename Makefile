@@ -37,8 +37,17 @@
 
 
 ## Set prefix = PREFIX ( install files in PREFIX )
+##
+## Verify variables: make info
+##
 ##==========================================================================
+# /usr:       /usr, /usr/bin ...
 # prefix    = /usr
+
+# /usr/local: /usr/local, /usr/local/bin ...
+# prefix    = /usr/local
+
+# Home:       $(HOME)/.local, $(HOME)/.local/bin ...
 prefix      = $(HOME)/.local
 
 program     = gtv-dvb
@@ -131,6 +140,12 @@ info:
 help:
 	@echo 'Makefile for Gtv-dvb'
 	@echo 'Get Gtv-dvb: https://github.com/vl-nix/gtv-dvb'
+	@echo
+	@echo 'Installation directories:'
+	@echo '  Open the Makefile and set the prefix value'
+	@echo '    prefix = PREFIX 	install files in PREFIX'
+	@echo
+	@echo '  Verify variables: make info'
 	@echo
 	@echo 'Usage: make [TARGET]'
 	@echo 'TARGETS:'
