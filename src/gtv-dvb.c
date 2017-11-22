@@ -58,6 +58,7 @@ static void tv_remv  ();
 static void tv_clear ();
 static void tv_quit  ( /*GtkWindow *window*/ );
 
+const gchar *lv_snr = "Level  &  Quality";
 gchar *channels_conf, *rec_dir, *video_parser, *audio_parser,
       *audio_encoder, *video_encoder, *muxer, *file_ext;
 
@@ -84,7 +85,7 @@ static void tv_message_dialog ( gchar *f_error, gchar *file_or_info, GtkMessageT
 static void tv_set_sgn_snr ( GstElement *element, GtkLabel *label, gdouble sgb, gdouble srb, gboolean hlook )
 {
     gchar *texta = g_strdup_printf ( "Level %d%s", (int)sgb, "%" );
-    gchar *textb = g_strdup_printf ( "Snr %d%s",    (int)srb, "%" );
+    gchar *textb = g_strdup_printf ( "Snr %d%s",   (int)srb, "%" );
 
     const gchar *format = NULL;
 
@@ -101,7 +102,7 @@ static void tv_set_sgn_snr ( GstElement *element, GtkLabel *label, gdouble sgb, 
     }
     if ( GST_ELEMENT_CAST ( element ) -> current_state == GST_STATE_NULL )
     {
-        gtk_label_set_text ( label, "Level 0  &  Snr 0" );
+        gtk_label_set_text ( label, lv_snr );
     }
 
     g_free ( texta );
@@ -480,7 +481,7 @@ static void tv_stop ()
         rec_status = TRUE;
 
         tv_sensitive  ( FALSE, 0, gtk_toolbar_get_n_items ( GTK_TOOLBAR ( toolbar_media ) ) - 2 );
-        gtk_label_set_text ( signal_snr, "Level 0  &  Snr 0" );
+        gtk_label_set_text ( signal_snr, lv_snr );
         gtk_window_set_title  ( GTK_WINDOW ( main_window ), "Gtv-Dvb" );
         gtk_widget_queue_draw ( GTK_WIDGET ( main_window ) );
     }
@@ -1088,7 +1089,7 @@ static GtkBox * tv_create_sgn_snr ()
 {
     GtkBox *tbar_dvb = (GtkBox *)gtk_box_new ( GTK_ORIENTATION_VERTICAL, 0 );
 
-    signal_snr = (GtkLabel *)gtk_label_new ( "Level 0  &  Snr 0" );
+    signal_snr = (GtkLabel *)gtk_label_new ( lv_snr );
     gtk_box_pack_start ( tbar_dvb, GTK_WIDGET ( signal_snr  ), FALSE, FALSE, 10 );
 
     return tbar_dvb;
@@ -2321,9 +2322,9 @@ static void tv_scan_stop ( GtkButton *button, gpointer data )
 
     gst_element_set_state ( dvb_scan, GST_STATE_NULL );
 
-    gtk_label_set_text ( scan_snr_dvbt, "Level 0  &  Quality 0" );
-    gtk_label_set_text ( scan_snr_dvbs, "Level 0  &  Quality 0" );
-    gtk_label_set_text ( scan_snr_dvbc, "Level 0  &  Quality 0" );
+    gtk_label_set_text ( scan_snr_dvbt, lv_snr );
+    gtk_label_set_text ( scan_snr_dvbs, lv_snr );
+    gtk_label_set_text ( scan_snr_dvbc, lv_snr );
 
     tv_scan_read_ch_to_treeview ();
 
@@ -2349,7 +2350,7 @@ static GtkBox * tv_scan_battons_box ( const gchar *type )
 
     GtkBox *hb_box = (GtkBox *)gtk_box_new ( GTK_ORIENTATION_HORIZONTAL, 0 );
 
-    GtkLabel *label = (GtkLabel *)gtk_label_new ( "Level 0  &  Quality 0" );
+    GtkLabel *label = (GtkLabel *)gtk_label_new ( lv_snr );
     if ( g_strrstr ( type, "DVB-T" ) ) scan_snr_dvbt = label;
     if ( g_strrstr ( type, "DVB-S" ) ) scan_snr_dvbs = label;
     if ( g_strrstr ( type, "DVB-C" ) ) scan_snr_dvbc = label;
