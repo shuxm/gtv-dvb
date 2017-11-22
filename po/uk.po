@@ -31,8 +31,8 @@ msgid ""
 "Auto saving will not be applied \n"
 " to empty list."
 msgstr ""
-"Авто збереження не буде застосовано \n"
-" до пустого списку."
+"Авто збереження вимкнене \n"
+" для пустого списку."
 
 #: src/gtv-dvb.c:707 src/gtv-dvb.c:1307 src/gtv-dvb.c:1735 src/gtv-dvb.c:2524
 msgid "Channels"
