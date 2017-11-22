@@ -1164,6 +1164,12 @@ static void tv_get_config ()
 {
     gchar *gtv_conf = g_strconcat ( g_get_user_config_dir (), "/gtv/gtv.conf", NULL );
 
+    if ( !g_file_test ( gtv_conf, G_FILE_TEST_EXISTS ) )
+    {
+        g_free ( gtv_conf );
+        return;
+    }
+
     guint n = 0;
     gchar *contents;
     GError *err = NULL;
