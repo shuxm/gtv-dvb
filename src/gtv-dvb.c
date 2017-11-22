@@ -1194,7 +1194,8 @@ static void tv_get_config ()
                 if ( g_strrstr ( lines[n], "main-win-height" ) )
                     main_win_height = atoi ( key_val[1] );
 
-                g_print ( "Set: %s -> %s \n", key_val[0], key_val[1]);
+                if ( w_info )
+                    g_print ( "Set: %s -> %s \n", key_val[0], key_val[1]);
 
             g_strfreev ( key_val );
         }
@@ -1209,8 +1210,8 @@ static void tv_get_config ()
 
     g_free ( gtv_conf );
 
-    if ( main_win_width < 400  ) main_win_width  = 450;
-    if ( main_win_height < 200 ) main_win_height = 250;
+    if ( main_win_width  < 400 ) main_win_width  = 900;
+    if ( main_win_height < 200 ) main_win_height = 400;
 }
 
 static void tv_auto_save ()
@@ -1236,6 +1237,8 @@ static void tv_auto_save ()
 
     g_string_free ( gstring, TRUE );
 
+    g_free ( gtv_conf_i );
+    g_free ( gtv_conf_t );
     g_free ( gtv_conf );
 
 
@@ -1395,7 +1398,6 @@ int main ()
 gint DVB_DELSYS = SYS_UNDEFINED;
 const gchar *dvb_type_str = N_("Undefined");
 
-//static guint j = 0, c = 0;
 guint adapter_ct = 0, frontend_ct = 0, lnb_type = 0;
 gchar *pol = "H";
 gboolean msg_info = FALSE, w_scan_info = FALSE, fmsg_is = TRUE;
