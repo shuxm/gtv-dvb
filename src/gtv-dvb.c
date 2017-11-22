@@ -1152,6 +1152,9 @@ static void tv_get_config ()
         if ( err ) g_error_free ( err );
 
     g_free ( gtv_conf );
+
+    if ( main_win_width < 400  ) main_win_width  = 450;
+    if ( main_win_height < 200 ) main_win_height = 250;
 }
 
 static void tv_auto_save ()
