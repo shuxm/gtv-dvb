@@ -897,20 +897,69 @@ static void tv_treeview_up_down ( GtkTreeView *tree_view, gboolean up_dw )
 
 static void tv_treeview_remove ( GtkTreeView *tree_view )
 {
-    GtkTreeIter iter;
-    GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tree_view ) );
+    GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
 
-    if ( gtk_tree_selection_get_selected ( gtk_tree_view_get_selection ( tree_view ), NULL, &iter ) )
+    GtkDialog *dialog = (GtkDialog *)gtk_dialog_new_with_buttons ( _("Remove"),
+                        main_window,  flags,
+                        "gtk-cancel", GTK_RESPONSE_REJECT,
+                        "gtk-ok",     GTK_RESPONSE_ACCEPT,
+                        NULL );
+
+    GtkBox *content = (GtkBox *)gtk_dialog_get_content_area ( dialog );
+
+    gchar *text = g_strdup_printf ( "\n %s \n %s \n", _("Remove?"), _("Deleted not recover.") );
+
+    GtkLabel *label = (GtkLabel *)gtk_label_new ( text );
+
+    g_free ( text );
+
+    gtk_container_add ( GTK_CONTAINER ( content ), GTK_WIDGET ( label ) );
+    gtk_widget_show_all ( GTK_WIDGET ( content ) );
+
+    if ( gtk_dialog_run ( GTK_DIALOG ( dialog ) ) == GTK_RESPONSE_ACCEPT )
     {
-        gtk_list_store_remove ( GTK_LIST_STORE ( model ), &iter );
-        tv_treeview_reread_mini ( tree_view );
+        GtkTreeIter iter;
+        GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tree_view ) );
+
+        if ( gtk_tree_selection_get_selected ( gtk_tree_view_get_selection ( tree_view ), NULL, &iter ) )
+        {
+            gtk_list_store_remove ( GTK_LIST_STORE ( model ), &iter );
+            tv_treeview_reread_mini ( tree_view );
+        }
     }
+
+    gtk_widget_destroy ( GTK_WIDGET ( dialog ) );
 }
 
 static void tv_treeview_clear ( GtkTreeView *tree_view )
 {
-    GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tree_view ) );
-    gtk_list_store_clear ( GTK_LIST_STORE ( model) );
+    GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
+
+    GtkDialog *dialog = (GtkDialog *)gtk_dialog_new_with_buttons ( _("Clear"),
+                        main_window,  flags,
+                        "gtk-cancel", GTK_RESPONSE_REJECT,
+                        "gtk-ok",     GTK_RESPONSE_ACCEPT,
+                        NULL );
+
+    GtkBox *content = (GtkBox *)gtk_dialog_get_content_area ( dialog );
+
+    gchar *text = g_strdup_printf ( "\n %s \n %s \n", _("Clear all?"), _("Auto saving will not be applied \n to empty list.") );
+
+    GtkLabel *label = (GtkLabel *)gtk_label_new ( text );
+
+    g_free ( text );
+
+
+    gtk_container_add ( GTK_CONTAINER ( content ), GTK_WIDGET ( label ) );
+    gtk_widget_show_all ( GTK_WIDGET ( content ) );
+
+    if ( gtk_dialog_run ( GTK_DIALOG ( dialog ) ) == GTK_RESPONSE_ACCEPT )
+    {
+        GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tree_view ) );
+        gtk_list_store_clear ( GTK_LIST_STORE ( model) );
+    }
+
+    gtk_widget_destroy ( GTK_WIDGET ( dialog ) );
 }
 
 
