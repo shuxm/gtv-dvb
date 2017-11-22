@@ -68,7 +68,7 @@ all: depends build msgfmt
 
 depends:
 	for depend in $(obj_depends); do \
-		echo $$depend; \
+		echo "checking for $$depend..."; \
 		pkg-config --exists --print-errors $$depend; \
 	done
 
