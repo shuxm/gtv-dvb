@@ -46,7 +46,7 @@ enum { COL_NUM, COL_FILES_CH, COL_URI_DATA, NUM_COLS };
 
 static guintptr video_window_handle = 0;
 static gdouble volume_start = 0.5;
-static guint j = 0, a = 0, b = 0, c = 0, tv_time_rec = 0;
+static guint j = 0, a = 0, b = 0, c = 0, tv_time_rec = 0, main_win_width = 900, main_win_height = 400;
 static gboolean video_enable = TRUE, rec_status = TRUE, rec_en_ts = TRUE, w_info = FALSE, fmsg_i = TRUE;
 
 static void tv_stop ();
@@ -705,7 +705,7 @@ const struct tv_list_media { const gchar *label; gchar *name_icon; void (* activ
     //{ N_("EQ-Audio"),   "preferences-desktop",     tv_audio, "<control>a" },
     //{ N_("EQ-Video"),   "preferences-desktop",     tv_video, "<control>v" },
     { N_("Channels"),   "applications-multimedia", tv_plist, "<control>l" },
-    { N_("Scan"),       "display",                 tv_scan,  "<control>u" },
+    { N_("Scanner"),    "display",                 tv_scan,  "<control>u" },
 
     // Toolbar sw
     { N_("Up"),         "up",                      tv_goup,  "<control>z" },
@@ -964,7 +964,7 @@ static void tv_read_file_ch_to_treeview ( const gchar *filename )
 
 static void mp_treeview_to_file ( GtkTreeView *tree_view, gchar *filename )
 {
-    GString *gstring = g_string_new ( "# Gtv-Dvbf channel format \n" );
+    GString *gstring = g_string_new ( "# Gtv-Dvb channel format \n" );
 
     GtkTreeIter iter;
     GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tree_view ) );
@@ -994,15 +994,15 @@ static void tv_down  () { tv_treeview_up_down ( tv_treeview, FALSE ); }
 static void tv_clear () { tv_treeview_clear   ( tv_treeview ); }
 static void tv_remv  () { tv_treeview_remove  ( tv_treeview ); }
 
-static gchar * tv_rec_dir ()
+static gchar * tv_open_dir ( const gchar *path )
 {
     GtkFileChooserDialog *dialog = ( GtkFileChooserDialog *)gtk_file_chooser_dialog_new (
-                    _("Folder"),  main_window, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                    _("Choose Folder"),  main_window, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
                     "gtk-cancel", GTK_RESPONSE_CANCEL,
                     "gtk-apply",  GTK_RESPONSE_ACCEPT,
                      NULL );
 
-    gtk_file_chooser_set_current_folder ( GTK_FILE_CHOOSER ( dialog ), g_get_home_dir () );
+    gtk_file_chooser_set_current_folder ( GTK_FILE_CHOOSER ( dialog ), path );
 
     gchar *dirname = NULL;
 
@@ -1050,6 +1050,142 @@ static void tv_strat_hide ()
     tv_sensitive ( FALSE, 0, gtk_toolbar_get_n_items ( GTK_TOOLBAR ( toolbar_media ) ) - 2 );
 }
 
+
+static gchar * tv_get_prop ( const gchar *prop )
+{
+    gchar *name = NULL;
+        g_object_get ( gtk_settings_get_default (), prop, &name, NULL );
+    return name;
+}
+static void tv_set_prop ( const gchar *prop, gchar *path )
+{
+    gchar *i_file = g_strconcat ( path, "/index.theme", NULL );
+
+        if ( g_file_test ( i_file, G_FILE_TEST_EXISTS ) )
+        {
+            gchar *name = g_path_get_basename ( path );
+                g_object_set ( gtk_settings_get_default (), prop, name, NULL );
+            g_free ( name );
+        }
+
+    g_free ( i_file );
+}
+static void tv_set_theme ( GtkEntry *entry )
+{
+    gchar *path = tv_open_dir ( "/usr/share/themes" );
+
+        if ( path )
+        {
+            tv_set_prop ( "gtk-theme-name", path );
+
+            gchar *name = g_path_get_basename ( path );
+                gtk_entry_set_text ( entry, name );
+            g_free ( name );
+        }
+
+    g_free ( path );
+}
+static void tv_set_icon ( GtkEntry *entry )
+{
+    gchar *path = tv_open_dir ( "/usr/share/icons" );
+
+        if ( path )
+        {
+            tv_set_prop ( "gtk-icon-theme-name", path );
+
+            gchar *name = g_path_get_basename ( path );
+                gtk_entry_set_text ( entry, name );
+            g_free ( name );
+        }
+
+    g_free ( path );
+}
+
+
+static void tv_read_ch ()
+{
+    if ( g_file_test ( channels_conf, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR ) )
+        tv_read_file_ch_to_treeview ( channels_conf );
+    else
+        tv_win_scan ();
+}
+
+static void tv_get_config ()
+{
+    gchar *gtv_conf = g_strconcat ( g_get_user_config_dir (), "/gtv/gtv.conf", NULL );
+
+    guint n = 0;
+    gchar *contents;
+    GError *err = NULL;
+
+    if ( g_file_get_contents ( gtv_conf, &contents, 0, &err ) )
+    {
+        gchar **lines = g_strsplit ( contents, "\n", 0 );
+
+        for ( n = 0; lines[n] != NULL; n++ )
+        {
+            if ( !g_strrstr ( lines[n], "=" ) ) continue;
+
+            gchar **key_val;
+            key_val = g_strsplit ( lines[n], "=", 0 );
+
+                if ( g_strrstr ( lines[n], "theme" ) )
+                    g_object_set ( gtk_settings_get_default (), key_val[0], key_val[1], NULL );
+
+                if ( g_strrstr ( lines[n], "main-win-width" ) )
+                    main_win_width = atoi ( key_val[1] );
+
+                if ( g_strrstr ( lines[n], "main-win-height" ) )
+                    main_win_height = atoi ( key_val[1] );
+
+                g_print ( "Set: %s -> %s \n", key_val[0], key_val[1]);
+
+            g_strfreev ( key_val );
+        }
+
+        g_strfreev ( lines );
+        g_free ( contents );
+    }
+    else
+        g_critical ( "ERROR: %s\n", err->message );
+
+        if ( err ) g_error_free ( err );
+
+    g_free ( gtv_conf );
+}
+
+static void tv_auto_save ()
+{
+    gchar *gtv_conf = g_strconcat ( g_get_user_config_dir (), "/gtv/gtv.conf", NULL );
+
+    gchar *gtv_conf_t = tv_get_prop ( "gtk-theme-name" );
+    gchar *gtv_conf_i = tv_get_prop ( "gtk-icon-theme-name" );
+
+    gint width  = gtk_widget_get_allocated_width  ( GTK_WIDGET ( main_window ) );
+    gint height = gtk_widget_get_allocated_height ( GTK_WIDGET ( main_window ) );
+
+    GString *gstring = g_string_new ( "# Gtv-Dvb conf \n" );
+
+        g_string_append_printf ( gstring, "gtk-theme-name=%s\n",      gtv_conf_t );
+        g_string_append_printf ( gstring, "gtk-icon-theme-name=%s\n", gtv_conf_i );
+
+        g_string_append_printf ( gstring, "main-win-width=%d\n",  width  );
+        g_string_append_printf ( gstring, "main-win-height=%d\n", height );
+
+        if ( !g_file_set_contents ( gtv_conf, gstring->str, -1, NULL ) )
+            g_printerr ( "Save failed: file %s. \n", gtv_conf );
+
+    g_string_free ( gstring, TRUE );
+
+    g_free ( gtv_conf );
+
+
+    GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tv_treeview ) );
+    guint ind = gtk_tree_model_iter_n_children ( model, NULL );
+
+    if ( ind > 0 ) mp_treeview_to_file ( tv_treeview, channels_conf );
+}
+
 static void tv_init ( GtkApplication *app )
 {
     gchar *dir_conf = g_strdup_printf ( "%s/gtv", g_get_user_config_dir () );
@@ -1070,25 +1206,7 @@ static void tv_init ( GtkApplication *app )
     muxer =         g_strdup ( "oggmux" );
     file_ext =      g_strdup ( "ogg" );
 
-    const gchar *th_name = "Dark-media";
-    gchar *th_home = g_strconcat ( g_get_home_dir (), "/.themes/", th_name, NULL );
-    gchar *th_root = g_strconcat ( "/usr/share/themes/", th_name, NULL );
-
-    if ( g_file_test ( th_home, G_FILE_TEST_EXISTS ) || g_file_test ( th_root, G_FILE_TEST_EXISTS ) )
-        g_object_set ( gtk_settings_get_default (), "gtk-theme-name", th_name, NULL );
-
-    g_free ( th_home );
-    g_free ( th_root );
-
-    const gchar *ic_name = "Light-media";
-    gchar *ic_home = g_strconcat ( g_get_home_dir (), "/.icons/", ic_name, NULL );
-    gchar *ic_root = g_strconcat ( "/usr/share/icons/", ic_name, NULL );
-
-    if ( g_file_test ( ic_home, G_FILE_TEST_EXISTS ) || g_file_test ( ic_root, G_FILE_TEST_EXISTS ) )
-        g_object_set ( gtk_settings_get_default (), "gtk-icon-theme-name", ic_name, NULL );
-
-    g_free ( ic_home );
-    g_free ( ic_root );
+    tv_get_config ();
 
     tv_logo = gtk_icon_theme_load_icon ( gtk_icon_theme_get_default (),
               "applications-multimedia", 64, GTK_ICON_LOOKUP_USE_BUILTIN, NULL );
@@ -1096,25 +1214,12 @@ static void tv_init ( GtkApplication *app )
     tv_create_gaction_entry ( app );
 }
 
-static void tv_read_ch ()
-{
-    if ( g_file_test ( channels_conf, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR ) )
-        tv_read_file_ch_to_treeview ( channels_conf );
-    else
-        tv_win_scan ();
-}
-
-static void tv_auto_save ()
-{
-    GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tv_treeview ) );
-    guint ind = gtk_tree_model_iter_n_children ( model, NULL );
-
-    if ( ind > 0 ) mp_treeview_to_file ( tv_treeview, channels_conf );
-}
-
+gboolean first_close = TRUE;
 static void tv_quit ( /*GtkWindow *window*/ )
 {
-    tv_auto_save ();
+    if ( first_close ) tv_auto_save ();
+    first_close = FALSE;
+
     tv_stop ();
 
     gtk_widget_destroy ( GTK_WIDGET ( main_window ) );
@@ -1130,7 +1235,7 @@ static void tv_win_base ( GtkApplication *app )
 
     main_window = (GtkWindow *)gtk_application_window_new ( app );
     gtk_window_set_title ( main_window, "Gtv-Dvb" );
-    gtk_window_set_default_size ( main_window, 900, 400 );
+    gtk_window_set_default_size ( main_window, main_win_width, main_win_height );
     gtk_window_set_default_icon_name ( "display" );
     g_signal_connect ( main_window, "destroy", G_CALLBACK ( tv_quit ), NULL );
 
@@ -1226,10 +1331,10 @@ int main ()
 
 
 
-// Scan & convert
+// Scanner & Converter
 
 gint DVB_DELSYS = SYS_UNDEFINED;
-const gchar *dvb_type_str = N_("UNDEFINED");
+const gchar *dvb_type_str = N_("Undefined");
 
 //static guint j = 0, c = 0;
 guint adapter_ct = 0, frontend_ct = 0, lnb_type = 0;
@@ -1575,7 +1680,7 @@ static void tv_scan_add_to_treeview ( gchar *name_ch, gchar *data );
 
 const struct labels_scan { gchar *name; } labels_scan_n[] =
 {
-    { N_("General") }, { N_("Scan / Convert") }, { "DVB-T/T2" }, { "DVB-S/S2" }, { "DVB-C" }, { N_("Channels") }
+    { N_("General") }, { N_("Scanner / Converter") }, { "DVB-T/T2" }, { "DVB-S/S2" }, { "DVB-C" }, { N_("Channels") }
 };
 
 const gchar *dvbt[] =
@@ -1894,22 +1999,22 @@ static glong tv_set_label_freq_ext ( GtkLabel *label_set, glong num )
         if ( num < 100000 )
         {
             num *= 1000;
-            gtk_label_set_text ( label_set, " Frequency  MHz " );
+            gtk_label_set_text ( label_set, "Frequency  MHz" );
         }
         else
-            gtk_label_set_text ( label_set, " Frequency  KHz " );
+            gtk_label_set_text ( label_set, "Frequency  KHz" );
     }
     else
     {
         if ( num < 1000 )
         {
             num *= 1000000;
-            gtk_label_set_text ( label_set, " Frequency  MHz " );
+            gtk_label_set_text ( label_set, "Frequency  MHz" );
         }
         else if ( num < 1000000 )
         {
             num *= 1000;
-            gtk_label_set_text ( label_set, " Frequency  KHz " );
+            gtk_label_set_text ( label_set, "Frequency  KHz" );
         }
     }
 
@@ -2499,7 +2604,7 @@ static GtkBox * tv_scan_convert ()
     gtk_widget_set_halign ( GTK_WIDGET ( label ), GTK_ALIGN_START );
     gtk_box_pack_start ( g_box, GTK_WIDGET ( label ), FALSE, FALSE, 10 );
 
-    GtkButton *button_convert = (GtkButton *)gtk_button_new_with_label ( "Convert" );
+    GtkButton *button_convert = (GtkButton *)gtk_button_new_with_label ( _("Convert") );
     g_signal_connect ( button_convert, "clicked", G_CALLBACK ( tv_convert ), NULL );
     gtk_box_pack_start ( g_box, GTK_WIDGET ( button_convert ), FALSE, FALSE, 10 );
 
@@ -2507,42 +2612,9 @@ static GtkBox * tv_scan_convert ()
 }
 
 
-static gchar * tv_get_prop ( const gchar *prop )
-{
-    gchar *name = NULL;
-        g_object_get ( gtk_settings_get_default (), prop, &name, NULL );
-    return name;
-}
-static void tv_set_prop ( GtkEntry *entry, const gchar *prop, gchar *path )
-{
-    gchar *i_file = g_strconcat ( path, "/index.theme", NULL );
-
-        if ( g_file_test ( i_file, G_FILE_TEST_EXISTS ) )
-        {
-            gchar *name = g_path_get_basename ( path );
-                g_object_set ( gtk_settings_get_default (), prop, name, NULL );
-                gtk_entry_set_text ( entry, name );
-            g_free ( name );
-        }
-
-    g_free ( i_file );
-}
-static void tv_set_theme ( GtkEntry *entry )
-{
-    gchar *path = tv_rec_dir ();
-        if ( path ) tv_set_prop ( entry, "gtk-theme-name", path );
-    g_free ( path );
-}
-static void tv_set_icon ( GtkEntry *entry )
-{
-    gchar *path = tv_rec_dir ();
-        if ( path ) tv_set_prop ( entry, "gtk-icon-theme-name", path );
-    g_free ( path );
-}
-
 static void tv_set_rec_dir ( GtkEntry *entry )
 {
-    g_free ( rec_dir ); rec_dir = tv_rec_dir ();
+    g_free ( rec_dir ); rec_dir = tv_open_dir ( g_get_home_dir () );
     if ( rec_dir ) gtk_entry_set_text ( entry, rec_dir );
 }
 
@@ -2675,7 +2747,7 @@ static void tv_win_scan ()
     GtkWindow *window =      (GtkWindow *)gtk_window_new ( GTK_WINDOW_TOPLEVEL );
     gtk_window_set_modal     ( window, TRUE );
     gtk_window_set_position  ( window, GTK_WIN_POS_CENTER );
-    gtk_window_set_title     ( window, _("Scan") );
+    gtk_window_set_title     ( window, _("Scanner") );
 	g_signal_connect         ( window, "destroy", G_CALLBACK ( tv_scan_quit ), NULL );
 
 	gtk_window_set_type_hint ( GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_UTILITY );
@@ -2692,7 +2764,7 @@ static void tv_win_scan ()
     {
         m_box_n[j] = (GtkBox *)gtk_box_new ( GTK_ORIENTATION_VERTICAL, 0 );
         gtk_box_pack_start ( m_box_n[j], GTK_WIDGET ( all_box_scan ( j ) ), TRUE, TRUE, 0 );
-        gtk_notebook_append_page ( notebook, GTK_WIDGET ( m_box_n[j] ),  gtk_label_new ( labels_scan_n[j].name ) );
+        gtk_notebook_append_page ( notebook, GTK_WIDGET ( m_box_n[j] ),  gtk_label_new ( _(labels_scan_n[j].name) ) );
     }
 
     gtk_notebook_set_tab_pos ( notebook, GTK_POS_TOP );
