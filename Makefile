@@ -14,8 +14,8 @@
 # gst-plugins-base
 # gst-plugins-good
 # gst-plugins-ugly
-# gst-plugins-bad gst-libav
-#
+# gst-plugins-bad
+# gst-libav
 #
 # Make Target:
 # ------------
@@ -30,7 +30,7 @@
 #
 #   $ For translators:
 #	   make genpot     only xgettext -> pot
-#	   make mergeinit  gen_pot and ( msgmerge or msginit ) pot -> po
+#	   make mergeinit  genpot and ( msgmerge or msginit ) pot -> po
 #	   make msgfmt     only msgfmt po -> mo
 #
 #===========================================================================
@@ -83,8 +83,6 @@ build:
 		`pkg-config gstreamer-video-1.0 --cflags --libs` \
 		`pkg-config gstreamer-mpegts-1.0 --libs`
 	sed 's|bindtextdomain ( "gtv-dvb", ".*" )|bindtextdomain ( "gtv-dvb", "/usr/share/locale/" )|g' -i src/$(program).c
-
-translation: mergeinit msgfmt
 
 genpot:
 	mkdir -p po
@@ -160,7 +158,7 @@ help:
 	@echo
 	@echo 'For translators:'
 	@echo '  genpot     only xgettext -> pot'
-	@echo '  mergeinit  gen_pot and ( msgmerge or msginit ) pot -> po'
+	@echo '  mergeinit  genpot and ( msgmerge or msginit ) pot -> po'
 	@echo '  msgfmt     only msgfmt po -> mo'
 	@echo
 
