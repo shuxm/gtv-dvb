@@ -934,7 +934,7 @@ static void tv_treeview_remove ( GtkTreeView *tree_view )
 
     if ( gtk_tree_selection_get_selected ( gtk_tree_view_get_selection ( tree_view ), NULL, &iter ) )
     {
-        tv_dialog_remove_clear ( tree_view, iter, "Remove?", TRUE );
+        tv_dialog_remove_clear ( tree_view, iter, _("Remove?"), TRUE );
         tv_treeview_reread_mini ( tree_view );
     }
 }
@@ -943,7 +943,7 @@ static void tv_treeview_clear ( GtkTreeView *tree_view )
 {
     GtkTreeIter iter;
 
-    tv_dialog_remove_clear ( tree_view, iter, "Clear all??", FALSE );
+    tv_dialog_remove_clear ( tree_view, iter, _("Clear all??"), FALSE );
 }
 
 
