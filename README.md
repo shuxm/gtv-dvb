@@ -1,8 +1,8 @@
 Gtv-Dvb  1.0 stable
 -------
 
-- Digital TV player
-- DVB-T/T2, DVB-S/S2, DVB-C
+* Digital TV player
+* DVB-T/T2, DVB-S/S2, DVB-C
 
 * OS Lubuntu; Icon-theme [Light-media](https://github.com/vl-nix/light-media); Theme [Adwaita-dark](https://github.com/GNOME/gnome-themes-standard)
 ![alt text](Lubuntu.png "Preview")
