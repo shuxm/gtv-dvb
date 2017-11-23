@@ -59,7 +59,7 @@ static void tv_clear ();
 static void tv_quit  ( /*GtkWindow *window*/ );
 
 const gchar *lv_snr = "Level  &  Quality";
-gchar *channels_conf, *rec_dir, *video_parser, *audio_parser,
+gchar *gtv_conf, *channels_conf, *rec_dir, *video_parser, *audio_parser,
       *audio_encoder, *video_encoder, *muxer, *file_ext;
 
 
@@ -896,11 +896,11 @@ static void tv_treeview_up_down ( GtkTreeView *tree_view, gboolean up_dw )
     }
 }
 
-static void tv_treeview_remove ( GtkTreeView *tree_view )
+static void tv_dialog_remove_clear ( GtkTreeView *tree_view, GtkTreeIter iter, gchar *info_text, gboolean remove_clear )
 {
     GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
 
-    GtkDialog *dialog = (GtkDialog *)gtk_dialog_new_with_buttons ( _("Remove"),
+    GtkDialog *dialog = (GtkDialog *)gtk_dialog_new_with_buttons ( _("Message"),
                         main_window,  flags,
                         "gtk-cancel", GTK_RESPONSE_REJECT,
                         "gtk-ok",     GTK_RESPONSE_ACCEPT,
@@ -908,10 +908,8 @@ static void tv_treeview_remove ( GtkTreeView *tree_view )
 
     GtkBox *content = (GtkBox *)gtk_dialog_get_content_area ( dialog );
 
-    gchar *text = g_strdup_printf ( "\n %s \n %s \n", _("Remove?"), _("Deleted not recover.") );
-
-    GtkLabel *label = (GtkLabel *)gtk_label_new ( text );
-
+    gchar *text = g_strdup_printf ( "\n %s \n", _(info_text) );
+        GtkLabel *label = (GtkLabel *)gtk_label_new ( text );
     g_free ( text );
 
     gtk_container_add ( GTK_CONTAINER ( content ), GTK_WIDGET ( label ) );
@@ -919,48 +917,33 @@ static void tv_treeview_remove ( GtkTreeView *tree_view )
 
     if ( gtk_dialog_run ( GTK_DIALOG ( dialog ) ) == GTK_RESPONSE_ACCEPT )
     {
-        GtkTreeIter iter;
         GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tree_view ) );
 
-        if ( gtk_tree_selection_get_selected ( gtk_tree_view_get_selection ( tree_view ), NULL, &iter ) )
-        {
+        if ( remove_clear )
             gtk_list_store_remove ( GTK_LIST_STORE ( model ), &iter );
-            tv_treeview_reread_mini ( tree_view );
-        }
+        else
+            gtk_list_store_clear ( GTK_LIST_STORE ( model ) );
     }
 
     gtk_widget_destroy ( GTK_WIDGET ( dialog ) );
 }
 
+static void tv_treeview_remove ( GtkTreeView *tree_view )
+{
+    GtkTreeIter iter;
+
+    if ( gtk_tree_selection_get_selected ( gtk_tree_view_get_selection ( tree_view ), NULL, &iter ) )
+    {
+        tv_dialog_remove_clear ( tree_view, iter, "Remove?", TRUE );
+        tv_treeview_reread_mini ( tree_view );
+    }
+}
+
 static void tv_treeview_clear ( GtkTreeView *tree_view )
 {
-    GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
+    GtkTreeIter iter;
 
-    GtkDialog *dialog = (GtkDialog *)gtk_dialog_new_with_buttons ( _("Clear"),
-                        main_window,  flags,
-                        "gtk-cancel", GTK_RESPONSE_REJECT,
-                        "gtk-ok",     GTK_RESPONSE_ACCEPT,
-                        NULL );
-
-    GtkBox *content = (GtkBox *)gtk_dialog_get_content_area ( dialog );
-
-    gchar *text = g_strdup_printf ( "\n %s \n %s \n", _("Clear all?"), _("Auto saving will not be applied \n to empty list.") );
-
-    GtkLabel *label = (GtkLabel *)gtk_label_new ( text );
-
-    g_free ( text );
-
-
-    gtk_container_add ( GTK_CONTAINER ( content ), GTK_WIDGET ( label ) );
-    gtk_widget_show_all ( GTK_WIDGET ( content ) );
-
-    if ( gtk_dialog_run ( GTK_DIALOG ( dialog ) ) == GTK_RESPONSE_ACCEPT )
-    {
-        GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tree_view ) );
-        gtk_list_store_clear ( GTK_LIST_STORE ( model) );
-    }
-
-    gtk_widget_destroy ( GTK_WIDGET ( dialog ) );
+    tv_dialog_remove_clear ( tree_view, iter, "Clear all??", FALSE );
 }
 
 
@@ -1012,7 +995,7 @@ static void tv_read_file_ch_to_treeview ( const gchar *filename )
         if ( err ) g_error_free ( err );
 }
 
-static void mp_treeview_to_file ( GtkTreeView *tree_view, gchar *filename )
+static void tv_treeview_to_file ( GtkTreeView *tree_view, gchar *filename )
 {
     GString *gstring = g_string_new ( "# Gtv-Dvb channel format \n" );
 
@@ -1162,14 +1145,6 @@ static void tv_read_ch ()
 
 static void tv_get_config ()
 {
-    gchar *gtv_conf = g_strconcat ( g_get_user_config_dir (), "/gtv/gtv.conf", NULL );
-
-    if ( !g_file_test ( gtv_conf, G_FILE_TEST_EXISTS ) )
-    {
-        g_free ( gtv_conf );
-        return;
-    }
-
     guint n = 0;
     gchar *contents;
     GError *err = NULL;
@@ -1208,16 +1183,11 @@ static void tv_get_config ()
 
         if ( err ) g_error_free ( err );
 
-    g_free ( gtv_conf );
-
     if ( main_win_width  < 400 ) main_win_width  = 900;
     if ( main_win_height < 200 ) main_win_height = 400;
 }
-
-static void tv_auto_save ()
+static void tv_set_config ()
 {
-    gchar *gtv_conf = g_strconcat ( g_get_user_config_dir (), "/gtv/gtv.conf", NULL );
-
     gchar *gtv_conf_t = tv_get_prop ( "gtk-theme-name" );
     gchar *gtv_conf_i = tv_get_prop ( "gtk-icon-theme-name" );
 
@@ -1239,13 +1209,13 @@ static void tv_auto_save ()
 
     g_free ( gtv_conf_i );
     g_free ( gtv_conf_t );
-    g_free ( gtv_conf );
+}
 
+static void tv_auto_save ()
+{
+    tv_set_config ();
 
-    GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tv_treeview ) );
-    guint ind = gtk_tree_model_iter_n_children ( model, NULL );
-
-    if ( ind > 0 ) mp_treeview_to_file ( tv_treeview, channels_conf );
+    tv_treeview_to_file ( tv_treeview, channels_conf );
 }
 
 static void tv_init ( GtkApplication *app )
@@ -1260,28 +1230,31 @@ static void tv_init ( GtkApplication *app )
 
     g_free ( dir_conf );
 
+    gtv_conf      = g_strconcat ( g_get_user_config_dir (), "/gtv/gtv.conf", NULL );
     channels_conf = g_strconcat ( g_get_user_config_dir (), "/gtv/gtv-channel.conf", NULL );
-    rec_dir  = g_strdup ( g_get_home_dir () );
+    rec_dir       = g_strdup    ( g_get_home_dir () );
 
-    audio_encoder = g_strdup ( "vorbisenc" );
-    video_encoder = g_strdup ( "theoraenc" );
-    muxer =         g_strdup ( "oggmux" );
-    file_ext =      g_strdup ( "ogg" );
-
-    tv_get_config ();
+    if ( g_file_test ( gtv_conf, G_FILE_TEST_EXISTS ) )
+        tv_get_config ();
 
     tv_logo = gtk_icon_theme_load_icon ( gtk_icon_theme_get_default (),
               "applications-multimedia", 64, GTK_ICON_LOOKUP_USE_BUILTIN, NULL );
 
     tv_create_gaction_entry ( app );
+
+    audio_encoder = g_strdup ( "vorbisenc" );
+    video_encoder = g_strdup ( "theoraenc" );
+    muxer         = g_strdup ( "oggmux"    );
+    file_ext      = g_strdup ( "ogg"       );
 }
 
 gboolean first_close = TRUE;
 static void tv_quit ( /*GtkWindow *window*/ )
 {
-    if ( first_close ) tv_auto_save ();
-    first_close = FALSE;
+    if ( !first_close ) return;
 
+    first_close = FALSE;
+    tv_auto_save ();
     tv_stop ();
 
     gtk_widget_destroy ( GTK_WIDGET ( main_window ) );
