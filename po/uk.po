@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtv-dvb 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-22 16:42+0200\n"
+"POT-Creation-Date: 2017-11-23 02:31+0200\n"
 "PO-Revision-Date: 2017-11-21 19:24+0200\n"
 "Last-Translator: <st.pr-u@yandex.ua>\n"
 "Language-Team: Ukrainian\n"
@@ -18,154 +18,146 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/gtv-dvb.c:2340 src/gtv-dvb.c:2519
+#: src/gtv-dvb.c:2322 src/gtv-dvb.c:2501
 msgid "All Channels"
 msgstr "Усі Канали"
 
-#: src/gtv-dvb.c:2726
+#: src/gtv-dvb.c:2708
 msgid "Audio encoder"
 msgstr "Аудіокодер"
 
-#: src/gtv-dvb.c:946
-msgid ""
-"Auto saving will not be applied \n"
-" to empty list."
-msgstr ""
-"Авто збереження вимкнене \n"
-" для пустого списку."
-
-#: src/gtv-dvb.c:707 src/gtv-dvb.c:1307 src/gtv-dvb.c:1735 src/gtv-dvb.c:2524
+#: src/gtv-dvb.c:708 src/gtv-dvb.c:1290 src/gtv-dvb.c:1717 src/gtv-dvb.c:2506
 msgid "Channels"
 msgstr "Канали"
 
-#: src/gtv-dvb.c:1049
+#: src/gtv-dvb.c:1033
 msgid "Choose Folder"
 msgstr "Вибрати теку"
 
-#: src/gtv-dvb.c:2650
+#: src/gtv-dvb.c:2632
 msgid "Choose file"
 msgstr "Вибрати файл"
 
-#: src/gtv-dvb.c:714 src/gtv-dvb.c:938
+#: src/gtv-dvb.c:715
 msgid "Clear"
 msgstr "Очистити"
 
 #: src/gtv-dvb.c:946
-msgid "Clear all?"
-msgstr "Очистити усе?"
+msgid "Clear all??"
+msgstr "Очистити усе??"
 
-#: src/gtv-dvb.c:2659
+#: src/gtv-dvb.c:2641
 msgid "Convert"
 msgstr "Конвертувати"
 
-#: src/gtv-dvb.c:910
-msgid "Deleted not recover."
-msgstr "Видалене не відновити."
-
-#: src/gtv-dvb.c:712
+#: src/gtv-dvb.c:713
 msgid "Down"
 msgstr "Вниз"
 
-#: src/gtv-dvb.c:2725
+#: src/gtv-dvb.c:2707
 msgid "Encoder / Ts"
 msgstr "Кодер / Ts"
 
-#: src/gtv-dvb.c:2729
+#: src/gtv-dvb.c:2711
 msgid "File .ext"
 msgstr "Файл .ext"
 
-#: src/gtv-dvb.c:718
+#: src/gtv-dvb.c:719
 msgid "Full-screen"
 msgstr "На весь екран"
 
-#: src/gtv-dvb.c:1735
+#: src/gtv-dvb.c:1717
 msgid "General"
 msgstr "Головна"
 
-#: src/gtv-dvb.c:2719
+#: src/gtv-dvb.c:2701
 msgid "Icon-theme"
 msgstr "Іконки"
 
-#: src/gtv-dvb.c:719
+#: src/gtv-dvb.c:903
+msgid "Message"
+msgstr "Повідомлення"
+
+#: src/gtv-dvb.c:720
 msgid "Mini"
 msgstr "Міні"
 
-#: src/gtv-dvb.c:717
+#: src/gtv-dvb.c:718
 msgid "Mute"
 msgstr "Без звуку"
 
-#: src/gtv-dvb.c:2728
+#: src/gtv-dvb.c:2710
 msgid "Muxer"
 msgstr "Мультиплексор"
 
-#: src/gtv-dvb.c:1071
+#: src/gtv-dvb.c:1055
 msgid "Open File"
 msgstr "Відкрити файл"
 
-#: src/gtv-dvb.c:2340
+#: src/gtv-dvb.c:2322
 msgid "Other"
 msgstr "Інше"
 
-#: src/gtv-dvb.c:720
+#: src/gtv-dvb.c:721
 msgid "Quit"
 msgstr "Вийти"
 
-#: src/gtv-dvb.c:2340
+#: src/gtv-dvb.c:2322
 msgid "Radio"
 msgstr "Радіо"
 
-#: src/gtv-dvb.c:703
+#: src/gtv-dvb.c:704
 msgid "Record"
 msgstr "Запис"
 
-#: src/gtv-dvb.c:2722
+#: src/gtv-dvb.c:2704
 msgid "Recording folder"
 msgstr "Тека для запису"
 
-#: src/gtv-dvb.c:713 src/gtv-dvb.c:902
+#: src/gtv-dvb.c:714
 msgid "Remove"
 msgstr "Видалити"
 
-#: src/gtv-dvb.c:910
+#: src/gtv-dvb.c:937
 msgid "Remove?"
 msgstr "Видалити?"
 
-#: src/gtv-dvb.c:708 src/gtv-dvb.c:2802
+#: src/gtv-dvb.c:709 src/gtv-dvb.c:2784
 msgid "Scanner"
 msgstr "Сканер"
 
-#: src/gtv-dvb.c:1735
+#: src/gtv-dvb.c:1717
 msgid "Scanner / Converter"
 msgstr "Сканер / Конвертер"
 
-#: src/gtv-dvb.c:2358
+#: src/gtv-dvb.c:2340
 msgid "Start"
 msgstr "Старт"
 
-#: src/gtv-dvb.c:704 src/gtv-dvb.c:2362
+#: src/gtv-dvb.c:705 src/gtv-dvb.c:2344
 msgid "Stop"
 msgstr "Стоп"
 
-#: src/gtv-dvb.c:2340
+#: src/gtv-dvb.c:2322
 msgid "TV"
 msgstr "ТБ"
 
-#: src/gtv-dvb.c:2718
+#: src/gtv-dvb.c:2700
 msgid "Theme"
 msgstr "Тема"
 
-#: src/gtv-dvb.c:1389
+#: src/gtv-dvb.c:1372
 msgid "Undefined"
 msgstr "Невизначено"
 
-#: src/gtv-dvb.c:711
+#: src/gtv-dvb.c:712
 msgid "Up"
 msgstr "Вверх"
 
-#: src/gtv-dvb.c:2727
+#: src/gtv-dvb.c:2709
 msgid "Video encoder"
 msgstr "Відеокодер"
 
-#: src/gtv-dvb.c:2650
+#: src/gtv-dvb.c:2632
 msgid "format"
 msgstr "формат"
