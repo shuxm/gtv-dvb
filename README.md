@@ -8,7 +8,7 @@ Gtv-Dvb   1.0 stable
 Preview
 ------------
 
-* OS Lubuntu; Icon-theme [Light-media](https://github.com/vl-nix/light-media); Theme [Adwaita-dark](https://github.com/GNOME/gnome-themes-standard)
+* OS Lubuntu; Icon-theme [Faenza-lite](https://github.com/vl-nix/Faenza-lite); Theme [Adwaita-dark](https://github.com/GNOME/gnome-themes-standard)
 ![alt text](Lubuntu.png "Preview")
 
 * OS AltLinux; Icon-theme default; Theme [Adwaita-dark](https://github.com/GNOME/gnome-themes-standard)
@@ -69,7 +69,7 @@ Record
 
 Design
 ------
-* Icon-theme [Light-media](https://github.com/vl-nix/light-media)
+* Icon-theme [Faenza-lite](https://github.com/vl-nix/Faenza-lite)
 
 * Theme [Adwaita-dark](https://github.com/GNOME/gnome-themes-standard)
 
