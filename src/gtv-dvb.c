@@ -47,7 +47,7 @@ enum { COL_NUM, COL_FILES_CH, COL_URI_DATA, NUM_COLS };
 static guintptr video_window_handle = 0;
 static gdouble volume_start = 0.5;
 static guint j = 0, a = 0, b = 0, c = 0, tv_time_rec = 0, main_win_width = 900, main_win_height = 400;
-static gboolean video_enable = TRUE, rec_status = TRUE, rec_en_ts = TRUE, w_info = FALSE, fmsg_i = TRUE;
+static gboolean video_enable = TRUE, rec_status = TRUE, rec_en_ts = FALSE, w_info = FALSE, fmsg_i = TRUE;
 
 static void tv_stop ();
 static void tv_gst_rec_remove ();
@@ -2677,12 +2677,11 @@ static void tv_set_rec_data_ext ( GtkEntry *entry )
     file_ext = g_strdup ( gtk_entry_get_text ( entry ) );
 }
 
-static void tv_changed_sw_et ( GtkSwitch *switch_p )
+static void tv_changed_sw ( GtkSwitch *switch_p )
 {
-    if ( !gtk_switch_get_state (switch_p) )
-        rec_en_ts = TRUE;
-    else
-        rec_en_ts = FALSE;
+    gboolean statte = gtk_switch_get_state ( switch_p );
+
+    rec_en_ts = statte;
 
     for ( c = 0; c < 4; c++ )
         gtk_widget_set_sensitive ( GTK_WIDGET ( entry_enc[c] ), rec_en_ts );
@@ -2708,7 +2707,7 @@ static GtkBox * tv_scan_pref ()
         { gtk_label_new ( "" ), N_("Recording folder"), gtk_entry_new  (), rec_dir,       tv_set_rec_dir, TRUE  },
         { gtk_label_new ( "" ), NULL,                   NULL,              NULL,          NULL,           FALSE },
 
-        { gtk_label_new ( "" ), N_("Encoder / Ts"),     gtk_switch_new (), NULL,          tv_changed_sw_et,     FALSE },
+        { gtk_label_new ( "" ), N_("TS / Encoder"),     gtk_switch_new (), NULL,          tv_changed_sw,        FALSE },
         { gtk_label_new ( "" ), N_("Audio encoder"),    gtk_entry_new  (), audio_encoder, tv_set_rec_data_aenc, FALSE },
         { gtk_label_new ( "" ), N_("Video encoder"),    gtk_entry_new  (), video_encoder, tv_set_rec_data_venc, FALSE },
         { gtk_label_new ( "" ), N_("Muxer"),            gtk_entry_new  (), muxer,         tv_set_rec_data_mux,  FALSE },
@@ -2727,7 +2726,7 @@ static GtkBox * tv_scan_pref ()
         if ( !data_a_n[d].etext )
         {
             gtk_grid_attach ( GTK_GRID ( grid ), GTK_WIDGET ( data_a_n[d].widget ), 1, d, 1, 1 );
-            gtk_switch_set_state ( GTK_SWITCH ( data_a_n[d].widget ), !rec_en_ts );
+            gtk_switch_set_state ( GTK_SWITCH ( data_a_n[d].widget ), rec_en_ts );
             g_signal_connect ( data_a_n[d].widget, "notify::active", G_CALLBACK ( data_a_n[d].activate ), NULL );
             continue;
         }
