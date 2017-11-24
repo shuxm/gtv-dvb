@@ -942,6 +942,10 @@ static void tv_treeview_remove ( GtkTreeView *tree_view )
 static void tv_treeview_clear ( GtkTreeView *tree_view )
 {
     GtkTreeIter iter;
+    GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tree_view ) );
+
+    guint ind = gtk_tree_model_iter_n_children ( model, NULL );
+    if ( ind == 0 ) return;
 
     tv_dialog_remove_clear ( tree_view, iter, _("Clear all??"), FALSE );
 }
