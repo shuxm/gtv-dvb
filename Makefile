@@ -76,12 +76,12 @@ compile: build
 
 build:
 	sed 's|bindtextdomain ( "gtv-dvb", ".*" )|bindtextdomain ( "gtv-dvb", "\$(localedir)" )|g' -i src/$(program).c
-	gcc -Wall -Wextra $(CFLAG)\
+	gcc -Wall $(CFLAG)\
 		src/*.c \
 		-o $(program) \
 		`pkg-config gtk+-3.0 --cflags --libs` \
 		`pkg-config gstreamer-video-1.0 --cflags --libs` \
-		`pkg-config gstreamer-mpegts-1.0 --libs`
+		`pkg-config gstreamer-mpegts-1.0 --libs` -lm
 	sed 's|bindtextdomain ( "gtv-dvb", ".*" )|bindtextdomain ( "gtv-dvb", "/usr/share/locale/" )|g' -i src/$(program).c
 
 genpot:
