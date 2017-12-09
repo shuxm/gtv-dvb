@@ -21,10 +21,8 @@ Depends
 * gcc
 * gtk+3
 * gstreamer
-* gst-plugins-base
-* gst-plugins-good
-* gst-plugins-ugly
-* gst-plugins-bad
+* gst-plugins
+  * base, good, ugly, bad
 * gst-libav
 
 
