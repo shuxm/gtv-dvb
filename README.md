@@ -1,8 +1,9 @@
-Gtv-Dvb   1.0 stable
+Gtv-Dvb
 -------
 
 * Digital TV player
 * DVB-T/T2, DVB-S/S2, DVB-C
+* Version 1.0 stable
 
 
 Requirements
