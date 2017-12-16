@@ -23,7 +23,8 @@
 #   $ make help       get the usage
 #   $ make info       show variables
 #   $ make depends    check dependencies
-#   $ make compile    only build
+#   $ make compile    only compile
+#   $ make build      build
 #   $ make install    install
 #   $ make uninstall  uninstall
 #   $ make clean      clean all
@@ -77,7 +78,7 @@ depends:
 		pkg-config --exists --print-errors $$depend; \
 	done
 
-compile: build
+compile: $(objs)
 
 build: $(objs)
 	@echo 'file: ' $(program) '...'
@@ -161,7 +162,8 @@ help:
 	@echo '  help       print this message'
 	@echo '  info       show variables'
 	@echo '  depends    check dependencies'
-	@echo '  compile    only build'
+	@echo '  compile    only compile'
+	@echo '  build      build'
 	@echo '  install    install'
 	@echo '  uninstall  uninstall'
 	@echo '  clean      clean all'
