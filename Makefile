@@ -82,8 +82,7 @@ depends:
 compile: $(objs)
 
 build: $(objs)
-	@echo
-	@echo 'build: ' $(program)
+	@echo '    build: ' $(program)
 	@gcc -Wall $^ -o $(program) $(CFLAG) $(cflags_libs)
 	@echo
 
