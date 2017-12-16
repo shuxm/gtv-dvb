@@ -87,10 +87,10 @@ build: $(objs)
 	@gcc -Wall -c $< -o $@ $(CFLAG) $(cflags_libs)
 
 setlcdir:
-	@sed 's|/usr/share/locale/|\$(localedir)|g' -i src/gtv-dvb.c
+	@sed 's|/usr/share/locale/|$(localedir)|g' -i src/gtv-dvb.c
 
 revlcdir:
-	@sed 's|\$(localedir)|/usr/share/locale/|g' -i src/gtv-dvb.c
+	@sed 's|$(localedir)|/usr/share/locale/|g' -i src/gtv-dvb.c
 
 
 genpot:
