@@ -1,10 +1,7 @@
 #############################################################################
 #
 # Makefile for Gtv-dvb
-# License: GPL (General Public License)
-#
 # Get Gtv-dvb: https://github.com/vl-nix/gtv-dvb
-#
 #
 # Depends
 # -------
@@ -35,13 +32,12 @@
 #	   make msgfmt     only msgfmt po -> mo
 #
 #===========================================================================
-
-
-## Set prefix = PREFIX ( install files in PREFIX )
-##
-## Verify variables: make info
-##
-##==========================================================================
+#
+# Set prefix = PREFIX ( install files in PREFIX )
+#
+# Verify variables: make info
+#
+#===========================================================================
 # /usr:       /usr, /usr/bin ...
 # prefix    = /usr
 
@@ -176,5 +172,5 @@ help:
 	@echo '  msgfmt     only msgfmt po -> mo'
 	@echo
 
-## End of the Makefile
+# End of the Makefile
 #############################################################################
