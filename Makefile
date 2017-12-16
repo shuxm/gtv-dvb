@@ -62,8 +62,13 @@ obj_locale = $(subst :, ,$(LANGUAGE))
 
 obj_depends = gtk+-3.0 gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-plugins-good-1.0 gstreamer-plugins-bad-1.0
 
+cflags_libs := `pkg-config gtk+-3.0 --cflags --libs` `pkg-config gstreamer-video-1.0 --cflags --libs` `pkg-config gstreamer-mpegts-1.0 --libs` -lm
 
-all: depends build msgfmt
+srcs := $(wildcard src/*.c)
+objs  = $(srcs:.c=.o)
+
+
+all: depends setlcdir build revlcdir msgfmt
 
 
 depends:
@@ -74,15 +79,20 @@ depends:
 
 compile: build
 
-build:
+build: $(objs)
+	@echo 'file: ' $(program) '...'
+	gcc -Wall $^ -o $(program) $(CFLAG) $(cflags_libs)
+
+%.o: %.c
+	@echo 'file: ' $@ '...'
+	gcc -Wall -c $< -o $@ $(CFLAG) $(cflags_libs)
+
+setlcdir:
 	sed 's|/usr/share/locale/|\$(localedir)|g' -i src/gtv-dvb.c
-	gcc -Wall $(CFLAG)\
-		src/*.c \
-		-o $(program) \
-		`pkg-config gtk+-3.0 --cflags --libs` \
-		`pkg-config gstreamer-video-1.0 --cflags --libs` \
-		`pkg-config gstreamer-mpegts-1.0 --libs` -lm
+
+revlcdir:
 	sed 's|\$(localedir)|/usr/share/locale/|g' -i src/gtv-dvb.c
+
 
 genpot:
 	mkdir -p po
