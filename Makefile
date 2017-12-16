@@ -73,7 +73,7 @@ all: depends setlcdir build revlcdir msgfmt
 
 
 depends:
-	for depend in $(obj_depends); do \
+	@for depend in $(obj_depends); do \
 		echo "checking for $$depend..."; \
 		pkg-config --exists --print-errors $$depend; \
 	done
@@ -109,7 +109,7 @@ mergeinit: genpot
 	done
 
 msgfmt:
-	for language in po/*.po; do \
+	@for language in po/*.po; do \
 		lang=`basename $$language | cut -f 1 -d '.'`; \
 		mkdir -pv locale/$$lang/LC_MESSAGES/; \
 		msgfmt -v $$language -o locale/$$lang/LC_MESSAGES/$(program).mo; \
