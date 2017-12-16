@@ -82,17 +82,17 @@ compile: $(objs)
 
 build: $(objs)
 	@echo 'file: ' $(program) '...'
-	gcc -Wall $^ -o $(program) $(CFLAG) $(cflags_libs)
+	@gcc -Wall $^ -o $(program) $(CFLAG) $(cflags_libs)
 
 %.o: %.c
 	@echo 'file: ' $@ '...'
-	gcc -Wall -c $< -o $@ $(CFLAG) $(cflags_libs)
+	@gcc -Wall -c $< -o $@ $(CFLAG) $(cflags_libs)
 
 setlcdir:
-	sed 's|/usr/share/locale/|\$(localedir)|g' -i src/gtv-dvb.c
+	@sed 's|/usr/share/locale/|\$(localedir)|g' -i src/gtv-dvb.c
 
 revlcdir:
-	sed 's|\$(localedir)|/usr/share/locale/|g' -i src/gtv-dvb.c
+	@sed 's|\$(localedir)|/usr/share/locale/|g' -i src/gtv-dvb.c
 
 
 genpot:
