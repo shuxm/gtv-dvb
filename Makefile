@@ -126,7 +126,7 @@ uninstall:
 	$(DESTDIR)$(localedir)/*/*/$(program).mo
 
 clean:
-	rm -f $(program) src/*.o po/$(program).pot
+	rm -f $(program) src/*.o po/$(program).pot po/*.po~
 	rm -fr locale
 
 
