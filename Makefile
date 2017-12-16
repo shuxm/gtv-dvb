@@ -77,15 +77,18 @@ depends:
 		echo "checking for $$depend..."; \
 		pkg-config --exists --print-errors $$depend; \
 	done
+	@echo
 
 compile: $(objs)
 
 build: $(objs)
-	@echo 'file: ' $(program) '...'
+	@echo
+	@echo 'build: ' $(program)
 	@gcc -Wall $^ -o $(program) $(CFLAG) $(cflags_libs)
+	@echo
 
 %.o: %.c
-	@echo 'file: ' $@ '...'
+	@echo 'compile: ' $@
 	@gcc -Wall -c $< -o $@ $(CFLAG) $(cflags_libs)
 
 setlcdir:
