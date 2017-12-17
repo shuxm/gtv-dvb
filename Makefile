@@ -55,10 +55,8 @@ datadir     = $(prefix)/share
 desktopdir  = $(datadir)/applications
 localedir   = $(datadir)/locale
 
-obj_locale = $(subst :, ,$(LANGUAGE))
-
+obj_locale  = $(subst :, ,$(LANGUAGE))
 obj_depends = gtk+-3.0 gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-plugins-good-1.0 gstreamer-plugins-bad-1.0
-
 cflags_libs = `pkg-config gtk+-3.0 --cflags --libs` `pkg-config gstreamer-video-1.0 --cflags --libs` `pkg-config gstreamer-mpegts-1.0 --libs` -lm
 
 srcs := $(wildcard src/*.c)
@@ -66,7 +64,6 @@ objs  = $(srcs:.c=.o)
 
 
 all: depends setlcdir build revlcdir msgfmt
-
 
 depends:
 	@for depend in $(obj_depends); do \
@@ -91,7 +88,6 @@ setlcdir:
 
 revlcdir:
 	@sed 's|$(localedir)|/usr/share/locale/|g' -i src/gtv-dvb.c
-
 
 genpot:
 	mkdir -p po
