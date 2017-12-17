@@ -2,7 +2,7 @@
 -------
 
 * Digital TV player
-* DVB-T/T2, DVB-S/S2, DVB-C
+* DVB-T2/S2/C
 * Version 1.0 stable
 
 
