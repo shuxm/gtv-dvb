@@ -14,27 +14,9 @@
 # gst-plugins-bad
 # gst-libav
 #
-# Make Target:
-# ------------
-#   $ make            all
-#   $ make help       get the usage
-#   $ make info       show variables
-#   $ make depends    check dependencies
-#   $ make compile    only compile
-#   $ make build      build
-#   $ make install    install
-#   $ make uninstall  uninstall
-#   $ make clean      clean all
-#
-#   $ For translators:
-#	   make genpot     only xgettext -> pot
-#	   make mergeinit  genpot and ( msgmerge or msginit ) pot -> po
-#	   make msgfmt     only msgfmt po -> mo
-#
 #===========================================================================
 #
 # Set prefix = PREFIX ( install files in PREFIX )
-#
 # Verify variables: make info
 #
 #===========================================================================
@@ -167,6 +149,8 @@ help:
 	@echo '  mergeinit  genpot and ( msgmerge or msginit ) pot -> po'
 	@echo '  msgfmt     only msgfmt po -> mo'
 	@echo
+	@echo 'Showing debug:'
+	@echo '  G_MESSAGES_DEBUG=all ./$(program)'
+	@echo
 
-# End of the Makefile
 #############################################################################
