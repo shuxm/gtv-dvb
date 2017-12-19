@@ -8,7 +8,7 @@
 # gcc
 # make
 # gettext
-# libgtk 	( & dev )
+# libgtk-3 	( & dev )
 # gstreamer 	( & dev )
 # gst-plugins 	( & dev )
 # 	base, good, ugly, bad
