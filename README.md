@@ -20,9 +20,9 @@ Depends
 * gcc
 * make
 * gettext
-* gtk+3
-* gstreamer
-* gst-plugins
+* gtk+3        ( & dev )
+* gstreamer    ( & dev )
+* gst-plugins  ( & dev )
   * base, good, ugly, bad
 * gst-libav
 
