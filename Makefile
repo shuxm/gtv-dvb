@@ -6,6 +6,8 @@
 # Depends
 # -------
 # gcc
+# make
+# gettext
 # gtk+3
 # gstreamer
 # gst-plugins-base
