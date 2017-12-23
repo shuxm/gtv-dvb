@@ -2,8 +2,8 @@
 -------
 
 * Digital TV player
-* DVB-T2/S2/C
-* Version 1.0 stable
+* DVB-T2/S2/C, ATSC, DTMB
+* Version 1.1 stable
 
 
 Preview

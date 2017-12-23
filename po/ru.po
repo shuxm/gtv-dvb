@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtv-dvb 1.0\n"
+"Project-Id-Version: gtv-dvb 1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-24 13:27+0200\n"
+"POT-Creation-Date: 2017-12-17 08:59+0200\n"
 "PO-Revision-Date: 2017-11-23 17:12+0700\n"
 "Last-Translator: antohami@altlinux.org\n"
 "Language-Team: Russian\n"
@@ -19,146 +19,234 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 2.0.4\n"
 
-#: src/gtv-dvb.c:2326 src/gtv-dvb.c:2505
+#: src/gtv-toolbar.c:40
+msgid "About"
+msgstr "О Gtv-Dvb"
+
+#: src/gtv-scan.c:669 src/gtv-scan.c:867
 msgid "All Channels"
 msgstr "Все каналы"
 
-#: src/gtv-dvb.c:2711
+#: src/gtv-pref.c:291
 msgid "Audio encoder"
 msgstr "Аудиокодер"
 
-#: src/gtv-dvb.c:708 src/gtv-dvb.c:1294 src/gtv-dvb.c:1721 src/gtv-dvb.c:2510
+#: src/gtv-eqa.c:118
+msgid "Audio equalizer"
+msgstr "Аудио эквалайзер"
+
+#: src/gtv-eqa.c:22
+msgid "Bandwidth  Hz"
+msgstr "Полоса  Hz"
+
+#: src/gtv-eqv.c:17
+msgid "Brightness"
+msgstr "Яркость"
+
+#: src/gtv-scan.c:68 src/gtv-toolbar.c:26
 msgid "Channels"
 msgstr "Каналы"
 
-#: src/gtv-dvb.c:1037
+#: src/gtv-service.c:176
 msgid "Choose Folder"
 msgstr "Назначить папку"
 
-#: src/gtv-dvb.c:2636
+#: src/gtv-scan.c:1154
 msgid "Choose file"
 msgstr "Назначить файл"
 
-#: src/gtv-dvb.c:715
+#: src/gtv-toolbar.c:33
 msgid "Clear"
 msgstr "Очистить"
 
-#: src/gtv-dvb.c:950
+#: src/gtv-treeview.c:104
 msgid "Clear all??"
-msgstr "Очистить всё?"
+msgstr "Очистить всё??"
 
-#: src/gtv-dvb.c:2645
+#: src/gtv-eqv.c:18
+msgid "Contrast"
+msgstr "Контрастность"
+
+#: src/gtv-scan.c:1161
 msgid "Convert"
 msgstr "Конвертировать"
 
-#: src/gtv-dvb.c:713
+#: src/gtv-toolbar.c:31
 msgid "Down"
 msgstr "Вниз"
 
-#: src/gtv-dvb.c:2714
-msgid "File .ext"
-msgstr "Файл .ext"
+#: src/gtv-toolbar.c:24
+msgid "EQ-Audio"
+msgstr "EQ-Аудио"
 
-#: src/gtv-dvb.c:719
+#: src/gtv-toolbar.c:25
+msgid "EQ-Video"
+msgstr "EQ-Видео"
+
+#: src/gtv-pref.c:298
+msgid "File extension"
+msgstr "Расширение файла"
+
+#: src/gtv-eqa.c:21
+msgid "Frequency  Hz"
+msgstr "Частота  Hz"
+
+#: src/gtv-toolbar.c:38
 msgid "Full-screen"
 msgstr "Полный экран"
 
-#: src/gtv-dvb.c:1721
-msgid "General"
-msgstr "Основные"
+#: src/gtv-eqv.c:20
+msgid "Hue"
+msgstr "Оттенок"
 
-#: src/gtv-dvb.c:2704
-msgid "Icon-theme"
-msgstr "Тема иконок"
+#: src/gtv-pref.c:279
+msgid "Icons"
+msgstr "Иконки"
 
-#: src/gtv-dvb.c:903
+#: src/gtv-eqa.c:20
+msgid "Level  dB"
+msgstr "Уровень  dB"
+
+#: src/gtv-treeview.c:57
 msgid "Message"
 msgstr "Сообщение"
 
-#: src/gtv-dvb.c:720
+#: src/gtv-toolbar.c:37
 msgid "Mini"
 msgstr "Мини"
 
-#: src/gtv-dvb.c:718
+#: src/gtv-toolbar.c:36
 msgid "Mute"
 msgstr "Без звука"
 
-#: src/gtv-dvb.c:2713
+#: src/gtv-pref.c:297
 msgid "Muxer"
 msgstr "Мультиплексор"
 
-#: src/gtv-dvb.c:1059
+#: src/gtv-service.c:196
 msgid "Open File"
 msgstr "Открыть файл"
 
-#: src/gtv-dvb.c:2326
+#: src/gtv-scan.c:669
 msgid "Other"
 msgstr "Другие"
 
-#: src/gtv-dvb.c:721
+#: src/gtv-pref.c:385 src/gtv-pref.c:398 src/gtv-toolbar.c:39
+msgid "Preferences"
+msgstr "Настройки"
+
+#: src/gtv-toolbar.c:41
 msgid "Quit"
 msgstr "Выйти"
 
-#: src/gtv-dvb.c:2326
+#: src/gtv-scan.c:669
 msgid "Radio"
 msgstr "Радио"
 
-#: src/gtv-dvb.c:704
+#: src/gtv-toolbar.c:22
 msgid "Record"
 msgstr "Запись"
 
-#: src/gtv-dvb.c:2707
+#: src/gtv-pref.c:285
 msgid "Recording folder"
 msgstr "Папка для записи"
 
-#: src/gtv-dvb.c:714
+#: src/gtv-toolbar.c:32
 msgid "Remove"
 msgstr "Удалить"
 
-#: src/gtv-dvb.c:937
+#: src/gtv-treeview.c:91
 msgid "Remove?"
 msgstr "Удалить?"
 
-#: src/gtv-dvb.c:709 src/gtv-dvb.c:2787
+#: src/gtv-eqv.c:19
+msgid "Saturation"
+msgstr "Насыщенность"
+
+#: src/gtv-scan.c:1211 src/gtv-toolbar.c:27
 msgid "Scanner"
 msgstr "Сканер"
 
-#: src/gtv-dvb.c:1721
+#: src/gtv-scan.c:62
 msgid "Scanner / Converter"
 msgstr "Сканер / Конвертер"
 
-#: src/gtv-dvb.c:2344
+#: src/gtv-scan.c:696
 msgid "Start"
 msgstr "Старт"
 
-#: src/gtv-dvb.c:705 src/gtv-dvb.c:2348
+#: src/gtv-scan.c:700 src/gtv-toolbar.c:23
 msgid "Stop"
 msgstr "Стоп"
 
-#: src/gtv-dvb.c:2710
+#: src/gtv-pref.c:289
 msgid "TS / Encoder"
 msgstr "TS / Кодер"
 
-#: src/gtv-dvb.c:2326
+#: src/gtv-scan.c:669
 msgid "TV"
 msgstr "ТВ"
 
-#: src/gtv-dvb.c:2703
+#: src/gtv-pref.c:278
 msgid "Theme"
 msgstr "Тема"
 
-#: src/gtv-dvb.c:1376
-msgid "Undefined"
-msgstr "Неопределённый"
+#: src/gtv-pref.c:337
+msgid ""
+"Time=Duration=Number\n"
+"    Offset[Minutes]\n"
+"    Duration[Minutes]\n"
+"    Number[Сhannel number]"
+msgstr ""
+"Время=Продолжительность=Номер\n"
+"    Смещение[Минуты]\n"
+"    Продолжительность[Минуты]\n"
+"    Номер[Номер канала]"
 
-#: src/gtv-dvb.c:712
+#: src/gtv-pref.c:286
+msgid "Timer recording"
+msgstr "Таймер записи"
+
+#: src/gtv-pref.c:200
+msgid ""
+"Type=Property=Value[space]\n"
+"    Type[int|double|bool|char]\n"
+"Example:\n"
+"    int=bitrate=2048000 bool=dct8x8=true char=option-string=..."
+msgstr ""
+"Тип=Свойство=Значение[пробел]\n"
+"    Тип[int|double|bool|char]\n"
+"Пример:\n"
+"    int=bitrate=2048000 bool=dct8x8=true char=option-string=..."
+
+#: src/gtv-scan.c:48
+msgid "Undefined \n"
+msgstr "Не определено \n"
+
+#: src/gtv-toolbar.c:30
 msgid "Up"
 msgstr "Вверх"
 
-#: src/gtv-dvb.c:2712
+#: src/gtv-pref.c:294
 msgid "Video encoder"
-msgstr "Видеокодек"
+msgstr "Видеокодер"
 
-#: src/gtv-dvb.c:2636
+#: src/gtv-eqv.c:87
+msgid "Video equalizer"
+msgstr "Видео эквалайзер"
+
+#: src/gtv-scan.c:1154
 msgid "format"
 msgstr "формат"
+
+#: src/gtv-pref.c:292 src/gtv-pref.c:295
+msgid "↳ Properties"
+msgstr "↳ Свойства"
+
+#: src/gtv-pref.c:281
+msgid "↳ Size ( media )"
+msgstr "↳ Размер ( медиа )"
+
+#: src/gtv-pref.c:282
+msgid "↳ Size ( panel )"
+msgstr "↳ Размер ( панель )"

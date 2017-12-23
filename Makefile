@@ -30,7 +30,7 @@
 prefix      = $(HOME)/.local
 
 program     = gtv-dvb
-version     = 1.0
+version     = 1.1
 
 bindir      = $(prefix)/bin
 datadir     = $(prefix)/share
@@ -41,11 +41,14 @@ obj_locale  = $(subst :, ,$(LANGUAGE))
 obj_depends = gtk+-3.0 gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-plugins-good-1.0 gstreamer-plugins-bad-1.0
 cflags_libs = `pkg-config gtk+-3.0 --cflags --libs` `pkg-config gstreamer-video-1.0 --cflags --libs` `pkg-config gstreamer-mpegts-1.0 --libs` -lm
 
-srcs := $(wildcard src/*.c)
+xres  = $(wildcard res/*.xml)
+gres := $(xres:.xml=.c)
+
+srcs := $(wildcard src/*.c res/*.c )
 objs  = $(srcs:.c=.o)
 
 
-all: depends setlcdir build revlcdir msgfmt
+all: depends cleanres genres setlcdir build revlcdir msgfmt
 
 depends:
 	@for depend in $(obj_depends); do \
@@ -65,11 +68,24 @@ build: $(objs)
 	@echo 'compile: ' $@
 	@gcc -Wall -c $< -o $@ $(CFLAG) $(cflags_libs)
 
+
+genres: $(gres)
+
+cleanres:
+	@rm -f res/*.gresource.c
+
+%.c: %.xml
+	@echo 'gresource: ' $@
+	@glib-compile-resources $< --target=$@ --generate-source
+	@echo
+
+
 setlcdir:
 	@sed 's|/usr/share/locale/|$(localedir)|g' -i src/gtv-dvb.c
 
 revlcdir:
 	@sed 's|$(localedir)|/usr/share/locale/|g' -i src/gtv-dvb.c
+
 
 genpot:
 	mkdir -p po
@@ -91,6 +107,7 @@ msgfmt:
 		msgfmt -v $$language -o locale/$$lang/LC_MESSAGES/$(program).mo; \
 	done
 
+
 install:
 	mkdir -p $(DESTDIR)$(bindir) $(DESTDIR)$(datadir) $(DESTDIR)$(desktopdir)
 	install -Dp -m0755 $(program) $(DESTDIR)$(bindir)/$(program)
@@ -103,7 +120,7 @@ uninstall:
 	$(DESTDIR)$(localedir)/*/*/$(program).mo
 
 clean:
-	rm -f $(program) src/*.o po/$(program).pot po/*.po~
+	rm -f $(program) src/*.o res/*.o po/$(program).pot po/*.po~
 	rm -fr locale
 
 
