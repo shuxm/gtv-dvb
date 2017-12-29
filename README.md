@@ -9,7 +9,7 @@
 [Preview](https://b.radikal.ru/b42/1712/72/39b2f37c530d.png)
 ------------
 
-![alt text](https://b.radikal.ru/b42/1712/72/39b2f37c530d.png "Preview")
+![alt text]("Preview")
 
 
 Requirements
