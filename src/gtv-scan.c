@@ -97,6 +97,7 @@ gst_param_dvb_descr_n[] =
     { "Rolloff",        "ROLLOFF",           "rolloff",          dvb_descr_roll_type_n,       G_N_ELEMENTS ( dvb_descr_roll_type_n 		 ) },
     { "Polarity",       "POLARIZATION",      "polarity",         dvb_descr_polarity_type_n,   G_N_ELEMENTS ( dvb_descr_polarity_type_n   ) },
     { "LNB",            "LNB",               "lnb-type",         dvb_descr_lnb_type_n,        G_N_ELEMENTS ( dvb_descr_lnb_type_n 		 ) },
+    { "DiSEqC",         "SAT_NUMBER",        "diseqc-source",    dvb_descr_lnb_num_n,         G_N_ELEMENTS ( dvb_descr_lnb_num_n 		 ) },
     { "Interleaving",   "INTERLEAVING",      "interleaving",     dvb_descr_ileaving_type_n,   G_N_ELEMENTS ( dvb_descr_ileaving_type_n 	 ) },
 
     // digits
@@ -104,7 +105,6 @@ gst_param_dvb_descr_n[] =
     { "Bandwidth",      "BANDWIDTH_HZ",      "bandwidth-hz",     NULL, 0 },
     { "Symbol rate",    "SYMBOL_RATE",       "symbol-rate",      NULL, 0 },
     { "Stream ID",      "STREAM_ID",         "stream-id",        NULL, 0 },
-    { "DiSEqC",         "SAT_NUMBER",        "diseqc-source",    NULL, 0 },
     { "Service Id",     "SERVICE_ID",        "program-number",   NULL, 0 },
     { "Audio Pid",      "AUDIO_PID",         "audio-pid",        NULL, 0 },
     { "Video Pid",      "VIDEO_PID",         "video-pid",        NULL, 0 }
@@ -767,14 +767,7 @@ static GtkBox * gtv_scan_dvb_all  ( guint num, const struct DvbTypes *dvball, co
             }
 
             if ( g_strrstr ( dvball[d].param, "DiSEqC" ) )
-            {
-                gtk_combo_box_text_append_text ( scan_combo_box, "None" );
-                for ( z = 0; z < 8; z++ )
-                {
-                    gchar *text = g_strdup_printf  ( "%d  Lnb", z+1 );
-                    gtk_combo_box_text_append_text ( scan_combo_box, text );
-                    g_free ( text );
-                }
+            {                
                 g_object_get ( gtvscan.dvbsrc_tune, "diseqc-source", &d_data, NULL );
                 gtk_combo_box_set_active ( GTK_COMBO_BOX ( scan_combo_box ), d_data+1 );
             }

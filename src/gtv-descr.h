@@ -242,4 +242,29 @@ const struct dvb_descr_all dvb_descr_lnb_type_n[] =
     { LNB_BS1, "110BS",	    "110 BS"    }
 };
 
+enum lnb_num
+{
+    LNB_0,
+    LNB_1,
+    LNB_2,
+    LNB_3,
+    LNB_4,
+    LNB_5,
+    LNB_6,
+    LNB_7
+};
+
+const struct dvb_descr_all dvb_descr_lnb_num_n[] =
+{
+    { 99999, "NONE",    "None"  },
+    { LNB_0, "LNB 1",   "Lnb 1" },
+    { LNB_1, "LNB 2",   "Lnb 2" },
+    { LNB_2, "LNB 3",   "Lnb 3" },
+    { LNB_3, "LNB 4",   "Lnb 4" },
+    { LNB_4, "LNB 5",   "Lnb 5" },
+    { LNB_5, "LNB 6",   "Lnb 6" },
+    { LNB_6, "LNB 7",   "Lnb 7" },
+    { LNB_7, "LNB 8",	"Lnb 8" }
+};
+
 #endif // GTV_DESCR_H
