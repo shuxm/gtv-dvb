@@ -136,18 +136,30 @@ static gchar * gtv_data_split_set_dvb ( gchar *data )
         if ( !g_strrstr ( fields[j], "=" ) ) continue;
 
         gchar **splits = g_strsplit ( fields[j], "=", 0 );
+        
+			if ( g_strrstr ( splits[0], "polarity" ) )
+            {
+				if ( splits[1][0] == 'v' || splits[1][0] == 'V' || splits[1][0] == '0' )
+					g_object_set ( element, "polarity", "V", NULL );
+                else
+					g_object_set ( element, "polarity", "H", NULL );
+				
+				continue;
+			}
+			
+			long dat = atol ( splits[1] );
 
             if ( g_strrstr ( splits[0], "program-number" ) )
             {
-                gtvdvb.sid = atoi ( splits[1] );
-                g_object_set ( gtv_gstelement_mts (), "program-number", gtvdvb.sid, NULL );
+                gtvdvb.sid = dat;
+                g_object_set ( gtv_gstelement_mts (), "program-number", dat, NULL );
             }
-            else if ( g_strrstr ( splits[0], "polarity" ) )
-                g_object_set ( element, splits[0], splits[1], NULL );
+            else if ( g_strrstr ( splits[0], "symbol-rate" ) )
+				g_object_set ( element, "symbol-rate", ( dat > 100000) ? dat/1000 : dat, NULL );
             else if ( g_strrstr ( splits[0], "lnb-type" ) )
-                gtv_set_lnb ( element, atoi ( splits[1]) );
+                gtv_set_lnb ( element, dat );
             else
-                g_object_set ( element, splits[0], atoi ( splits[1] ), NULL );
+                g_object_set ( element, splits[0], dat, NULL );
 
         g_strfreev (splits);
     }

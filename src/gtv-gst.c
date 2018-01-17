@@ -32,7 +32,7 @@ struct GtvGstBase
 struct GtvGstBase gtvgstbase;
 
 
-static guint a = 0, b = 0, c = 0, j = 0;
+static guint c = 0, j = 0;
 
 
 static void gtv_gst_set_prop ( GstElement *element, gchar *av_enc_p );
@@ -204,48 +204,35 @@ struct dvb_all_list { const gchar *name; } dvb_all_list_n[] =
     for ( c = 0; c < G_N_ELEMENTS ( gtvgstbase.dvb_all_n ); c++ )
     {
         gtvgstbase.dvb_all_n[c] = gst_element_factory_make ( dvb_all_list_n[c].name, NULL );
-
-    	if ( !gtvgstbase.dvb_all_n[c] )
-    	{
-            g_critical ( "gtv_gst_tsdemux:: element - %s - not be created.\n", dvb_all_list_n[c].name );
-            return;
-        }
-    }
-
-    if ( gtvdvb.video_enable ) { a = 2; } else { a = 10; }
-
-    gst_bin_add ( GST_BIN ( gtvgstdvb.dvbplay ), gtvgstbase.dvb_all_n[0] );
-    gst_bin_add ( GST_BIN ( gtvgstdvb.dvbplay ), gtvgstbase.dvb_all_n[1] );
-
-    for ( c = a; c < G_N_ELEMENTS ( gtvgstbase.dvb_all_n ); c++ )
+        
+        //if ( !gtvgstbase.dvb_all_n[c] ) return;
+        
+        if ( !gtvdvb.video_enable && ( c == 2 || c == 3 || c == 4 || c == 5 || c == 6 || c == 7 || c == 8 || c == 9 ) ) continue;
+        
         gst_bin_add ( GST_BIN ( gtvgstdvb.dvbplay ), gtvgstbase.dvb_all_n[c] );
-
-    gst_element_link_many ( gtvgstbase.dvb_all_n[0], gtvgstbase.dvb_all_n[1], NULL );
+    	
+    	if (  c == 1 || c == 3 || c == 4 || c == 6 || c == 7 || c == 8 || c == 9
+           || c == 11 || c == 12 || c == 14 || c == 15 || c == 16 || c == 17 || c == 18 )
+           gst_element_link ( gtvgstbase.dvb_all_n[c-1], gtvgstbase.dvb_all_n[c] );
+    }
 
     g_signal_connect ( gtvgstbase.dvb_all_n[1], "pad-added", G_CALLBACK ( gtv_pad_demux_added_audio ), gtvgstbase.dvb_all_n[10] );
     g_signal_connect ( gtvgstbase.dvb_all_n[1], "pad-added", G_CALLBACK ( gtv_pad_demux_added_video ), gtvgstbase.dvb_all_n[2] );
 
-    if ( gtvdvb.video_enable )
-    {
-        gst_element_link_many ( gtvgstbase.dvb_all_n[2], gtvgstbase.dvb_all_n[3], gtvgstbase.dvb_all_n[4], NULL );
-        gst_element_link_many ( gtvgstbase.dvb_all_n[5], gtvgstbase.dvb_all_n[6], gtvgstbase.dvb_all_n[7], gtvgstbase.dvb_all_n[8], gtvgstbase.dvb_all_n[9], NULL );
-
+    if ( gtvdvb.video_enable )    
         g_signal_connect ( gtvgstbase.dvb_all_n[4], "pad-added", G_CALLBACK ( gtv_pad_decode_added ), gtvgstbase.dvb_all_n[5] );
-    }
-
-    gst_element_link_many ( gtvgstbase.dvb_all_n[10], gtvgstbase.dvb_all_n[11], gtvgstbase.dvb_all_n[12], NULL );
-    gst_element_link_many ( gtvgstbase.dvb_all_n[13], gtvgstbase.dvb_all_n[14], gtvgstbase.dvb_all_n[15], gtvgstbase.dvb_all_n[16], gtvgstbase.dvb_all_n[17], gtvgstbase.dvb_all_n[18], NULL );
 
     g_signal_connect ( gtvgstbase.dvb_all_n[12], "pad-added", G_CALLBACK ( gtv_pad_decode_added ), gtvgstbase.dvb_all_n[13] );
 }
 
 void gtv_gst_tsdemux_remove ()
 {
-    gst_bin_remove ( GST_BIN ( gtvgstdvb.dvbplay ), gtvgstbase.dvb_all_n[0] );
-    gst_bin_remove ( GST_BIN ( gtvgstdvb.dvbplay ), gtvgstbase.dvb_all_n[1] );
-
-    for ( c = a; c < G_N_ELEMENTS ( gtvgstbase.dvb_all_n ); c++ )
+    for ( c = 0; c < G_N_ELEMENTS ( gtvgstbase.dvb_all_n ); c++ )
+    {
+		if ( !gtvdvb.video_enable && ( c == 2 || c == 3 || c == 4 || c == 5 || c == 6 || c == 7 || c == 8 || c == 9 ) ) continue;
+        
         gst_bin_remove ( GST_BIN ( gtvgstdvb.dvbplay ), gtvgstbase.dvb_all_n[c] );
+	}
 
     if ( !gtvdvb.rec_status ) gtv_gst_rec_remove ();
 }
@@ -259,38 +246,36 @@ gboolean gtv_gst_rec_enc ( gchar *name_ch )
 		{ "queue2"      }, { gtvpref.audio_encoder },
 		{ gtvpref.muxer }, { "filesink" }
 	};
+	
+	gst_element_set_state ( gtvgstdvb.dvbplay, GST_STATE_PAUSED );
 
     for ( c = 0; c < G_N_ELEMENTS ( gtvgstbase.dvb_rec_all_n ); c++ )
     {
         gtvgstbase.dvb_rec_all_n[c] = gst_element_factory_make ( dvb_all_rec_list_n[c].name, NULL );
 
-    	if ( !gtvgstbase.dvb_rec_all_n[c] )
-    	{
-            g_critical ( "gtv_gst_rec_enc:: element - %s - not be created.\n", dvb_all_rec_list_n[c].name );
-            return FALSE;
-    	}
+    	if ( !gtvgstbase.dvb_rec_all_n[c] ) return FALSE;
+    	
+    	if ( !gtvdvb.video_enable && ( c == 0 || c == 1 ) ) continue;
+    	
+    	gst_bin_add ( GST_BIN (gtvgstdvb.dvbplay), gtvgstbase.dvb_rec_all_n[c] );
+    	
+    	if ( c == 1 || c == 3 || c == 5 )
+			gst_element_link ( gtvgstbase.dvb_rec_all_n[c-1], gtvgstbase.dvb_rec_all_n[c] );
     }
-
 
     if ( gtvdvb.video_enable )
         gtv_gst_set_prop ( gtvgstbase.dvb_rec_all_n[1], gtvpref.video_enc_p );
 
     gtv_gst_set_prop ( gtvgstbase.dvb_rec_all_n[3], gtvpref.audio_enc_p );
-
-
-    if ( gtvdvb.video_enable ) { b = 0; } else { b = 2; }
-
-  gst_element_set_state ( gtvgstdvb.dvbplay, GST_STATE_PAUSED );
-
-    for ( c = b; c < G_N_ELEMENTS ( gtvgstbase.dvb_rec_all_n ); c++ )
-        gst_bin_add ( GST_BIN (gtvgstdvb.dvbplay), gtvgstbase.dvb_rec_all_n[c] );
-
+    
     if ( gtvdvb.video_enable )
-        gst_element_link_many ( gtvgstbase.dvb_all_n[6], gtvgstbase.dvb_rec_all_n[0], gtvgstbase.dvb_rec_all_n[1], gtvgstbase.dvb_rec_all_n[4], NULL );
+    {
+        gst_element_link ( gtvgstbase.dvb_all_n[6],     gtvgstbase.dvb_rec_all_n[0] );
+        gst_element_link ( gtvgstbase.dvb_rec_all_n[1], gtvgstbase.dvb_rec_all_n[4] );
+	}
 
-    gst_element_link_many ( gtvgstbase.dvb_all_n[14], gtvgstbase.dvb_rec_all_n[2], gtvgstbase.dvb_rec_all_n[3], gtvgstbase.dvb_rec_all_n[4], NULL );
-
-    gst_element_link_many ( gtvgstbase.dvb_rec_all_n[4], gtvgstbase.dvb_rec_all_n[5], NULL );
+    gst_element_link ( gtvgstbase.dvb_all_n[14],    gtvgstbase.dvb_rec_all_n[2] );
+    gst_element_link ( gtvgstbase.dvb_rec_all_n[3], gtvgstbase.dvb_rec_all_n[4] );
 
 	gchar *date_str = gtv_get_time_date_str ();
     gchar *file_rec = g_strdup_printf ( "%s/%s_%s.%s", gtvpref.rec_dir, name_ch, date_str, gtvpref.file_ext );
@@ -300,12 +285,12 @@ gboolean gtv_gst_rec_enc ( gchar *name_ch )
     g_free ( file_rec );
     g_free ( date_str );
 
-    for ( c = b; c < G_N_ELEMENTS ( gtvgstbase.dvb_rec_all_n ); c++ )
-        gst_element_set_state ( gtvgstbase.dvb_rec_all_n[c], GST_STATE_PAUSED );
+    //for ( c = b; c < G_N_ELEMENTS ( gtvgstbase.dvb_rec_all_n ); c++ )
+      //  gst_element_set_state ( gtvgstbase.dvb_rec_all_n[c], GST_STATE_PAUSED );
 
-    g_usleep ( 250000 );
+    //g_usleep ( 250000 );
 
-  gst_element_set_state ( gtvgstdvb.dvbplay, GST_STATE_PLAYING );
+	gst_element_set_state ( gtvgstdvb.dvbplay, GST_STATE_PLAYING );
 
 	return TRUE;
 }
@@ -401,6 +386,8 @@ gboolean gtv_gst_rec_ts ( gchar *name_ch )
 		{ "queue2" }, { audio_mpeg ? audio_parser : audio_encode },
 		{ "mpegtsmux" }, { "filesink" }
 	};
+	
+	gst_element_set_state ( gtvgstdvb.dvbplay, GST_STATE_PAUSED );
 
     for ( c = 0; c < G_N_ELEMENTS ( gtvgstbase.dvb_rec_all_n ); c++ )
     {
@@ -408,26 +395,24 @@ gboolean gtv_gst_rec_ts ( gchar *name_ch )
 		
         gtvgstbase.dvb_rec_all_n[c] = gst_element_factory_make ( dvb_all_rec_list_n[c].name, NULL );
 
-    	if ( !gtvgstbase.dvb_rec_all_n[c] )
-    	{
-            g_critical ( "gtv_gst_rec_ts:: element - %s - not be created.\n", dvb_all_rec_list_n[c].name );
-            return FALSE;
-    	}
+    	if ( !gtvgstbase.dvb_rec_all_n[c] ) return FALSE;
+    	
+    	if ( !gtvdvb.video_enable && ( c == 0 || c == 1 ) ) continue;
+    	
+    	gst_bin_add ( GST_BIN (gtvgstdvb.dvbplay), gtvgstbase.dvb_rec_all_n[c] );
+    	
+    	if ( c == 1 || c == 3 || c == 5 )
+			gst_element_link ( gtvgstbase.dvb_rec_all_n[c-1], gtvgstbase.dvb_rec_all_n[c] );
     }
 
-    if ( gtvdvb.video_enable ) { b = 0; } else { b = 2; }
-
-  gst_element_set_state ( gtvgstdvb.dvbplay, GST_STATE_PAUSED );
-
-    for ( c = b; c < G_N_ELEMENTS ( gtvgstbase.dvb_rec_all_n ); c++ )
-        gst_bin_add ( GST_BIN (gtvgstdvb.dvbplay), gtvgstbase.dvb_rec_all_n[c] );
-
     if ( gtvdvb.video_enable )
-        gst_element_link_many ( gtvgstbase.dvb_all_n[2], gtvgstbase.dvb_rec_all_n[0], gtvgstbase.dvb_rec_all_n[1], gtvgstbase.dvb_rec_all_n[4], NULL );
+    {
+        gst_element_link ( gtvgstbase.dvb_all_n[2],     gtvgstbase.dvb_rec_all_n[0] );
+        gst_element_link ( gtvgstbase.dvb_rec_all_n[1], gtvgstbase.dvb_rec_all_n[4] );
+	}
 
-    gst_element_link_many ( audio_mpeg ? gtvgstbase.dvb_all_n[10] : gtvgstbase.dvb_all_n[14], gtvgstbase.dvb_rec_all_n[2], gtvgstbase.dvb_rec_all_n[3], gtvgstbase.dvb_rec_all_n[4], NULL );
-
-    gst_element_link_many ( gtvgstbase.dvb_rec_all_n[4], gtvgstbase.dvb_rec_all_n[5], NULL );
+    gst_element_link ( audio_mpeg ? gtvgstbase.dvb_all_n[10] : gtvgstbase.dvb_all_n[14], gtvgstbase.dvb_rec_all_n[2] );
+    gst_element_link ( gtvgstbase.dvb_rec_all_n[3], gtvgstbase.dvb_rec_all_n[4] );
 
 	gchar *date_str = gtv_get_time_date_str ();
     gchar *file_rec = g_strdup_printf ( "%s/%s_%s.%s", gtvpref.rec_dir, name_ch, date_str, "m2ts" );
@@ -437,12 +422,12 @@ gboolean gtv_gst_rec_ts ( gchar *name_ch )
     g_free ( file_rec );
     g_free ( date_str );
 
-    for ( c = b; c < G_N_ELEMENTS ( gtvgstbase.dvb_rec_all_n ); c++ )
-        gst_element_set_state ( gtvgstbase.dvb_rec_all_n[c], GST_STATE_PAUSED );
+    //for ( c = b; c < G_N_ELEMENTS ( gtvgstbase.dvb_rec_all_n ); c++ )
+      //  gst_element_set_state ( gtvgstbase.dvb_rec_all_n[c], GST_STATE_PAUSED );
 
-    g_usleep ( 250000 );
+    //g_usleep ( 250000 );
 
-  gst_element_set_state ( gtvgstdvb.dvbplay, GST_STATE_PLAYING );
+	gst_element_set_state ( gtvgstdvb.dvbplay, GST_STATE_PLAYING );
 	
 	return TRUE;
 }
@@ -462,8 +447,11 @@ gboolean gtv_gst_rec ( gchar *name_ch )
 
 void gtv_gst_rec_remove ()
 {	
-    for ( c = b; c < G_N_ELEMENTS ( gtvgstbase.dvb_rec_all_n ); c++ )
-        gst_bin_remove ( GST_BIN (gtvgstdvb.dvbplay), gtvgstbase.dvb_rec_all_n[c] );
+    for ( c = 0; c < G_N_ELEMENTS ( gtvgstbase.dvb_rec_all_n ); c++ )
+    {
+		if ( !gtvdvb.video_enable && ( c == 0 || c == 1 ) ) continue;
+			gst_bin_remove ( GST_BIN (gtvgstdvb.dvbplay), gtvgstbase.dvb_rec_all_n[c] );
+	}
 }
 
 

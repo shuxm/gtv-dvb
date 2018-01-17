@@ -216,31 +216,30 @@ const struct dvb_descr_all dvb_descr_ileaving_type_n[] =
     { INTERLEAVING_720,  "720",  "720"  }
 };
 
+enum lnbs 
+{ 
+    LNB_UNV,
+    LNB_DBS,
+    LNB_EXT,
+    LNB_STD,
+    LNB_EHD,
+    LNB_CBD,
+    LNB_CMT,
+    LNB_DSP,
+    LNB_BS1
+};
+
 const struct dvb_descr_all dvb_descr_lnb_type_n[] =
 {
-    { 0, "UNIVERSAL", "Universal" },
-    { 1, "DBS",	      "DBS"       },
-    { 2, "EXTENDED",  "Extended"  },
-    { 3, "STANDARD",  "Standard"  },
-    { 4, "ENHANCED",  "Enhanced"  },
-    { 5, "C-BAND",	  "C-Band"    },
-    { 6, "C-MULT",	  "C-Mult"    },
-    { 7, "DISHPRO",	  "Dishpro"   },
-    { 8, "110BS",	  "110 BS"    },
+    { LNB_UNV, "UNIVERSAL", "Universal" },
+    { LNB_DBS, "DBS",	    "DBS"       },
+    { LNB_EXT, "EXTENDED",  "Extended"  },
+    { LNB_STD, "STANDARD",  "Standard"  },
+    { LNB_EHD, "ENHANCED",  "Enhanced"  },
+    { LNB_CBD, "C-BAND",    "C-Band"    },
+    { LNB_CMT, "C-MULT",    "C-Mult"    },
+    { LNB_DSP, "DISHPRO",   "Dishpro"   },
+    { LNB_BS1, "110BS",	    "110 BS"    }
 };
-
-struct lnb_types_lhs { const char *name; unsigned int low_val; unsigned int high_val; unsigned int switch_val; } lnb_n[] =
-{
-	{ "UNIVERSAL",  9750000,  10600000, 11700000 },
- 	{ "DBS",		11250000, 0, 0               },
- 	{ "EXTENDED",   9750000,  10600000, 11700000 },
-	{ "STANDARD",	10000000, 0, 0               },
-	{ "ENHANCED",	9750000,  0, 0               },
-	{ "C-BAND",		5150000,  0, 0               },
-	{ "C-MULT",		5150000,  5750000,  0        },
-	{ "DISHPRO",	11250000, 14350000, 0        },
-	{ "110BS",		10678000, 0, 0               }
-};
-
 
 #endif // GTV_DESCR_H

@@ -15,12 +15,12 @@
 static guint j = 0;
 
 
-const struct GtvAllMedia { const gchar *label; const gchar *name_icon; void (* activate); const gchar *accel_key; } 
+const struct GtvAllMedia { const gchar *label; const gchar *name_icon; void (* activate)(); const gchar *accel_key; } 
 gtv_all_media_n[] =
 {
     // Toolbar media
-    { N_("Record"),         "media-record",            gtv_rec,   "<control>r" },
     { N_("Stop"),           "media-playback-stop",     gtv_stop,  "<control>x" },
+    { N_("Record"),         "media-record",            gtv_rec,   "<control>r" },
     { N_("EQ-Audio"),       "preferences-desktop",     gtv_audio, "<control>a" },
     { N_("EQ-Video"),       "preferences-desktop",     gtv_video, "<control>v" },
     { N_("Channels"),       "applications-multimedia", gtv_plist, "<control>l" },
@@ -101,11 +101,11 @@ static GMenu * gtv_create_gmenu ()
     GMenuItem *mitem;
 
 /*
-    Record 0 | Stop 1 | EQ-Audio 2 | EQ-Video 3 | Channels 4 | Scanner 5 | Up 6 | Down 7
+    Stop 0 | Record 1 | EQ-Audio 2 | EQ-Video 3 | Channels 4 | Scanner 5 | Up 6 | Down 7
     Remove 8 | Clear 9 | Mute 10 | Mini 11 |  Full-screen12 | Preferences 13 | About 14 | Quit 15
 */
 
-    gint dat_n[] = { 1, 0, 2, 3, 4, 5, 10, 11, 12, 13, 14, 15 };
+    gint dat_n[] = { 0, 1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 15 };
 
     for ( j = 0; j < G_N_ELEMENTS ( dat_n ); j++ )
     {

@@ -111,6 +111,21 @@ gst_param_dvb_descr_n[] =
 };
 
 
+struct lnb_types_lhs { uint descr_num; const char *name;
+                       long low_val; long high_val; long switch_val; }
+lnb_n[] =
+{
+    { LNB_UNV, "UNIVERSAL", 9750000,  10600000, 11700000 },
+    { LNB_DBS, "DBS",		11250000, 0, 0               },
+    { LNB_EXT, "EXTENDED",  9750000,  10600000, 11700000 },
+    { LNB_STD, "STANDARD",	10000000, 0, 0               },
+    { LNB_EHD, "ENHANCED",	9750000,  0, 0               },
+    { LNB_CBD, "C-BAND",	5150000,  0, 0               },
+    { LNB_CMT, "C-MULT",	5150000,  5750000,  0        },
+    { LNB_DSP, "DISHPRO",	11250000, 14350000, 0        },
+    { LNB_BS1, "110BS",		10678000, 0, 0               }
+};
+
 void gtv_set_lnb ( GstElement *element, gint num_lnb )
 {
     g_object_set ( element, "lnb-lof1", lnb_n[num_lnb].low_val,    NULL );
@@ -220,12 +235,7 @@ static gchar * gtv_strip_ch_name ( gchar *name )
     guint i = 0;
     for ( i = 0; name[i] != '\0'; i++ )
     {
-        if ( g_ascii_isprint ( name[i] ) )
-        {
-            if ( name[i] == ':' || name[i] == '[' || name[i] == ']' ) name[i] = ' ';
-        }
-        else
-            name[i] = ' ';
+		if ( name[i] == ':' || name[i] == '[' || name[i] == ']' ) name[i] = ' ';
     }
     return g_strstrip ( name );
 }
@@ -236,7 +246,7 @@ static void gtv_convert_dvb5 ( const gchar *filename )
     gchar *contents;
     GError *err = NULL;
 
-    GString *gstring = g_string_new ( "# Convert DVB 5 format" );
+    GString *gstring;
 
     if ( g_file_get_contents ( filename, &contents, 0, &err ) )
     {
@@ -246,7 +256,18 @@ static void gtv_convert_dvb5 ( const gchar *filename )
         {
             if ( g_str_has_prefix ( lines[n], "[" ) )
             {
-                gstring = g_string_append ( gstring, "\n" );
+				if ( gstring )
+				{
+					g_debug ( "All data: %s", gstring->str );
+					
+					if ( g_strrstr ( gstring->str, "audio-pid" ) || g_strrstr ( gstring->str, "video-pid" ) )
+						gtv_str_split_ch_data ( gstring->str );
+				
+					g_string_free ( gstring, TRUE );
+				}
+				
+				gstring = g_string_new ( NULL );
+				
                 g_string_append_printf ( gstring, "%s", gtv_strip_ch_name ( lines[n] ) );
                 g_string_append_printf ( gstring, ":adapter=%d:frontend=%d", gtvscan.adapter_set, gtvscan.frontend_set );
             }
@@ -256,12 +277,12 @@ static void gtv_convert_dvb5 ( const gchar *filename )
                 if ( g_strrstr ( lines[n], gst_param_dvb_descr_n[z].dvb_v5_name ) )
                 {
                     gchar **value_key = g_strsplit ( lines[n], " = ", 0 );
+                    
+                    g_string_append_printf ( gstring, ":%s=", gst_param_dvb_descr_n[z].gst_param );
 
                     if ( gst_param_dvb_descr_n[z].cdsc == 0 )
                     {
-                        guint data = atoi ( value_key[1] );
-                        if ( g_strrstr ( value_key[0], "SYMBOL_RATE" ) && data > 100000 ) data /= 1000;
-                        g_string_append_printf ( gstring, ":%s=%d", gst_param_dvb_descr_n[z].gst_param, data );
+                        g_string_append ( gstring, value_key[1] );
                     }
                     else
                     {
@@ -269,18 +290,7 @@ static void gtv_convert_dvb5 ( const gchar *filename )
                         {
                             if ( g_strrstr ( value_key[1], gst_param_dvb_descr_n[z].dvb_descr[x].dvb_v5_name ) )
                             {
-                                if ( g_strrstr ( value_key[0], "POLARIZATION" ) )
-                                {
-                                    g_string_append_printf ( gstring, ":%s=%s",
-                                        gst_param_dvb_descr_n[z].gst_param,
-                                        gst_param_dvb_descr_n[z].dvb_descr[x].descr_num ? "H" : "V" );
-                                }
-                                else
-                                {
-                                    g_string_append_printf ( gstring, ":%s=%d",
-                                        gst_param_dvb_descr_n[z].gst_param,
-                                        gst_param_dvb_descr_n[z].dvb_descr[x].descr_num );
-                                }
+								g_string_append_printf ( gstring, "%d", gst_param_dvb_descr_n[z].dvb_descr[x].descr_num );
                             }
                         }
                     }
@@ -290,30 +300,18 @@ static void gtv_convert_dvb5 ( const gchar *filename )
 
         g_strfreev ( lines );
         g_free ( contents );
+        
+		if ( g_strrstr ( gstring->str, "audio-pid" ) || g_strrstr ( gstring->str, "video-pid" ) )
+			gtv_str_split_ch_data ( gstring->str );
+				
+		g_string_free ( gstring, TRUE );
     }
     else
     {
         g_critical ( "ERROR: %s\n", err->message );
         if ( err ) g_error_free ( err );
-        g_string_free ( gstring, FALSE );
         return;
     }
-
-    g_debug ( "All data: %s", gstring->str );
-
-    // gtv_treeview_clear ( gtv_treeview );
-
-        gchar **lines_all = g_strsplit ( gstring->str, "\n", 0 );
-
-            for ( n = 0; lines_all[n] != NULL; n++ )
-			{
-				if ( g_strrstr ( lines_all[n], "audio-pid" ) || g_strrstr ( lines_all[n], "video-pid" ) )
-					gtv_str_split_ch_data ( lines_all[n] );
-			}
-
-        g_strfreev ( lines_all );
-
-    g_string_free ( gstring, TRUE );
 }
 
 
@@ -1226,9 +1224,9 @@ void gtv_win_scan ()
     gtvscan.notebook = (GtkNotebook *)gtk_notebook_new ();
     gtk_notebook_set_scrollable ( gtvscan.notebook, TRUE );
 
-    GtkBox *m_box_n[G_N_ELEMENTS ( gtv_scan_label_n )];
+    GtkBox *m_box_n[PAGE_NUM];
 
-    for ( j = 0; j < G_N_ELEMENTS ( gtv_scan_label_n ); j++ )
+    for ( j = 0; j < PAGE_NUM; j++ )
     {
         m_box_n[j] = (GtkBox *)gtk_box_new ( GTK_ORIENTATION_VERTICAL, 0 );
         gtk_box_pack_start ( m_box_n[j], GTK_WIDGET ( all_box_scan ( j ) ), TRUE, TRUE, 0 );
