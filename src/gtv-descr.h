@@ -210,8 +210,8 @@ const struct dvb_descr_all dvb_descr_polarity_type_n[] =
 
 const struct dvb_descr_all dvb_descr_ileaving_type_n[] =
 {
-    { INTERLEAVING_NONE, "NONE", "none" },
-    { INTERLEAVING_AUTO, "AUTO", "auto" },
+    { INTERLEAVING_NONE, "NONE", "None" },
+    { INTERLEAVING_AUTO, "AUTO", "Auto" },
     { INTERLEAVING_240,  "240",  "240"  },
     { INTERLEAVING_720,  "720",  "720"  }
 };
