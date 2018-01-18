@@ -601,13 +601,13 @@ static GtkBox * gtv_scan_battons_box ( const gchar *type )
 
     GtkButton *button_scan = (GtkButton *)gtk_button_new_with_label ( _("Start") );
     g_signal_connect ( button_scan, "clicked", G_CALLBACK ( gtv_scan_start ), (gpointer)type );
-    gtk_box_pack_start ( hb_box, GTK_WIDGET ( button_scan ), FALSE, FALSE, 0 );
+    gtk_box_pack_start ( hb_box, GTK_WIDGET ( button_scan ), TRUE, TRUE, 0 );
 
     GtkButton *button_stop = (GtkButton *) gtk_button_new_with_label ( _("Stop") );
     g_signal_connect ( button_stop, "clicked", G_CALLBACK ( gtv_scan_stop ),  (gpointer)type );
-    gtk_box_pack_start ( hb_box, GTK_WIDGET ( button_stop ), FALSE, FALSE, 0 );
+    gtk_box_pack_start ( hb_box, GTK_WIDGET ( button_stop ), TRUE, TRUE, 0 );
 
-    gtk_box_pack_start ( g_box, GTK_WIDGET  ( hb_box ), FALSE, FALSE, 5 );
+    gtk_box_pack_start ( g_box, GTK_WIDGET  ( hb_box ), TRUE, TRUE, 5 );
 
     return g_box;
 }
