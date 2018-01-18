@@ -595,8 +595,26 @@ static void gtv_auto_save ()
     gtv_treeview_to_file ( gtvbase.gtv_tree_view, gtvbase.channels_conf );
 }
 
+static void gtv_style_theme ()
+{
+    GtkCssProvider  *provider = gtk_css_provider_new ();
+    GdkDisplay      *display  = gdk_display_get_default ();
+    GdkScreen       *screen   = gdk_display_get_default_screen (display);
+
+    gtk_style_context_add_provider_for_screen ( screen,
+            GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_USER );
+
+    gtk_css_provider_load_from_data ( GTK_CSS_PROVIDER (provider),
+            "GtkProgressBar {\n"
+            "   -GtkProgressBar-min-horizontal-bar-height: 8;\n"
+            "}\n",
+            -1, NULL );
+}
+
 static void gtv_init ( GtkApplication *app )
 {
+	gtv_style_theme ();
+	
 	gtvdvb.adapter  = 0;
 	gtvdvb.frontend = 0;
 	gtv_get_dvb_info ( FALSE, FALSE, FALSE, gtvdvb.adapter, gtvdvb.frontend );
