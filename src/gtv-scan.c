@@ -1149,7 +1149,7 @@ static GtkBox * gtv_scan_convert ()
     }
 
     gchar *text = g_strdup_printf ( " %s:\n    dvb_channel.conf ( %s DVBv5 )", _("Choose file"), _("format") );
-    GtkLabel *label = (GtkLabel *)gtk_label_new ( text );
+    	GtkLabel *label = (GtkLabel *)gtk_label_new ( text );
     g_free ( text );
 
     gtk_widget_set_halign ( GTK_WIDGET ( label ), GTK_ALIGN_START );
