@@ -604,7 +604,7 @@ static void gtv_style_theme ()
     gtk_style_context_add_provider_for_screen ( screen,
             GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_USER );
 
-    gtk_css_provider_load_from_data ( GTK_CSS_PROVIDER (provider),
+    gtk_css_provider_load_from_data ( GTK_CSS_PROVIDER (provider), // GTK_CHECK_VERSION(3,20,0) GtkProgressBar:min-height
             "GtkProgressBar {\n"
             "   -GtkProgressBar-min-horizontal-bar-height: 8;\n"
             "}\n",
