@@ -19,9 +19,6 @@
 #include "gtv-mpegts.h"
 #include "gtv-service.h"
 
-//#include "gtv-eqa.h"
-//#include "gtv-eqv.h"
-
 
 struct GtvGstBase
 {
