@@ -16,7 +16,7 @@
 #include <linux/dvb/frontend.h>
 
 
-/* DVB-T/T2, DVB-S/S2, DVB-C A/B/C, ATSC, DTMB */
+/* DVB-T/T2, DVB-S/S2, DVB-C ( A/B/C ), ATSC, DTMB */
 /* Not support ISDB-T/S/C */
 
 
