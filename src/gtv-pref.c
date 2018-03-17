@@ -26,7 +26,6 @@ struct GtvPrefData
 
 struct GtvPrefData gtvprefdata;
 
-
 static guint c = 0;
 
 
@@ -358,8 +357,9 @@ static GtkBox * gtv_scan_pref ()
     }
 
     for ( c = 0; c < 6; c++ )
+	{
         gtk_widget_set_sensitive ( GTK_WIDGET ( gtvprefdata.entry_enc[c] ), gtvdvb.rec_en_ts );
-
+	}
 	
     g_free ( theme_n );
     g_free ( icon_n );
