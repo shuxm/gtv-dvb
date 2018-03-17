@@ -14,7 +14,6 @@
 
 static guint j = 0;
 
-
 const struct GtvAllMedia { const gchar *label; const gchar *name_icon; void (* activate)(); const gchar *accel_key; } 
 gtv_all_media_n[] =
 {
@@ -54,7 +53,7 @@ void gtv_create_gaction_entry ( GtkApplication *app, GSimpleActionGroup *group )
         entries[j].state          = NULL;
 
         gchar *text = g_strconcat ( "app.", gtv_all_media_n[j].label, NULL );
-        const gchar *accelf[] = { gtv_all_media_n[j].accel_key, NULL };
+            const gchar *accelf[] = { gtv_all_media_n[j].accel_key, NULL };
             gtk_application_set_accels_for_action ( app, text, accelf );
         g_free ( text );
     }
