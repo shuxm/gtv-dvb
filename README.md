@@ -29,7 +29,7 @@ Depends
 * libgtk 3 ( & dev )
 * gstreamer 1.0 ( & dev )
 * gst-plugins 1.0 ( & dev )
-  * base, good, ugly, bad
+  * base, good, ugly, bad ( & dev )
 * gst-libav
 
 
