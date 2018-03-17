@@ -9,7 +9,7 @@
 Preview
 ------------
 
-![alt text](https://static.wixstatic.com/media/650ea5_8d15ce1cb90e4b17a3d452abd0eb28bd~mv2.png/v1/fill/w_759,h_416,al_c,usm_0.66_1.00_0.01/650ea5_8d15ce1cb90e4b17a3d452abd0eb28bd~mv2.png "Preview")
+![alt text](https://static.wixstatic.com/media/650ea5_8d15ce1cb90e4b17a3d452abd0eb28bd~mv2.png)
 
 
 Requirements
