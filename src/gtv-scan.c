@@ -191,6 +191,7 @@ static void gtv_scan_msg_err ( GstBus *bus, GstMessage *msg )
     g_error_free ( err );
     g_free ( dbg );
 
+	/* In some cases need to comment out this line. */
     gtv_scan_stop ( NULL, NULL );
 }
 
