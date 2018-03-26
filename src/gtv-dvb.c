@@ -737,7 +737,7 @@ static void gtv_win_base ( GtkApplication *app )
     gtvbase.toolbar_sw    = gtv_create_toolbar ( 6, 10 );
 
     gtvbase.volbutton = (GtkVolumeButton *)gtk_volume_button_new ();
-    gtk_scale_button_set_value ( GTK_SCALE_BUTTON ( gtvbase.volbutton ), gtvbase.volume_start );
+    gtk_scale_button_set_value ( GTK_SCALE_BUTTON ( gtvbase.volbutton ), gtvbase.volume_set );
     g_signal_connect ( gtvbase.volbutton, "value-changed", G_CALLBACK ( gtv_volume_changed ), NULL );
 
     gtvbase.combo_lang = (GtkComboBoxText *)gtk_combo_box_text_new ();
