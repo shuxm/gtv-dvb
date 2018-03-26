@@ -40,7 +40,7 @@ struct GtvBase
 	GtkToolbar  *toolbar_media, *toolbar_sw;
 	
 	guint time_rec;
-	gdouble volume_start;
+	gdouble volume_set;
 	gulong combo_signal_id;
 	
 	gchar *gtv_conf, *channels_conf;
@@ -211,7 +211,7 @@ static void gtv_play ( gchar *data )
         gtv_gst_tsdemux ();
         gtvdvb.first_msg = TRUE;
 		
-		g_object_set ( gtv_gstelement_mut (), "volume", gtvbase.volume_start, NULL );
+		g_object_set ( gtv_gstelement_mut (), "volume", gtvbase.volume_set, NULL );
 
 		g_free ( gtvbase.ch_name );
 		gtvbase.ch_name = gtv_data_split_set_dvb ( data );
@@ -365,7 +365,7 @@ static void gtv_volume_changed ( GtkScaleButton *button, gdouble value )
     if ( GST_ELEMENT_CAST ( gtvgstdvb.dvbplay )->current_state == GST_STATE_PLAYING )
       g_object_set ( gtv_gstelement_mut (), "volume", value, NULL );
 
-	gtvbase.volume_start = value;
+	gtvbase.volume_set = value;
 }
 
 static void gtv_volume_mute ()
@@ -650,7 +650,7 @@ static void gtv_init ( GtkApplication *app )
 
 	gtvdvb.lv_snr = "Level  &  Quality";
 	gtvbase.ch_name = NULL;
-	gtvbase.volume_start = 0.5;
+	gtvbase.volume_set = 0.5;
 	gtvbase.time_rec = 0;
 
 	gtvdvb.sid = 0;
