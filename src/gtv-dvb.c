@@ -210,6 +210,8 @@ static void gtv_play ( gchar *data )
         gtv_checked_video ( data );
         gtv_gst_tsdemux ();
         gtvdvb.first_msg = TRUE;
+		
+		g_object_set ( gtv_gstelement_mut (), "volume", gtvbase.volume_start, NULL );
 
 		g_free ( gtvbase.ch_name );
 		gtvbase.ch_name = gtv_data_split_set_dvb ( data );
@@ -222,15 +224,8 @@ static void gtv_play ( gchar *data )
 
 void gtv_stop_play ( gchar *data )
 {
-    gdouble volume = gtvbase.volume_start;
-
-    if ( GST_ELEMENT_CAST ( gtvgstdvb.dvbplay )->current_state == GST_STATE_PLAYING )
-        volume = gtk_scale_button_get_value ( GTK_SCALE_BUTTON ( gtvbase.volbutton ) );
-
     gtv_stop ();
     gtv_play ( data );
-
-    g_object_set ( gtv_gstelement_mut (), "volume", volume, NULL );
 }
 
 gboolean trig_lr = TRUE;
@@ -369,6 +364,8 @@ static void gtv_volume_changed ( GtkScaleButton *button, gdouble value )
 {
     if ( GST_ELEMENT_CAST ( gtvgstdvb.dvbplay )->current_state == GST_STATE_PLAYING )
       g_object_set ( gtv_gstelement_mut (), "volume", value, NULL );
+
+	gtvbase.volume_start = value;
 }
 
 static void gtv_volume_mute ()
