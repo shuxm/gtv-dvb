@@ -84,8 +84,15 @@ static void gtv_set_icon ( GtkEntry *entry )
 
 static void gtv_set_rec_dir ( GtkEntry *entry )
 {
-    g_free ( gtvpref.rec_dir ); gtvpref.rec_dir = gtv_open_dir ( g_get_home_dir () );
-    if ( gtvpref.rec_dir ) gtk_entry_set_text ( entry, gtvpref.rec_dir );
+	gchar *path = gtv_open_dir ( g_get_home_dir () );
+
+	if ( path == NULL ) return;
+
+	if ( gtvpref.rec_dir ) g_free ( gtvpref.rec_dir );
+
+    gtvpref.rec_dir = path;
+
+	gtk_entry_set_text ( entry, gtvpref.rec_dir );
 }
 
 
