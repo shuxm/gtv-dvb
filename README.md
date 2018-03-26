@@ -53,5 +53,4 @@ Channels
 Design
 ------
 
-* Icon-theme: [Faenza-lite](https://github.com/vl-nix/Faenza-lite)
 * Theme: [Adwaita-dark](https://github.com/GNOME/gnome-themes-standard); [Cloak-3.22](https://github.com/killhellokitty/Cloak-3.22); [Obsidian 2](https://github.com/madmaxms/theme-obsidian-2)
