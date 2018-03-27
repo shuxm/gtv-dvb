@@ -243,7 +243,7 @@ static gchar * gtv_strip_ch_name ( gchar *name )
 
 static void gtv_convert_dvb5 ( const gchar *filename )
 {
-    guint n = 0, z = 0, x = 0;
+    guint n = 0, z = 0, x = 0, count_ch = 0;
     gchar *contents;
     GError *err = NULL;
 
@@ -257,7 +257,7 @@ static void gtv_convert_dvb5 ( const gchar *filename )
         {
             if ( g_str_has_prefix ( lines[n], "[" ) )
             {
-				if ( gstring )
+				if ( count_ch > 0 )
 				{
 					g_debug ( "All data: %s", gstring->str );
 					
@@ -271,6 +271,8 @@ static void gtv_convert_dvb5 ( const gchar *filename )
 				
                 g_string_append_printf ( gstring, "%s", gtv_strip_ch_name ( lines[n] ) );
                 g_string_append_printf ( gstring, ":adapter=%d:frontend=%d", gtvscan.adapter_set, gtvscan.frontend_set );
+				
+				count_ch++;
             }
 
             for ( z = 0; z < G_N_ELEMENTS ( gst_param_dvb_descr_n ); z++ )
