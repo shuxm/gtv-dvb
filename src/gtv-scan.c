@@ -257,6 +257,8 @@ static void gtv_convert_dvb5 ( const gchar *filename )
         {
             if ( g_str_has_prefix ( lines[n], "[" ) )
             {
+				g_debug ( "Channel: %s ( %d ) \n", lines[n], count_ch );
+				
 				if ( count_ch > 0 )
 				{
 					g_debug ( "All data: %s", gstring->str );
