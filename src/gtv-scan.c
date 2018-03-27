@@ -281,6 +281,12 @@ static void gtv_convert_dvb5 ( const gchar *filename )
                     
                     g_string_append_printf ( gstring, ":%s=", gst_param_dvb_descr_n[z].gst_param );
 
+					if ( g_strrstr ( gst_param_dvb_descr_n[z].dvb_v5_name, "SAT_NUMBER" ) )
+					{
+						g_string_append ( gstring, value_key[1] );
+						continue;
+					}
+
                     if ( gst_param_dvb_descr_n[z].cdsc == 0 )
                     {
                         g_string_append ( gstring, value_key[1] );
