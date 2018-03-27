@@ -45,10 +45,11 @@ xres  = $(wildcard res/*.xml)
 gres := $(xres:.xml=.c)
 
 srcs := $(wildcard src/*.c res/*.c )
+srcs += res/gtv-dvb.gresource.c
 objs  = $(srcs:.c=.o)
 
 
-all: depends cleanres genres setlcdir build revlcdir msgfmt
+all: depends genres setlcdir build revlcdir msgfmt
 
 depends:
 	@for depend in $(obj_depends); do \
@@ -70,9 +71,6 @@ build: $(objs)
 
 
 genres: $(gres)
-
-cleanres:
-	@rm -f res/*.gresource.c
 
 %.c: %.xml
 	@echo 'gresource: ' $@
@@ -120,7 +118,7 @@ uninstall:
 	$(DESTDIR)$(localedir)/*/*/$(program).mo
 
 clean:
-	rm -f $(program) src/*.o res/*.o po/$(program).pot po/*.po~
+	rm -f $(program) src/*.o res/*.o res/*.c po/$(program).pot po/*.po~
 	rm -fr locale
 
 
