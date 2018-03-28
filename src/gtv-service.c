@@ -27,7 +27,7 @@ void gtv_win_about ( GtkWindow *window )
     const gchar *license = "GNU Lesser General Public License \nwww.gnu.org/licenses/lgpl.html";
 
     gtk_about_dialog_set_program_name ( dialog, " Gtv-Dvb " );
-    gtk_about_dialog_set_version ( dialog, "1.1" );
+    gtk_about_dialog_set_version ( dialog, "1.1.8" );
     gtk_about_dialog_set_license ( dialog, license );
     gtk_about_dialog_set_authors ( dialog, authors );
     gtk_about_dialog_set_website ( dialog,   "https://github.com/vl-nix/gtv-dvb" );
