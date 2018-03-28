@@ -1,6 +1,6 @@
 #############################################################################
 #
-# Makefile for Gtv-dvb
+# Makefile for Gtv-dvb 1.1.8 classic
 # Get Gtv-dvb: https://github.com/vl-nix/gtv-dvb
 #
 # Depends
@@ -30,7 +30,7 @@
 prefix      = $(HOME)/.local
 
 program     = gtv-dvb
-version     = 1.1
+version     = 1.1.8
 
 bindir      = $(prefix)/bin
 datadir     = $(prefix)/share
