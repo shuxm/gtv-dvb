@@ -258,23 +258,27 @@ static void gtv_convert_dvb5 ( const gchar *filename )
             if ( g_str_has_prefix ( lines[n], "[" ) )
             {
 				g_debug ( "Channel: %s ( %d ) \n", lines[n], count_ch );
-				
-				if ( count_ch > 0 )
+
+				if ( count_ch == 0 )
 				{
-					g_debug ( "All data: %s", gstring->str );
-					
-					if ( g_strrstr ( gstring->str, "audio-pid" ) || g_strrstr ( gstring->str, "video-pid" ) )
-						gtv_str_split_ch_data ( gstring->str );
-				
-					g_string_free ( gstring, TRUE );
+					gstring = g_string_new ( gtv_strip_ch_name ( lines[n] ) );
+	                g_string_append_printf ( gstring, ":adapter=%d:frontend=%d", gtvscan.adapter_set, gtvscan.frontend_set );
+
+					count_ch++;
+					continue;					
 				}
+
+				g_debug ( "All data: %s \n", gstring->str );
+
+				if ( g_strrstr ( gstring->str, "audio-pid" ) || g_strrstr ( gstring->str, "video-pid" ) )
+					gtv_str_split_ch_data ( gstring->str );
 				
-				gstring = g_string_new ( NULL );
+				g_string_free ( gstring, TRUE );
 				
-                g_string_append_printf ( gstring, "%s", gtv_strip_ch_name ( lines[n] ) );
+				gstring = g_string_new ( gtv_strip_ch_name ( lines[n] ) );
                 g_string_append_printf ( gstring, ":adapter=%d:frontend=%d", gtvscan.adapter_set, gtvscan.frontend_set );
-				
-				count_ch++;
+
+				count_ch++;				
             }
 
             for ( z = 0; z < G_N_ELEMENTS ( gst_param_dvb_descr_n ); z++ )
