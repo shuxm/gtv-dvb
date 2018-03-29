@@ -1115,8 +1115,10 @@ static void gtv_convert ()
 {
     gchar *filename = gtv_open_file ( g_get_home_dir () );
 
-    if ( filename )
+	if ( filename && g_str_has_suffix ( filename, ".conf" ) )
         gtv_convert_dvb5 ( filename );
+	else
+		g_print ( "gmp_convert:: no convert %s \n ", filename );
 
      g_free ( filename );
 }
