@@ -247,7 +247,7 @@ static void gtv_convert_dvb5 ( const gchar *filename )
     gchar *contents;
     GError *err = NULL;
 
-    GString *gstring;
+    GString *gstring = g_string_new ( NULL );
 
     if ( g_file_get_contents ( filename, &contents, 0, &err ) )
     {
