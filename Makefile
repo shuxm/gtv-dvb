@@ -1,7 +1,7 @@
 #############################################################################
 #
-# Makefile for Gtv-dvb 1.1.8 classic
-# Get Gtv-dvb: https://github.com/vl-nix/gtv-dvb
+# Makefile for Gtv-dvb 1.1.9 classic
+# Get Gtv-dvb: https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9
 #
 # Depends
 # -------
