@@ -188,6 +188,14 @@ gchar * gtv_open_dir ( const gchar *path )
     return dirname;
 }
 
+static void gtv_add_filter ( GtkFileChooserDialog *dialog, gchar *name, gchar *filter )
+{
+    GtkFileFilter *filter_video = gtk_file_filter_new ();
+    gtk_file_filter_set_name ( filter_video, name );
+    gtk_file_filter_add_pattern ( filter_video, filter );
+    gtk_file_chooser_add_filter ( GTK_FILE_CHOOSER ( dialog ), filter_video );
+}
+
 gchar * gtv_open_file ( const gchar *path )
 {
     GtkFileChooserDialog *dialog = ( GtkFileChooserDialog *)gtk_file_chooser_dialog_new (
@@ -195,7 +203,9 @@ gchar * gtv_open_file ( const gchar *path )
                     "gtk-cancel", GTK_RESPONSE_CANCEL,
                     "gtk-open",   GTK_RESPONSE_ACCEPT,
                      NULL );
-
+	
+	gtv_add_filter ( dialog, "conf", "*.conf" );
+	
     gtk_file_chooser_set_current_folder  ( GTK_FILE_CHOOSER ( dialog ), path  );
     gtk_file_chooser_set_select_multiple ( GTK_FILE_CHOOSER ( dialog ), FALSE );
 
