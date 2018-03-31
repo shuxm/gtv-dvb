@@ -3,7 +3,7 @@
 
 * Digital TV player
 * DVB-T2/S2/C, ATSC, DTMB
-* Stable Version [1.1.9 classic](https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9)
+* Stable Version [1.1.9 classic](https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9) ( long term support )
 
 
 Preview [1.1.9 classic](https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9)
