@@ -19,7 +19,7 @@
 ![alt text](Modern-Digital-TV.png)
 
 
-[Classic Digital TV](https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9)
+[Classic Digital TV](https://github.com/vl-nix/gtv-dvb/tree/classic)
 ------------
 
 ![alt text](Classic-Digital%20TV.png)
