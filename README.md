@@ -68,7 +68,7 @@ Makefile
 Channels
 --------
 
-* Scan channels manually ( Ctrl + U )
+* Scan channels manually
 * Convert - dvb_channel.conf ( format [DVBv5](https://www.linuxtv.org/docs/libdvbv5/index.html) ) 
   * dvb_channel.conf - created by command: [dvbv5-scan](https://www.linuxtv.org/downloads/v4l-utils) [OPTION...] [initial file](https://www.linuxtv.org/downloads/dtv-scan-tables)
 
