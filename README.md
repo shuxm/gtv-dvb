@@ -21,7 +21,7 @@
 [Classic Digital TV](https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9)
 ------------
 
-![alt text]("Classic-Digital TV.png")
+![alt text](Classic-Digital%20TV.png)
 
 
 Requirements
