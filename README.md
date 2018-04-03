@@ -4,19 +4,20 @@
 * Media Player & Digital TV
 * DVB-T2/S2/C, ATSC, DTMB
 * Ver. Classic Stable  [1.1.9](https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9)
-* Ver. Modern  Beta    [2.0]
+* Ver. Modern  Beta    [2.0](https://github.com/vl-nix/gtv-dvb/tree/modern)
 
 
-[Modern Media Player](https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9)
+[Modern Media Player](https://github.com/vl-nix/gtv-dvb/tree/modern)
 ------------
 
 ![alt text](Modern-Media-Player.png)
 
 
-[Modern Digital TV](https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9)
+[Modern Digital TV](https://github.com/vl-nix/gtv-dvb/tree/modern)
 ------------
 
 ![alt text](Modern-Digital-TV.png)
+
 
 [Classic Digital TV](https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9)
 ------------
