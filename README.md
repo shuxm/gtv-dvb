@@ -10,7 +10,7 @@
 Preview [Classic](https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9)
 ------------
 
-![alt text](https://static.wixstatic.com/media/650ea5_8d15ce1cb90e4b17a3d452abd0eb28bd~mv2.png)
+![alt text](https://github.com/vl-nix/gtv-dvb/blob/modern/Classic-Digital%20TV.png)
 
 
 Requirements
