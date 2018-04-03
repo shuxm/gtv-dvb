@@ -7,21 +7,21 @@
 * Ver. Modern  Beta    [2.0]
 
 
-[Modern Media Player]
+[Modern Media Player](https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9)
 ------------
 
 ![alt text](Modern-Media-Player.png)
 
 
-[Modern Digital TV]
+[Modern Digital TV](https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9)
 ------------
 
 ![alt text](Modern-Digital-TV.png)
 
-[Classic Digital TV]
+[Classic Digital TV](https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9)
 ------------
 
-![alt text](Classic-Digital TV.png)
+![alt text]("Classic-Digital TV.png")
 
 
 Requirements
