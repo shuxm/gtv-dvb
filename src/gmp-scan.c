@@ -156,7 +156,7 @@ static void gmp_convert_dvb5 ( gchar *filename )
 					continue;					
 				}
 
-				g_debug ( "All data: %s \n", gstring->str );
+				//g_debug ( "All data: %s \n", gstring->str );
 
 				if ( g_strrstr ( gstring->str, "audio-pid" ) || g_strrstr ( gstring->str, "video-pid" ) )
 					gmp_str_split_ch_data ( gstring->str );
@@ -445,6 +445,8 @@ void gmp_scan_gst_create ()
     g_signal_connect ( bus_scan, "message::warning", G_CALLBACK ( gmp_scan_msg_war ), NULL );
 
     gmp_scan_set_tune ();
+    
+    g_debug ( "gmp_scan_gst_create \n" );
 }
 
 
@@ -523,6 +525,8 @@ static void gmp_scan_channels_clear ()
 
 static GtkBox * gmp_scan_channels  ()
 {
+	g_debug ( "gmp_scan_channels \n" );
+	
     GtkBox *g_box  = (GtkBox *)gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_set_margin_start ( GTK_WIDGET ( g_box ), 10 );
     gtk_widget_set_margin_end   ( GTK_WIDGET ( g_box ), 10 );
@@ -782,6 +786,8 @@ static void gmp_convert ( GtkButton *button )
 
 static void  gmp_convert_win_set_file ( GtkEntry *entry )
 {
+	g_debug ( "gmp_convert_win_set_file \n" );
+	
 	gchar *file_name = gmp_pref_open_file ( g_get_home_dir () );
 
 	if ( file_name == NULL ) return;
