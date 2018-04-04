@@ -35,7 +35,6 @@ version     = 1.1.8
 bindir      = $(prefix)/bin
 datadir     = $(prefix)/share
 desktopdir  = $(datadir)/applications
-localedir   = $(datadir)/locale
 
 cflags_libs = `pkg-config gtk+-3.0 --cflags --libs` `pkg-config gstreamer-video-1.0 --cflags --libs` `pkg-config gstreamer-mpegts-1.0 --libs`
 
@@ -72,17 +71,9 @@ genres: $(gres)
 install:
 	mkdir -p $(DESTDIR)$(bindir) $(DESTDIR)$(datadir) $(DESTDIR)$(desktopdir)
 	install -Dp -m0755 $(program) $(DESTDIR)$(bindir)/$(program)
-	install -Dp -m0644 res/$(program).desktop $(DESTDIR)$(desktopdir)/$(program).desktop
-	sed 's|bindir|$(bindir)|g' -i $(DESTDIR)$(desktopdir)/$(program).desktop
-	cp -r locale $(DESTDIR)$(datadir)
-
-uninstall:
-	rm -fr $(DESTDIR)$(bindir)/$(program) $(DESTDIR)$(desktopdir)/$(program).desktop \
-	$(DESTDIR)$(localedir)/*/*/$(program).mo
 
 clean:
 	rm -f $(program) src/*.o res/*.o res/*.c po/$(program).pot po/*.po~
-	rm -fr locale
 
 
 # Show variables.
@@ -123,3 +114,8 @@ help:
 	@echo
 
 #############################################################################
+	install -Dp -m0644 res/$(program).desktop $(DESTDIR)$(desktopdir)/$(program).desktop
+	sed 's|bindir|$(bindir)|g' -i $(DESTDIR)$(desktopdir)/$(program).desktop
+
+uninstall:
+	rm -fr $(DESTDIR)$(bindir)/$(program) $(DESTDIR)$(desktopdir)/$(program).desktop \

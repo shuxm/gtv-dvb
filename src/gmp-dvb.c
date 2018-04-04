@@ -35,13 +35,13 @@ static void gmp_about_win ( GtkWindow *window, GdkPixbuf *logo )
 
     const gchar *license = "GNU Lesser General Public License \nwww.gnu.org/licenses/lgpl.html";
 
-    gtk_about_dialog_set_program_name ( dialog, " Gmp-Dvb " );
-    gtk_about_dialog_set_version ( dialog, "1.0" );
+    gtk_about_dialog_set_program_name ( dialog, " Gtv-Dvb " );
+    gtk_about_dialog_set_version ( dialog, "2.0" );
     gtk_about_dialog_set_license ( dialog, license );
     gtk_about_dialog_set_authors ( dialog, authors );
-    gtk_about_dialog_set_website ( dialog,   "https://github.com/vl-nix/gmp-dvb" );
-    gtk_about_dialog_set_copyright ( dialog, "Copyright 2014 - 2018 Gmp-Dvb" );
-    gtk_about_dialog_set_comments  ( dialog, "Digital TV & Media Player \nDVB-T2/S2/C, ATSC, DTMB" );
+    gtk_about_dialog_set_website ( dialog,   "https://github.com/vl-nix/gtv-dvb" );
+    gtk_about_dialog_set_copyright ( dialog, "Copyright 2014 - 2018 Gtv-Dvb" );
+    gtk_about_dialog_set_comments  ( dialog, "Media Player & Digital TV \nDVB-T2/S2/C, ATSC, DTMB" );
 
     if ( logo != NULL )
         gtk_about_dialog_set_logo ( dialog, logo );
