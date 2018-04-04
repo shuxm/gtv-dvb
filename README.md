@@ -65,6 +65,13 @@ Makefile
   * ...
 
 
+Drag and Drop
+-------------
+  * folders
+  * files
+  * playlists - [M3U](https://ru.wikipedia.org/wiki/M3U)
+
+
 Channels
 --------
 
