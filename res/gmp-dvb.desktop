@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Gmp-dvb
+Comment=Digital TV & Media player
+Type=Application
+TryExec=bindir/gmp-dvb
+Exec=bindir/gmp-dvb
+Icon=display
+Terminal=false
+Categories=GTK;AudioVideo;Video

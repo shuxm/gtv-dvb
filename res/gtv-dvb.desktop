@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Gtv-dvb
-Comment=Digital TV
-Type=Application
-TryExec=bindir/gtv-dvb
-Exec=bindir/gtv-dvb %U
-Icon=display
-Terminal=false
-Categories=GTK;AudioVideo;Video
