@@ -22,7 +22,7 @@
 [Classic Digital TV](https://github.com/vl-nix/gtv-dvb/tree/classic)
 ------------
 
-![alt text](Classic-Digital%20TV.png)
+![alt text](Classic-Digital-TV.png)
 
 
 Requirements
