@@ -30,8 +30,7 @@
 prefix      = $(HOME)/.local
 
 program     = gtv-dvb
-version     = 1.1.8
-
+version     = 2.0
 bindir      = $(prefix)/bin
 datadir     = $(prefix)/share
 desktopdir  = $(datadir)/applications
@@ -71,6 +70,8 @@ genres: $(gres)
 install:
 	mkdir -p $(DESTDIR)$(bindir) $(DESTDIR)$(datadir) $(DESTDIR)$(desktopdir)
 	install -Dp -m0755 $(program) $(DESTDIR)$(bindir)/$(program)
+	install -Dp -m0644 res/$(program).desktop $(DESTDIR)$(desktopdir)/$(program).desktop
+	sed 's|bindir|$(bindir)|g' -i $(DESTDIR)$(desktopdir)/$(program).desktop
 
 clean:
 	rm -f $(program) src/*.o res/*.o res/*.c po/$(program).pot po/*.po~
