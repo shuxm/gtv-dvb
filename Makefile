@@ -1,7 +1,7 @@
 #############################################################################
 #
 # Makefile for Gtv-dvb 1.1.9 classic
-# Get Gtv-dvb: https://github.com/vl-nix/gtv-dvb/releases/tag/1.1.9
+# Get Gtv-dvb: https://github.com/vl-nix/gtv-dvb
 #
 # Depends
 # -------
@@ -37,9 +37,7 @@ datadir     = $(prefix)/share
 desktopdir  = $(datadir)/applications
 localedir   = $(datadir)/locale
 
-obj_locale  = $(subst :, ,$(LANGUAGE))
-obj_depends = gtk+-3.0 gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-plugins-good-1.0 gstreamer-plugins-bad-1.0
-cflags_libs = `pkg-config gtk+-3.0 --cflags --libs` `pkg-config gstreamer-video-1.0 --cflags --libs` `pkg-config gstreamer-mpegts-1.0 --libs` -lm
+cflags_libs = `pkg-config gtk+-3.0 --cflags --libs` `pkg-config gstreamer-video-1.0 --cflags --libs` `pkg-config gstreamer-mpegts-1.0 --libs`
 
 xres  = $(wildcard res/*.xml)
 gres := $(xres:.xml=.c)
@@ -49,14 +47,7 @@ srcs += res/gtv-dvb.gresource.c
 objs  = $(srcs:.c=.o)
 
 
-all: depends genres setlcdir build revlcdir msgfmt
-
-depends:
-	@for depend in $(obj_depends); do \
-		echo "checking for $$depend..."; \
-		pkg-config --exists --print-errors $$depend; \
-	done
-	@echo
+all: genres build
 
 compile: $(objs)
 
@@ -76,34 +67,6 @@ genres: $(gres)
 	@echo 'gresource: ' $@
 	@glib-compile-resources $< --target=$@ --generate-source
 	@echo
-
-
-setlcdir:
-	@sed 's|/usr/share/locale/|$(localedir)|g' -i src/gtv-dvb.c
-
-revlcdir:
-	@sed 's|$(localedir)|/usr/share/locale/|g' -i src/gtv-dvb.c
-
-
-genpot:
-	mkdir -p po
-	xgettext src/*.c --language=C --keyword=N_ --keyword=_ --escape --sort-output --from-code=UTF-8 \
-	--package-name=$(program) --package-version=$(version) -o po/$(program).pot
-	sed 's|PACKAGE VERSION|$(program) $(version)|g;s|charset=CHARSET|charset=UTF-8|g' -i po/$(program).pot
-
-mergeinit: genpot
-	for lang in $(obj_locale); do \
-		echo $$lang; \
-		if [ ! -f po/$$lang.po ]; then msginit -i po/$(program).pot --locale=$$lang -o po/$$lang.po; \
-		else msgmerge --update po/$$lang.po po/$(program).pot; fi \
-	done
-
-msgfmt:
-	@for language in po/*.po; do \
-		lang=`basename $$language | cut -f 1 -d '.'`; \
-		mkdir -pv locale/$$lang/LC_MESSAGES/; \
-		msgfmt -v $$language -o locale/$$lang/LC_MESSAGES/$(program).mo; \
-	done
 
 
 install:
@@ -130,9 +93,6 @@ info:
 	@echo 'bindir       :' $(bindir)
 	@echo 'datadir      :' $(datadir)
 	@echo 'desktopdir   :' $(desktopdir)
-	@echo 'localedir    :' $(localedir)
-	@echo 'obj_locale   :' $(obj_locale)
-	@echo 'obj_depends  :' $(obj_depends)
 	@echo
 
 
@@ -152,17 +112,11 @@ help:
 	@echo '  all        or make'
 	@echo '  help       print this message'
 	@echo '  info       show variables'
-	@echo '  depends    check dependencies'
 	@echo '  compile    only compile'
 	@echo '  build      build'
 	@echo '  install    install'
 	@echo '  uninstall  uninstall'
 	@echo '  clean      clean all'
-	@echo
-	@echo 'For translators:'
-	@echo '  genpot     only xgettext -> pot'
-	@echo '  mergeinit  genpot and ( msgmerge or msginit ) pot -> po'
-	@echo '  msgfmt     only msgfmt po -> mo'
 	@echo
 	@echo 'Showing debug:'
 	@echo '  G_MESSAGES_DEBUG=all ./$(program)'
