@@ -119,6 +119,8 @@ info:
 	@echo 'bindir       :' $(bindir)
 	@echo 'datadir      :' $(datadir)
 	@echo 'desktopdir   :' $(desktopdir)
+	@echo 'localedir    :' $(localedir)
+	@echo 'obj_locale   :' $(obj_locale)	
 	@echo
 
 
@@ -144,6 +146,11 @@ help:
 	@echo '  uninstall  uninstall'
 	@echo '  clean      clean all'
 	@echo
+	@echo 'For translators:'
+	@echo '  genpot     only xgettext -> pot'
+	@echo '  mergeinit  genpot and ( msgmerge or msginit ) pot -> po'
+	@echo '  msgfmt     only msgfmt po -> mo'
+	@echo	
 	@echo 'Showing debug:'
 	@echo '  G_MESSAGES_DEBUG=all ./$(program)'
 	@echo
