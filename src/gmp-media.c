@@ -18,6 +18,7 @@
 #include <gdk/gdkx.h>
 #include <gst/video/videooverlay.h>
 
+#include <glib/gi18n.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -1534,7 +1535,7 @@ static void gmp_media_save ( GtkButton *button, GtkWidget *tree_view )
     if ( ind > 0 )
     {
         GtkFileChooserDialog *dialog = ( GtkFileChooserDialog *)gtk_file_chooser_dialog_new (
-                    "Save",  NULL, GTK_FILE_CHOOSER_ACTION_SAVE,
+                    _("Choose file"),  NULL, GTK_FILE_CHOOSER_ACTION_SAVE,
                     "gtk-cancel", GTK_RESPONSE_CANCEL,
                     "gtk-save",   GTK_RESPONSE_ACCEPT,
                      NULL );
@@ -1699,7 +1700,7 @@ static void gmp_treeview_clear ( GtkTreeView *tree_view )
     gtk_window_set_transient_for ( window, gmp_base_win_ret () );
     gtk_window_set_modal     ( window, TRUE );
     gtk_window_set_position  ( window, GTK_WIN_POS_CENTER_ON_PARENT );
-    gtk_window_set_title     ( window, "Clear" );
+    gtk_window_set_title     ( window, _("Clear") );
     
     gtk_widget_set_size_request ( GTK_WIDGET ( window ), 400, 150 );
 
@@ -2016,7 +2017,7 @@ static void gmp_media_drag_in ( GtkDrawingArea *widget, GdkDragContext *context,
         
         g_debug ( "title: %s | file: %s \n", title, file_name );	
 
-		if ( g_str_has_prefix ( title, "Channels" ) )
+		if ( gmpmedia.media_tv_pl )
 		{
 			if ( g_str_has_suffix ( file_name, ".conf" ) )
 			{
@@ -2058,7 +2059,7 @@ static void gmp_tree_view_row_activated ( GtkTreeView *tree_view, GtkTreePath *p
         gchar *file_ch = NULL;
             gtk_tree_model_get ( model, &iter, COL_DATA, &file_ch, -1 );
             
-			if ( g_str_has_prefix ( gtk_tree_view_column_get_title ( column ), "Files" ) )
+			if ( !gmpmedia.media_tv_pl )
 			{
 				gmp_media_stop_set_play ( file_ch );
 				gmpmedia.gmp_index_path = gtk_tree_model_get_path ( model, &iter );

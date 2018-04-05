@@ -10,6 +10,7 @@
 #include <fcntl.h>
 #include <glib/gstdio.h>
 #include <sys/ioctl.h>
+#include <glib/gi18n.h>
 
 #include "gmp-descr.h"
 #include "gmp-scan.h"
@@ -37,7 +38,7 @@ struct GmpScan
 struct GmpScan gmpscan;
 
 
-const gchar *undf = "Undefined \n", *pol = "H";
+const gchar *undf = N_("Undefined \n"), *pol = "H";
 static guint SYS_DVBC = SYS_DVBC_ANNEX_A, lnb_type = 0;
 
 
@@ -56,13 +57,13 @@ enum page_n
 const struct GmpScanLabel { guint page; const gchar *name; } 
 gmp_scan_label_n[] =
 {
-    { PAGE_SC, "Scanner"  }, 
+    { PAGE_SC, N_("Scanner")  }, 
     { PAGE_DT, "DVB-T/T2" }, 
     { PAGE_DS, "DVB-S/S2" }, 
     { PAGE_DC, "DVB-C"    },
     { PAGE_AT, "ATSC"     },
     { PAGE_DM, "DTMB"     }, 
-    { PAGE_CH, "Channels" }
+    { PAGE_CH, N_("Channels") }
 };
 
 struct DvbDescrGstParam { const gchar *name; const gchar *dvb_v5_name; const gchar *gst_param; 
@@ -531,7 +532,7 @@ static GtkBox * gmp_scan_channels  ()
     gtk_widget_set_margin_start ( GTK_WIDGET ( g_box ), 10 );
     gtk_widget_set_margin_end   ( GTK_WIDGET ( g_box ), 10 );
 
-    gmpscan.all_channels = (GtkLabel *)gtk_label_new ( "All Channels" );
+    gmpscan.all_channels = (GtkLabel *)gtk_label_new ( _("All Channels") );
     gtk_widget_set_halign ( GTK_WIDGET ( gmpscan.all_channels ),    GTK_ALIGN_START );
 
     gmpscan.scan_treeview = (GtkTreeView *)gtk_tree_view_new_with_model ( GTK_TREE_MODEL ( gtk_list_store_new ( 3, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING ) ) );
@@ -539,7 +540,7 @@ static GtkBox * gmp_scan_channels  ()
 	struct trw_columns trw_cols_scan_n[] =
 	{
 		{ "Num",      TRUE  },
-		{ "Channels", TRUE  },
+		{ _("Channels"), TRUE  },
 		{ "Data",     FALSE }
 	};
 
@@ -589,7 +590,7 @@ void gmp_get_dvb_info ( gboolean set_label, guint adapter, guint frontend )
 {
 	g_print ( "\ngmp_get_dvb_info:: adapter %d frontend %d \n", adapter, frontend );
 	
-    const gchar *dvb_name = undf, *dvb_type = "Undefined";
+    const gchar *dvb_name = _(undf), *dvb_type = "Undefined";
     
     gint flags = O_RDWR;
     guint dtv_api_ver = 0, dtv_del_sys = SYS_UNDEFINED;
@@ -706,7 +707,7 @@ static void gmp_scan_set_adapter ( GtkSpinButton *button )
     gtk_spin_button_update ( button );
     gmpscan.adapter_set = gtk_spin_button_get_value_as_int ( button );
 
-	gtk_label_set_text ( gmpscan.label_dvb_name, undf );
+	gtk_label_set_text ( gmpscan.label_dvb_name, _(undf) );
     gmp_get_dvb_info ( TRUE, gmpscan.adapter_set, gmpscan.frontend_set );
     
     g_debug ( "gmp_scan_set_adapter \n" );
@@ -716,7 +717,7 @@ static void gmp_scan_set_frontend ( GtkSpinButton *button )
     gtk_spin_button_update ( button );
     gmpscan.frontend_set = gtk_spin_button_get_value_as_int ( button );
 
-	gtk_label_set_text ( gmpscan.label_dvb_name, undf );
+	gtk_label_set_text ( gmpscan.label_dvb_name, _(undf) );
     gmp_get_dvb_info ( TRUE, gmpscan.adapter_set, gmpscan.frontend_set );
     
     g_debug ( "gmp_scan_set_frontend \n" );
@@ -757,7 +758,7 @@ static GtkBox * gmp_scan_device ()
         if ( d == 0 )
         {
             gmpscan.label_dvb_name = GTK_LABEL ( data_a_n[d].label );
-            gtk_label_set_text ( gmpscan.label_dvb_name, undf );
+            gtk_label_set_text ( gmpscan.label_dvb_name, _(undf) );
             gmp_get_dvb_info ( TRUE, gmpscan.adapter_set, gmpscan.frontend_set );
             continue;
         }
@@ -819,7 +820,7 @@ void gmp_convert_win ( gboolean set_file )
     gtk_window_set_transient_for ( window, gmp_base_win_ret () );
     gtk_window_set_modal     ( window, TRUE );
     gtk_window_set_position  ( window, GTK_WIN_POS_CENTER_ON_PARENT );
-    gtk_window_set_title     ( window, "Convert" ); //Converter
+    gtk_window_set_title     ( window, _("Convert") );
 
 	gtk_window_set_type_hint ( GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_UTILITY );
 
@@ -832,7 +833,7 @@ void gmp_convert_win ( gboolean set_file )
     gtk_box_pack_start ( m_box, GTK_WIDGET ( m_box_n ), TRUE, TRUE, 0 );
 
 
-    GtkLabel *label = (GtkLabel *)gtk_label_new ( "Format  DVBv5" );
+    GtkLabel *label = (GtkLabel *)gtk_label_new ( _("Format  DVBv5") );
     gtk_box_pack_start ( m_box_n, GTK_WIDGET ( label ), FALSE, FALSE, 10 );
 
 
@@ -904,7 +905,7 @@ static void gmp_scan_add_to_treeview ( gchar *name, gchar *data )
 static void gmp_scan_set_all_ch ( gint all_ch, gint c_tv, gint c_ro )
 {
     gchar *text = g_strdup_printf ( " %s: %d \n %s: %d -- %s: %d -- %s: %d",
-                   "All Channels", all_ch, "TV", c_tv, "Radio", c_ro, "Other", all_ch - c_tv - c_ro );
+                   _("All Channels"), all_ch, _("TV"), c_tv, _("Radio"), c_ro, _("Other"), all_ch - c_tv - c_ro );
 
     gtk_label_set_text ( GTK_LABEL ( gmpscan.all_channels ), text );
     g_free ( text );
@@ -1253,7 +1254,7 @@ void gmp_scan_win ()
 {	
     GtkWindow *window =      (GtkWindow *)gtk_window_new ( GTK_WINDOW_TOPLEVEL );
     gtk_window_set_transient_for ( window, gmp_base_win_ret () );
-	gtk_window_set_title     ( window, "Scanner" );
+	gtk_window_set_title     ( window, _("Scanner") );
     gtk_window_set_modal     ( window, TRUE );
     gtk_window_set_position  ( window, GTK_WIN_POS_CENTER_ON_PARENT );
 	g_signal_connect         ( window, "destroy", G_CALLBACK ( gmp_scan_quit ), NULL );
@@ -1271,7 +1272,7 @@ void gmp_scan_win ()
     {
         m_box_n[j] = (GtkBox *)gtk_box_new ( GTK_ORIENTATION_VERTICAL, 0 );
         gtk_box_pack_start ( m_box_n[j], GTK_WIDGET ( gmp_scan_all_box ( j ) ), TRUE, TRUE, 0 );
-        gtk_notebook_append_page ( gmpscan.notebook, GTK_WIDGET ( m_box_n[j] ),  gtk_label_new ( gmp_scan_label_n[j].name ) );
+        gtk_notebook_append_page ( gmpscan.notebook, GTK_WIDGET ( m_box_n[j] ),  gtk_label_new ( _(gmp_scan_label_n[j].name) ) );
     
 		if ( j == PAGE_SC )
 		{

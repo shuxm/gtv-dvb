@@ -9,9 +9,12 @@
 #include "gmp-pref.h"
 #include "gmp-dvb.h"
 
+#include <glib/gi18n.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
 
 
 static gchar * gmp_pref_get_prop ( const gchar *prop );
@@ -60,7 +63,7 @@ gchar * gmp_pref_open_file ( const gchar *path )
 	g_debug ( "gmp_pref_open_file \n" );
 
     GtkFileChooserDialog *dialog = ( GtkFileChooserDialog *)gtk_file_chooser_dialog_new (
-                    "Open File",  NULL, GTK_FILE_CHOOSER_ACTION_OPEN,
+                    _("Choose file"),  NULL, GTK_FILE_CHOOSER_ACTION_OPEN,
                     "gtk-cancel", GTK_RESPONSE_CANCEL,
                     "gtk-open",   GTK_RESPONSE_ACCEPT,
                      NULL );
@@ -158,7 +161,7 @@ static gchar * gmp_pref_open_dir ( const gchar *path )
 	g_debug ( "gmp_pref_open_dir \n" );
 
     GtkFileChooserDialog *dialog = ( GtkFileChooserDialog *)gtk_file_chooser_dialog_new (
-                    "Folder",  NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                    _("Choose folder"),  NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
                     "gtk-cancel", GTK_RESPONSE_CANCEL,
                     "gtk-apply",  GTK_RESPONSE_ACCEPT,
                      NULL );
@@ -370,7 +373,7 @@ void gmp_pref_win ( GtkWindow *base_window )
     gtk_window_set_transient_for ( window, gmp_base_win_ret () );
     gtk_window_set_modal     ( window, TRUE );
     gtk_window_set_position  ( window, GTK_WIN_POS_CENTER_ON_PARENT );
-    gtk_window_set_title     ( window, "Preferences" );
+    gtk_window_set_title     ( window, _("Preferences" ) );
 	g_signal_connect         ( window, "destroy", G_CALLBACK ( gmp_pref_quit ), NULL );
 
 	GdkPixbuf *icon = gtk_icon_theme_load_icon ( gtk_icon_theme_get_default (),

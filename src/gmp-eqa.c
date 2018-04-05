@@ -10,15 +10,17 @@
 #include "gmp-pref.h"
 #include "gmp-dvb.h"
 
+#include <glib/gi18n.h>
+
 
 #define BAND_N 10
 gpointer dat_gfb[3][BAND_N];
 
 static struct GstEQAudioData { const gchar *name; const gchar *desc; } eqa_n[] =
 {
-    { "Level  dB"    ,  "gain"      },
-    { "Frequency  Hz",  "freq"      },
-    { "Bandwidth  Hz",  "bandwidth" }
+    { N_("Level  dB"    ),  "gain"      },
+    { N_("Frequency  Hz"),  "freq"      },
+    { N_("Bandwidth  Hz"),  "bandwidth" }
 };
 
 
@@ -83,7 +85,7 @@ static void gmp_create_label_box ( GtkBox *vbox )
 	guint i = 0;
     for ( i = 0; i < G_N_ELEMENTS ( eqa_n ); i++ )
     {
-        label = (GtkLabel *)gtk_label_new ( eqa_n[i].name );
+        label = (GtkLabel *)gtk_label_new ( _(eqa_n[i].name) );
         gtk_box_pack_start ( hboxl, GTK_WIDGET ( label ), TRUE, TRUE, 10 );
     }
 
@@ -145,7 +147,7 @@ void gmp_eqa_win ( GstElement *element )
 
     GtkWindow *window_eq_audio = (GtkWindow *)gtk_window_new ( GTK_WINDOW_TOPLEVEL );
     gtk_window_set_transient_for ( window_eq_audio, gmp_base_win_ret () );
-    gtk_window_set_title    ( window_eq_audio, "Audio equalizer" );
+    gtk_window_set_title    ( window_eq_audio, _("Audio equalizer") );
     gtk_window_set_modal    ( window_eq_audio, TRUE );
     gtk_window_set_position ( window_eq_audio, GTK_WIN_POS_CENTER_ON_PARENT );
     g_signal_connect ( G_OBJECT ( window_eq_audio ), "destroy", G_CALLBACK ( gmp_eqa_win_quit ), NULL );

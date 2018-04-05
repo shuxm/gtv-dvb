@@ -10,13 +10,15 @@
 #include "gmp-pref.h"
 #include "gmp-dvb.h"
 
+#include <glib/gi18n.h>
+
 
 struct GstEQVideoData { const gchar *name; const gchar *desc; } eqv_n[] =
 {
-	{ "Brightness", "brightness" },
- 	{ "Contrast"  ,	"contrast"   },
-	{ "Saturation",	"saturation" },
-	{ "Hue"       ,	"hue"        }
+	{ N_("Brightness"), "brightness" },
+ 	{ N_("Contrast"  ),	"contrast"   },
+	{ N_("Saturation"),	"saturation" },
+	{ N_("Hue"       ),	"hue"        }
 };
 
 static GtkScale *all_scale[ G_N_ELEMENTS (eqv_n) ];
@@ -101,7 +103,7 @@ void gmp_eqv_win ( GstElement *element )
 
     GtkWindow *window_eq_video = (GtkWindow *)gtk_window_new ( GTK_WINDOW_TOPLEVEL );
     gtk_window_set_transient_for ( window_eq_video, gmp_base_win_ret () );
-    gtk_window_set_title    ( window_eq_video, "Video equalizer" );
+    gtk_window_set_title    ( window_eq_video, _("Video equalizer") );
     gtk_window_set_modal    ( window_eq_video, TRUE );
     gtk_window_set_position ( window_eq_video, GTK_WIN_POS_CENTER_ON_PARENT );
     g_signal_connect ( window_eq_video, "destroy", G_CALLBACK ( gmp_eqv_win_quit ), NULL );
@@ -115,7 +117,7 @@ void gmp_eqv_win ( GstElement *element )
 	guint c = 0;
     for ( c = 0; c < G_N_ELEMENTS ( eqv_n ); c++ )
     {
-        name_label = (GtkLabel *)gtk_label_new ( eqv_n[c].name );
+        name_label = (GtkLabel *)gtk_label_new ( _(eqv_n[c].name) );
         gtk_widget_set_halign ( GTK_WIDGET ( name_label ), GTK_ALIGN_START );
 
         gdouble val = 0;

@@ -10,6 +10,8 @@
 #include "gmp-media.h"
 #include "gmp-pref.h"
 
+#include <locale.h>
+#include <glib/gi18n.h>
 #include <glib/gstdio.h>
 
 
@@ -239,7 +241,7 @@ static void gmp_base_win ( GtkApplication *app )
 
 	struct trw_columns trw_cols_tv_n[] =
 	{
-		{ "Num", TRUE  }, { "Channels", TRUE  }, { "Data", FALSE }
+		{ "Num", TRUE  }, { _("Channels"), TRUE  }, { "Data", FALSE }
 	};
 
 	gmp_media_win ( gmpbase.tv_vbox, gmpbase.tv_logo, TRUE, trw_cols_tv_n, G_N_ELEMENTS ( trw_cols_tv_n ) );
@@ -247,7 +249,7 @@ static void gmp_base_win ( GtkApplication *app )
 
 	struct trw_columns trw_cols_pl_n[] =
 	{
-		{ "Num", TRUE  }, { "Files", TRUE  }, { "Full Uri", FALSE }
+		{ "Num", TRUE  }, { _("Files"), TRUE  }, { "Full Uri", FALSE }
 	};
 
 	gmp_media_win ( gmpbase.mp_vbox, gmpbase.mp_logo, FALSE, trw_cols_pl_n, G_N_ELEMENTS ( trw_cols_pl_n ) );
@@ -312,9 +314,18 @@ static void gmp_base_get_arg ( int argc, char **argv )
 	}	
 }
 
+static void gmp_set_locale ()
+{
+    setlocale ( LC_ALL, "" );
+    bindtextdomain ( "gtv-dvb", "/usr/share/locale/" );
+    textdomain ( "gtv-dvb" );
+}
+
 int main ( int argc, char **argv )
 {
 	gst_init ( NULL, NULL );
+	
+	gmp_set_locale ();
 
 	gmp_base_get_arg ( argc, argv );
 
