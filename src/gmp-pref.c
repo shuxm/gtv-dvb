@@ -108,6 +108,9 @@ void gmp_pref_read_config ( const gchar *file )
 				if ( g_strrstr ( lines[n], "opacity-window" ) )
                     opacity_win = (double)( atoi ( key_val[1] ) ) / 100;
 
+				if ( g_strrstr ( lines[n], "resize-icon" ) )
+                    resize_icon = atoi ( key_val[1] );
+
                 g_debug ( "gmp_read_config:: Set %s -> %s \n", key_val[0], key_val[1]);
 
             g_strfreev ( key_val );
@@ -137,6 +140,7 @@ void gmp_pref_save_config ( const gchar *file )
 		g_string_append_printf ( gstring, "opacity-control=%d\n",     (int)( opacity_cnt * 100 ) );
 		g_string_append_printf ( gstring, "opacity-equalizer=%d\n",   (int)( opacity_eq  * 100 ) );
 		g_string_append_printf ( gstring, "opacity-window=%d\n",      (int)( opacity_win * 100 ) );
+		g_string_append_printf ( gstring, "resize-icon=%d\n",         resize_icon );
 
         if ( !g_file_set_contents ( file, gstring->str, -1, NULL ) )
             g_critical ( "gmp_save_config:: Save file %s failed.\n", file );
@@ -281,6 +285,12 @@ static void gmp_changed_opacity_base_win ( GtkRange *range, gpointer data )
 
 	g_debug ( "gmp_changed_opacity_win \n" );
 }
+static void gmp_changed_resize_icon ( GtkRange *range, gpointer data )
+{
+    resize_icon = (guint)gtk_range_get_value ( range );
+
+	g_debug ( "gmp_changed_resize_icon \n" );
+}
 
 static GtkBox * gmp_pref_set_data ( GtkWindow *window, GtkWindow *base_window )
 {
@@ -303,7 +313,8 @@ static GtkBox * gmp_pref_set_data ( GtkWindow *window, GtkWindow *base_window )
 		
 		{ "gmp-panel",   gtk_scale_new_with_range ( GTK_ORIENTATION_HORIZONTAL, 0.4, 1.0, 0.01 ), NULL, gmp_changed_opacity_cnt, FALSE, opacity_cnt },
 		{ "gmp-eqav",    gtk_scale_new_with_range ( GTK_ORIENTATION_HORIZONTAL, 0.4, 1.0, 0.01 ), NULL, gmp_changed_opacity_eq,  FALSE, opacity_eq  },
-		{ "gmp-display", gtk_scale_new_with_range ( GTK_ORIENTATION_HORIZONTAL, 0.4, 1.0, 0.01 ), NULL, gmp_changed_opacity_win, FALSE, opacity_win }
+		{ "gmp-display", gtk_scale_new_with_range ( GTK_ORIENTATION_HORIZONTAL, 0.4, 1.0, 0.01 ), NULL, gmp_changed_opacity_win, FALSE, opacity_win },
+		{ "gmp-resize",  gtk_scale_new_with_range ( GTK_ORIENTATION_HORIZONTAL, 16,  48,  1    ), NULL, gmp_changed_resize_icon, FALSE, resize_icon }
     };
 
     guint d = 0;
@@ -379,7 +390,7 @@ void gmp_pref_win ( GtkWindow *base_window )
 
     GtkButton *button_close = (GtkButton *)gtk_button_new_from_icon_name ( "gmp-exit", GTK_ICON_SIZE_BUTTON );
     g_signal_connect ( button_close, "clicked", G_CALLBACK ( gmp_pref_close ), window );
-    gtk_box_pack_end ( h_box, GTK_WIDGET ( button_close ), TRUE, TRUE, 0 );
+    gtk_box_pack_end ( h_box, GTK_WIDGET ( button_close ), TRUE, TRUE, 10 );
 
     gtk_box_pack_end ( m_box, GTK_WIDGET ( h_box ), FALSE, FALSE, 5 );
 

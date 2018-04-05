@@ -53,6 +53,7 @@ struct GmpMedia
 struct GmpMedia gmpmedia;
 
 
+static void gmp_treeview_to_file ( GtkTreeView *tree_view, gchar *filename );
 static void gmp_media_next_pl ();
 
 
@@ -1067,6 +1068,9 @@ static void gmp_media_menu_close ( GtkButton *button, GtkWidget *window )
 static void gmp_media_base_window ( GtkButton *button, GtkWidget *window )
 {
 	gmp_media_stop_all ();
+	
+	if ( gmpmedia.media_tv_pl )
+		gmp_treeview_to_file ( gmpmedia.treeview_tv, (gchar *)ch_conf );
 
 	gmp_media_menu_quit ( GTK_WIDGET ( window ) );
     gmp_base_set_window ();
@@ -1321,7 +1325,6 @@ void gmp_media_menu ( GtkBox *vbox )
 
 	GtkVolumeButton *volbutton = (GtkVolumeButton *)gtk_volume_button_new ();
     gtk_scale_button_set_value ( GTK_SCALE_BUTTON ( volbutton ), gmpmedia.media_tv_pl ? gmpmedia.volume_tv : gmpmedia.volume_pl );
-	gtk_widget_set_size_request ( GTK_WIDGET ( volbutton ), 48, -1 );
     g_signal_connect ( volbutton, "value-changed", G_CALLBACK ( gmp_volume_changed_pl_tv ), NULL );
 
 	gtk_widget_set_sensitive ( GTK_WIDGET ( volbutton ), 
@@ -1345,38 +1348,38 @@ void gmp_media_menu ( GtkBox *vbox )
 
 	if ( gmpmedia.media_tv_pl )
 	{
-		gmp_media_buttons ( h_box, base_icon,    48, gmp_media_base_window, GTK_WIDGET ( window ) );
-		gmp_media_buttons ( h_box, "gmp-editor", 48, gmp_media_scroll_win,  GTK_WIDGET ( vbox )   );
-		gmp_media_buttons ( h_box, "gmp-eqav",   48, gmp_media_menu_ega,    GTK_WIDGET ( window ) );
-		gmp_media_buttons ( h_box, "gmp-eqav",   48, gmp_media_menu_egv,    GTK_WIDGET ( window ) );
-		gmp_media_buttons ( h_box, "gmp-muted",  48, gmp_media_pl_tv_mute,  GTK_WIDGET ( volbutton ) );
+		gmp_media_buttons ( h_box, base_icon,    resize_icon, gmp_media_base_window, GTK_WIDGET ( window ) );
+		gmp_media_buttons ( h_box, "gmp-editor", resize_icon, gmp_media_scroll_win,  GTK_WIDGET ( vbox )   );
+		gmp_media_buttons ( h_box, "gmp-eqav",   resize_icon, gmp_media_menu_ega,    GTK_WIDGET ( window ) );
+		gmp_media_buttons ( h_box, "gmp-eqav",   resize_icon, gmp_media_menu_egv,    GTK_WIDGET ( window ) );
+		gmp_media_buttons ( h_box, "gmp-muted",  resize_icon, gmp_media_pl_tv_mute,  GTK_WIDGET ( volbutton ) );
 	}
 	else
 	{
-		gmp_media_buttons ( h_box, base_icon,    48, gmp_media_base_window, GTK_WIDGET ( window ) );
-		gmp_media_buttons ( h_box, "gmp-editor", 48, gmp_media_scroll_win,  GTK_WIDGET ( vbox )   );	
-		gmp_media_buttons ( h_box, "gmp-eqav",   48, gmp_media_menu_ega,    GTK_WIDGET ( window ) );
-		gmp_media_buttons ( h_box, "gmp-eqav",   48, gmp_media_menu_egv,    GTK_WIDGET ( window ) );	
-		gmp_media_buttons ( h_box, "gmp-muted",  48, gmp_media_pl_tv_mute,  GTK_WIDGET ( volbutton ) );
+		gmp_media_buttons ( h_box, base_icon,    resize_icon, gmp_media_base_window, GTK_WIDGET ( window ) );
+		gmp_media_buttons ( h_box, "gmp-editor", resize_icon, gmp_media_scroll_win,  GTK_WIDGET ( vbox )   );	
+		gmp_media_buttons ( h_box, "gmp-eqav",   resize_icon, gmp_media_menu_ega,    GTK_WIDGET ( window ) );
+		gmp_media_buttons ( h_box, "gmp-eqav",   resize_icon, gmp_media_menu_egv,    GTK_WIDGET ( window ) );	
+		gmp_media_buttons ( h_box, "gmp-muted",  resize_icon, gmp_media_pl_tv_mute,  GTK_WIDGET ( volbutton ) );
 	}
 
     gtk_box_pack_start ( l_box, GTK_WIDGET ( h_box ), TRUE, TRUE, 5 );
 
 	if ( gmpmedia.media_tv_pl )
 	{
-		gmp_media_buttons ( hm_box, "gmp-media-stop",   48, gmp_media_dvb_stop,   NULL );
-		gmp_media_buttons ( hm_box, "gmp-media-record", 48, gmp_media_dvb_record, NULL );
-		gmp_media_buttons ( hm_box, "gmp-display",      48, gmp_media_scan,       GTK_WIDGET ( window ) );
-		gmp_media_buttons ( hm_box, "gmp-convert",      48, gmp_media_convert,    GTK_WIDGET ( window ) );
-		gmp_media_buttons ( hm_box, "gmp-exit",         48, gmp_media_menu_close, GTK_WIDGET ( window ) );
+		gmp_media_buttons ( hm_box, "gmp-media-stop",   resize_icon, gmp_media_dvb_stop,   NULL );
+		gmp_media_buttons ( hm_box, "gmp-media-record", resize_icon, gmp_media_dvb_record, NULL );
+		gmp_media_buttons ( hm_box, "gmp-display",      resize_icon, gmp_media_scan,       GTK_WIDGET ( window ) );
+		gmp_media_buttons ( hm_box, "gmp-convert",      resize_icon, gmp_media_convert,    GTK_WIDGET ( window ) );
+		gmp_media_buttons ( hm_box, "gmp-exit",         resize_icon, gmp_media_menu_close, GTK_WIDGET ( window ) );
 	}
 	else
 	{
-		gmp_media_buttons ( hm_box, "gmp-media-start", 48, gmp_media_playback_start, NULL );
-		gmp_media_buttons ( hm_box, "gmp-media-pause", 48, gmp_media_playback_pause, NULL );	
-		gmp_media_buttons ( hm_box, "gmp-media-stop",  48, gmp_media_playback_stop,  NULL );
-		gmp_media_buttons ( hm_box, "gmp-slider",      48, gmp_media_slider_win,     NULL );
-		gmp_media_buttons ( hm_box, "gmp-exit",        48, gmp_media_menu_close,     GTK_WIDGET ( window ) );
+		gmp_media_buttons ( hm_box, "gmp-media-start", resize_icon, gmp_media_playback_start, NULL );
+		gmp_media_buttons ( hm_box, "gmp-media-pause", resize_icon, gmp_media_playback_pause, NULL );	
+		gmp_media_buttons ( hm_box, "gmp-media-stop",  resize_icon, gmp_media_playback_stop,  NULL );
+		gmp_media_buttons ( hm_box, "gmp-slider",      resize_icon, gmp_media_slider_win,     NULL );
+		gmp_media_buttons ( hm_box, "gmp-exit",        resize_icon, gmp_media_menu_close,     GTK_WIDGET ( window ) );
 	}
 
 	gtk_box_pack_start ( l_box, GTK_WIDGET ( hm_box ), TRUE, TRUE, 5 );
@@ -1804,17 +1807,17 @@ void gmp_media_menu_trw ( GtkTreeView *tree_view )
     GtkBox *h_box  = (GtkBox *)gtk_box_new ( GTK_ORIENTATION_HORIZONTAL, 0 );
     GtkBox *hc_box = (GtkBox *)gtk_box_new ( GTK_ORIENTATION_HORIZONTAL, 0 );
 
-	gmp_media_buttons ( h_box, "gmp-up",     48, gmp_media_goup,  GTK_WIDGET ( tree_view ) );
-	gmp_media_buttons ( h_box, "gmp-down",   48, gmp_media_down,  GTK_WIDGET ( tree_view ) );	
-	gmp_media_buttons ( h_box, "gmp-remove", 48, gmp_media_remv,  GTK_WIDGET ( tree_view ) );
-	gmp_media_buttons ( h_box, "gmp-clear",  48, gmp_media_clear, GTK_WIDGET ( tree_view ) );
+	gmp_media_buttons ( h_box, "gmp-up",     resize_icon, gmp_media_goup,  GTK_WIDGET ( tree_view ) );
+	gmp_media_buttons ( h_box, "gmp-down",   resize_icon, gmp_media_down,  GTK_WIDGET ( tree_view ) );	
+	gmp_media_buttons ( h_box, "gmp-remove", resize_icon, gmp_media_remv,  GTK_WIDGET ( tree_view ) );
+	gmp_media_buttons ( h_box, "gmp-clear",  resize_icon, gmp_media_clear, GTK_WIDGET ( tree_view ) );
 
 	gtk_box_pack_start ( m_box, GTK_WIDGET ( h_box ), TRUE, TRUE, 5 );
 	
-	gmp_media_buttons ( hc_box, "gmp-up-select",   48, gmp_media_goup_s,  GTK_WIDGET ( tree_view ) );
-	gmp_media_buttons ( hc_box, "gmp-down-select", 48, gmp_media_down_s,  GTK_WIDGET ( tree_view ) );	
-	gmp_media_buttons ( hc_box, "gmp-save",        48, gmp_media_save,       GTK_WIDGET ( tree_view ) );
-	gmp_media_buttons ( hc_box, "gmp-exit",        48, gmp_media_menu_close, GTK_WIDGET ( window )    );
+	gmp_media_buttons ( hc_box, "gmp-up-select",   resize_icon, gmp_media_goup_s,  GTK_WIDGET ( tree_view ) );
+	gmp_media_buttons ( hc_box, "gmp-down-select", resize_icon, gmp_media_down_s,  GTK_WIDGET ( tree_view ) );	
+	gmp_media_buttons ( hc_box, "gmp-save",        resize_icon, gmp_media_save,       GTK_WIDGET ( tree_view ) );
+	gmp_media_buttons ( hc_box, "gmp-exit",        resize_icon, gmp_media_menu_close, GTK_WIDGET ( window )    );
 
     gtk_box_pack_start ( m_box, GTK_WIDGET ( hc_box ), TRUE, TRUE, 5 );
 

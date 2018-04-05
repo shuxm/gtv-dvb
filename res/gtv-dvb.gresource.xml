@@ -32,5 +32,6 @@
 	<file preprocess="to-pixdata">res/icons/gmp-set.png</file>
 	<file preprocess="to-pixdata">res/icons/gmp-unset.png</file>
 	<file preprocess="to-pixdata">res/icons/gmp-playlist.png</file>
+	<file preprocess="to-pixdata">res/icons/gmp-resize.png</file>
   </gresource>
 </gresources>

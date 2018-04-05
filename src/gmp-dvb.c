@@ -169,6 +169,7 @@ static void gmp_base_init ()
 	opacity_cnt = 0.85;
 	opacity_eq  = 0.85;
 	opacity_win = 1.0;
+	resize_icon = 48;
 	
     gmp_dvb_conf = g_strconcat ( g_get_user_config_dir (), "/gtv/gtv.conf",         NULL );
 	ch_conf      = g_strconcat ( g_get_user_config_dir (), "/gtv/gtv-channel.conf", NULL );
@@ -274,6 +275,10 @@ static void gmp_base_win ( GtkApplication *app )
 
 static void gmp_base_get_arg ( int argc, char **argv )
 {
+	//guint n = 0;
+	//for ( n = 0; n < argc; n++ )
+		//g_print ( "argv %s \n", argv[n] );
+	
 	gmp_arg_one = NULL;
 	
 	if ( argc == 1 ) return;

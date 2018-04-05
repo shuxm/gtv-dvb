@@ -27,5 +27,7 @@ void gmp_add_filter ( GtkFileChooserDialog *dialog, gchar *name, gchar *filter )
 const gchar *gmp_dvb_conf, *ch_conf;
 gchar *gmp_arg_one, *gmp_drag_cvr, *gmp_rec_dir;
 gdouble opacity_cnt, opacity_eq, opacity_win;
+guint resize_icon;
+
 
 #endif // GMP_PREF_H
