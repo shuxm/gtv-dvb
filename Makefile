@@ -36,7 +36,7 @@ datadir     = $(prefix)/share
 desktopdir  = $(datadir)/applications
 localedir   = $(datadir)/locale
 
-obj_locale  = uk ru # $(subst :, ,$(LANGUAGE))
+obj_locale  = $(subst :, ,$(LANGUAGE))
 cflags_libs = `pkg-config gtk+-3.0 --cflags --libs` `pkg-config gstreamer-video-1.0 --cflags --libs` `pkg-config gstreamer-mpegts-1.0 --libs`
 
 xres  = $(wildcard res/*.xml)
