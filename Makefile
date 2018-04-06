@@ -58,7 +58,7 @@ build: $(objs)
 
 %.o: %.c
 	@echo 'compile: ' $@
-	@gcc -Wall -c $< -o $@ $(CFLAG) $(cflags_libs)
+	@gcc -Wall -Wextra -c $< -o $@ $(CFLAG) $(cflags_libs)
 
 
 genres: $(gres)

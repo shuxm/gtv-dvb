@@ -288,7 +288,7 @@ static void gmp_changed_opacity_base_win ( GtkRange *range, gpointer data )
 
 	g_debug ( "gmp_changed_opacity_win \n" );
 }
-static void gmp_changed_resize_icon ( GtkRange *range, gpointer data )
+static void gmp_changed_resize_icon ( GtkRange *range )
 {
     resize_icon = (guint)gtk_range_get_value ( range );
 

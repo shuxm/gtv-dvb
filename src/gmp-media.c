@@ -2051,6 +2051,8 @@ static void gmp_media_drag_in ( GtkDrawingArea *widget, GdkDragContext *context,
 
 static void gmp_tree_view_row_activated ( GtkTreeView *tree_view, GtkTreePath *path, GtkTreeViewColumn *column )
 {
+	g_debug ( "gmp_tree_view_row_activated:: column name %s \n", gtk_tree_view_column_get_title ( column ) );
+	
     GtkTreeIter iter;
     GtkTreeModel *model = gtk_tree_view_get_model ( GTK_TREE_VIEW ( tree_view ) );
 
